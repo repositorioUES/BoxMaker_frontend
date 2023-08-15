@@ -9,13 +9,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 /**
  * Componentes de Login
  */
-import { LoginComponent } from './auth/login/login.component';
-import { RegisterComponent } from './auth/register/register.component';
+import { AuthModule } from './auth/auth.module';
 
 /**
  * Componentes de Home
  */
-import { HomeComponent } from './pages/home/home.component';
+import { HomeModule } from './pages/home.module';
 
 /**
  * Componentes de Shared
@@ -35,8 +34,8 @@ import {MatCardModule} from "@angular/material/card";
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import { AuthModule } from './auth/auth.module';
-import { HomeModule } from './pages/home.module';
+
+
 
 
 
