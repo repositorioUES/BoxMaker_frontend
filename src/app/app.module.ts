@@ -35,6 +35,8 @@ import {MatCardModule} from "@angular/material/card";
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
+import { AuthModule } from './auth/auth.module';
+import { HomeModule } from './pages/home.module';
 
 
 
@@ -43,15 +45,14 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent,
-    RegisterComponent,
-    HomeComponent,
     NavbarComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    AuthModule,
+    HomeModule,
     MatButtonModule,
     MatInputModule,
     FormsModule,
