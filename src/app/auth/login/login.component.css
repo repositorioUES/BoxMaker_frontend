@@ -2,4 +2,13 @@
     margin-left: 1%;
   }
   
+  .center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+  }
   
+  .center-content {
+    text-align: center;
+  }

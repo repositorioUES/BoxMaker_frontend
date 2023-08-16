@@ -1,9 +1,9 @@
-<mat-toolbar class="custom-color">
+<div>
+  <mat-toolbar class="custom-color">
 
-    
-    <a [routerLink]="'/'"
-        matTooltip="Ir a inicio">
-    <img src="../../../assets/images/logocel_blanco.png" width = "65" height = "65" alt="Descripción de la imagen">
+
+    <a [routerLink]="'/'" matTooltip="Ir a inicio">
+      <img src="../../../assets/images/logocel_blanco.png" width="65" height="65" alt="Descripción de la imagen">
     </a>
 
     <span class="big-text">CEL</span>
@@ -11,49 +11,39 @@
     <span class="example-spacer"></span>
     <span class="example-spacer"></span>
 
-    <img src="../../../assets/images/carretilla.png" width = "60" height = "60" alt="">
+    <img src="../../../assets/images/carretilla.png" width="60" height="60" alt="">
 
     <div class="centered-container">
-        <h2>Módulo General</h2>
-        <h2>Definición de inventario de documentos Archivo de Contabilidad</h2>
+      <h2>Módulo General</h2>
+      <h2>Definición de inventario de documentos Archivo de Contabilidad</h2>
     </div>
 
 
     <span class="example-spacer"></span>
     <span class="example-spacer"></span>
 
-  
-    <a 
-       [routerLink]="'/login'"
-       mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon" matTooltip="Iniciar sesión">
+
+    <a [routerLink]="'/login'" mat-icon-button class="example-icon favorite-icon"
+      aria-label="Example icon-button with heart icon" matTooltip="Iniciar sesión">
       <mat-icon>person</mat-icon>
     </a>
-  
-  
-    <a 
-       [routerLink]="'/registrar'"
-       mat-icon-button class="example-icon favorite-icon mr5 ml10" aria-label="Example icon-button with heart icon" matTooltip="Registrar">
+
+
+    <a [routerLink]="'/auth/register'" mat-icon-button class="example-icon favorite-icon mr5 ml10"
+      aria-label="Example icon-button with heart icon" matTooltip="Registrar">
       <mat-icon>person_add</mat-icon>
     </a>
-  
-  
-    <button
-      
-      mat-button
-      style="margin-right: 10px"
-      class="example-icon favorite-icon"
-      aria-label="Example icon-button with heart icon"
-      [routerLink] = "'/admin/profile'"
-    >
-    
+
+
+    <button mat-button style="margin-right: 10px" class="example-icon favorite-icon"
+      aria-label="Example icon-button with heart icon" [routerLink]="'/admin/profile'">
+
     </button>
-  
-    <a 
-       
-       style="margin-right: 30px"
-       mat-icon-button class="example-icon favorite-icon mr5 ml10" aria-label="Example icon-button with heart icon" matTooltip="Cerrar sesión">
+
+    <a style="margin-right: 30px" mat-icon-button class="example-icon favorite-icon mr5 ml10"
+      aria-label="Example icon-button with heart icon" matTooltip="Cerrar sesión">
       <mat-icon>logout</mat-icon>
     </a>
-  
+
   </mat-toolbar>
-  
+</div>

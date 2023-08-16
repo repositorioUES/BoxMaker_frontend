@@ -1,0 +1,30 @@
+.full-width {
+  margin-left: 1%;
+}
+
+.full-width2 {
+  margin-left: 2.7%;
+  margin-right: 0;
+}
+
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.center-content {
+  text-align: center;
+}
+
+.form-container {
+  max-width: 500px;
+  border-radius: 5px;
+
+}
+
+.form-input {
+  margin-bottom: 1px;
+}
