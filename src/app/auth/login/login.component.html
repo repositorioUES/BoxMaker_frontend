@@ -6,16 +6,16 @@
       </div>
 
       <h1 class="text-center">Inicio de sesión</h1>
-      <form>
+      <form (ngSubmit)="login()" [formGroup]="miFormulario" >
 
         <mat-form-field class="full-width" appearance="outline">
           <mat-label>Nombre de usuario</mat-label>
-          <input name="username" required matInput placeholder="Digite su nombre de usuario">
+          <input formControlName="userName" id="username" required matInput placeholder="Digite su nombre de usuario">
         </mat-form-field>
 
         <mat-form-field class="full-width" appearance="outline">
           <mat-label>Contraseña</mat-label>
-          <input name="password" required type="password" matInput placeholder="Digite su contraseña">
+          <input formControlName="password" id="password" required type="password" matInput placeholder="Digite su contraseña">
         </mat-form-field>
         <br>
 

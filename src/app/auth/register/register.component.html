@@ -8,14 +8,14 @@
 
                 <h1 class="text-center">Registrar Usuario</h1>
 
-                <form class="row">
+                <form (ngSubmit)="crearUsuario()" class="row" autocomplete="off" [formGroup]="registerForm">
 
                     <div class="col-md-6">
                         <div class="form-input">
 
                             <mat-form-field class="full-width" appearance="outline">
                                 <mat-label>Primer nombre</mat-label>
-                                <input name="username" matInput placeholder="Digite su primer nombre">
+                                <input formControlName="primerNombre" id="username" matInput placeholder="Digite su primer nombre">
                             </mat-form-field>
                         </div>
                     </div>
@@ -24,7 +24,7 @@
                         <div class="form-input">
                             <mat-form-field class="full-width" appearance="outline">
                                 <mat-label>Segundo Nombre</mat-label>
-                                <input name="username" matInput placeholder="Digite su segundo nombre">
+                                <input formControlName="segundoNombre" id="username" matInput placeholder="Digite su segundo nombre">
                             </mat-form-field>
                         </div>
                     </div>
@@ -33,7 +33,7 @@
                         <div class="form-input">
                             <mat-form-field class="full-width" appearance="outline">
                                 <mat-label>Primer Apellido</mat-label>
-                                <input name="username" matInput placeholder="Digite su primer apellido">
+                                <input formControlName="primerApellido" id="username" matInput placeholder="Digite su primer apellido">
                             </mat-form-field>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                         <div class="form-input">
                             <mat-form-field class="full-width" appearance="outline">
                                 <mat-label>Segundo Apellido</mat-label>
-                                <input name="username" matInput placeholder="Digite su segundo apellido">
+                                <input formControlName="segundoApellido" id="username" matInput placeholder="Digite su segundo apellido">
                             </mat-form-field>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                     <div class="row">
                         <mat-form-field class="full-width2" appearance="outline">
                             <mat-label>Email</mat-label>
-                            <input name="email" type="email" matInput placeholder="Digite su Email">
+                            <input formControlName="email" id="email" type="email" matInput placeholder="Digite su Email">
                         </mat-form-field>
                     </div>
 
