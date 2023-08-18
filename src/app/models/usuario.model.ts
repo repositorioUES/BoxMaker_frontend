@@ -7,6 +7,6 @@ export class Usuario {
         public segundoApellido: string,
         public email: string,
         public password?: string,
-    ){}
+        ){}
 
 }

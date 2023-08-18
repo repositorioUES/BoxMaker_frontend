@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
   selector: 'app-register',
@@ -8,19 +10,35 @@ import { FormBuilder, Validators } from '@angular/forms';
 })
 export class RegisterComponent {
 
-  public registerForm = this.fb.group({
-    primerNombre: ["Christian", [Validators.required]],
-    segundoNombre: ["Alberto", [Validators.required]],
-    primerApellido: ["Garcia", [Validators.required]],
-    segundoApellido: ["Ordonez", [Validators.required]],
-    email: ["christian@gmail.com", [Validators.required]],
+  public formSubmitted = false;
 
+  public registerForm = this.fb.group({
+    primerNombre: ["carlos", Validators.required],
+    segundoNombre: ["carlos", Validators.required],
+    primerApellido: ["carlos", Validators.required],
+    segundoApellido: ["carlos", Validators.required],
+    email: ["carlos@gmail.com", [Validators.required, Validators.email]]
   });
 
-  constructor(private fb: FormBuilder){}
+  constructor(private fb: FormBuilder,private usuarioService: UsuarioService, private router: Router){}
 
   crearUsuario(){
+    this.formSubmitted = true;
     console.log(this.registerForm.value);
+
+    if ( this.registerForm.invalid ) {
+      return;
+    }
+
+    /** Realizar el posteo del formulario */
+    this.usuarioService.crearUsuario(this.registerForm.value)
+        .subscribe( resp => {
+          console.log('usuario creado');
+          console.log(resp);
+          
+          
+
+        },(err) => console.warn(err));
     
   }
 
