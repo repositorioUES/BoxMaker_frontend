@@ -6,7 +6,7 @@
       </div>
 
       <h1 class="text-center">Inicio de sesión</h1>
-      <form (ngSubmit)="login()" [formGroup]="miFormulario" >
+      <form (ngSubmit)="login()" autocomplete="off" [formGroup]="loginForm" >
 
         <mat-form-field class="full-width" appearance="outline">
           <mat-label>Nombre de usuario</mat-label>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
@@ -13,33 +14,44 @@ export class RegisterComponent {
   public formSubmitted = false;
 
   public registerForm = this.fb.group({
-    primerNombre: ["carlos", Validators.required],
-    segundoNombre: ["carlos", Validators.required],
-    primerApellido: ["carlos", Validators.required],
-    segundoApellido: ["carlos", Validators.required],
+    primerNombre: ["Christian", Validators.required],
+    segundoNombre: ["Alberto", Validators.required],
+    primerApellido: ["Garcia", Validators.required],
+    segundoApellido: ["Ordoñez", Validators.required],
     email: ["carlos@gmail.com", [Validators.required, Validators.email]]
   });
 
-  constructor(private fb: FormBuilder,private usuarioService: UsuarioService, private router: Router){}
+  constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private router: Router, private snack: MatSnackBar) { }
 
-  crearUsuario(){
+  crearUsuario() {
     this.formSubmitted = true;
     console.log(this.registerForm.value);
 
-    if ( this.registerForm.invalid ) {
+    if (this.registerForm.invalid) {
       return;
     }
 
     /** Realizar el posteo del formulario */
     this.usuarioService.crearUsuario(this.registerForm.value)
-        .subscribe( resp => {
-          console.log('usuario creado');
-          console.log(resp);
-          
-          
+      .subscribe(resp => {
+        this.snack.open('Usuario guardado con exito', 'Aceptar', {
+          duration: 5000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+        // Navegar al Dashboard
+        this.router.navigateByUrl('/login');
 
-        },(err) => console.warn(err));
-    
+
+      }, (err) => {
+        this.snack.open('Error', 'Aceptar', {
+          duration: 5000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+
+      });
+
   }
 
 }

@@ -12,8 +12,6 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) { }
 
-  
-
   crearUsuario( formData: any ) {
     
     return this.http.post(`${ base_url }/usuario/register`, formData)
