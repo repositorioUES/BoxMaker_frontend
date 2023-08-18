@@ -14,11 +14,11 @@ export class RegisterComponent {
   public formSubmitted = false;
 
   public registerForm = this.fb.group({
-    primerNombre: ["Christian", Validators.required],
-    segundoNombre: ["Alberto", Validators.required],
-    primerApellido: ["Garcia", Validators.required],
-    segundoApellido: ["Ordoñez", Validators.required],
-    email: ["carlos@gmail.com", [Validators.required, Validators.email]]
+    primerNombre: ["", Validators.required],
+    segundoNombre: ["", Validators.required],
+    primerApellido: ["", Validators.required],
+    segundoApellido: ["", Validators.required],
+    email: ["", [Validators.required, Validators.email]]
   });
 
   constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private router: Router, private snack: MatSnackBar) { }
