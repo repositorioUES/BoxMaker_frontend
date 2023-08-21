@@ -1,0 +1,7 @@
+.full-width {
+    margin-left: 0.1%;
+  }
+
+  mat-grid-tile {
+    background: lightblue;
+  }

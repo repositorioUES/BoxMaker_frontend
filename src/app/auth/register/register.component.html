@@ -1,70 +1,69 @@
-<div class="center-container">
-    <div class="form-container">
-        <div class="center-content">
-            <mat-card>
-                <div class="container text-center">
-                    <img src="../../../assets/images/registro.png" width="100" height="100">
-                </div>
+<div class="component-class">
+    <div class="center-container">
+        <div class="form-container">
+            <div class="center-content">
+                <mat-card class="custom-color">
+                    <div class="container text-center">
+                        <img src="../../../assets/images/registro.png" width="100" height="100">
+                    </div>
 
-                <h1 class="text-center">Registrar Usuario</h1>
+                    <h1 class="text-center">Registrar Usuario</h1>
 
-                <form (ngSubmit)="crearUsuario()" class="row" autocomplete="off" [formGroup]="registerForm">
+                    <form (ngSubmit)="crearUsuario()" class="row" autocomplete="off" [formGroup]="registerForm">
 
-                    <div class="col-md-6">
-                        <div class="form-input">
+                        <div class="col-md-6">
+                            <div class="form-input">
 
-                            <mat-form-field class="full-width" appearance="outline">
-                                <mat-label>Primer Nombre</mat-label>
-                                <input formControlName="primerNombre"  matInput placeholder="Digite su primer nombre">
-                            </mat-form-field>
+                                <mat-form-field class="full-width" appearance="outline">
+                                    <mat-label>Primer Nombre</mat-label>
+                                    <input formControlName="primerNombre" matInput
+                                        placeholder="Digite su primer nombre">
+                                </mat-form-field>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-input">
-                            <mat-form-field class="full-width" appearance="outline">
-                                <mat-label>Segundo Nombre</mat-label>
-                                <input formControlName="segundoNombre"  matInput placeholder="Digite su segundo nombre">
-                            </mat-form-field>
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <mat-form-field class="full-width" appearance="outline">
+                                    <mat-label>Segundo Nombre</mat-label>
+                                    <input formControlName="segundoNombre" matInput
+                                        placeholder="Digite su segundo nombre">
+                                </mat-form-field>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-input">
-                            <mat-form-field class="full-width" appearance="outline">
-                                <mat-label>Primer Apellido</mat-label>
-                                <input formControlName="primerApellido"  matInput placeholder="Digite su primer apellido">
-                            </mat-form-field>
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <mat-form-field class="full-width" appearance="outline">
+                                    <mat-label>Primer Apellido</mat-label>
+                                    <input formControlName="primerApellido" matInput
+                                        placeholder="Digite su primer apellido">
+                                </mat-form-field>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-input">
-                            <mat-form-field class="full-width" appearance="outline">
-                                <mat-label>Segundo Apellido</mat-label>
-                                <input formControlName="segundoApellido"  matInput placeholder="Digite su segundo apellido">
-                            </mat-form-field>
+                        <div class="col-md-6">
+                            <div class="form-input">
+                                <mat-form-field class="full-width" appearance="outline">
+                                    <mat-label>Segundo Apellido</mat-label>
+                                    <input formControlName="segundoApellido" matInput
+                                        placeholder="Digite su segundo apellido">
+                                </mat-form-field>
+                            </div>
                         </div>
-                    </div>
-
-                  <div class="row">
-                    <mat-form-field class="full-width2" appearance="outline">
-                      <mat-label>Email</mat-label>
-                      <input formControlName="email"  type="email" matInput placeholder="Digite su Email">
-                    </mat-form-field>
-                  </div>
 
 
-                    <div class="justify-content-end">
-                        <button mat-raised-button color="primary">Registrar</button>
-                        <button type="reset" style="margin-left: 10px;" mat-raised-button
-                            color="warn">Limpiar</button>&nbsp;
-                        <br><br>
-                    </div>
+                        <div class="justify-content-end">
+                            <button mat-raised-button color="primary">Registrar</button>
+                            <button type="reset" style="margin-left: 10px;" mat-raised-button
+                                color="warn">Limpiar</button>&nbsp;
+                            <br><br>
+                        </div>
 
-                </form>
-            </mat-card>
-            <br><br><br>
+                    </form>
+                </mat-card>
+                <br><br><br>
+            </div>
         </div>
     </div>
 </div>

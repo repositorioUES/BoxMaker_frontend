@@ -14,11 +14,10 @@ export class RegisterComponent {
   public formSubmitted = false;
 
   public registerForm = this.fb.group({
-    primerNombre: ["", Validators.required],
-    segundoNombre: ["", Validators.required],
-    primerApellido: ["", Validators.required],
-    segundoApellido: ["", Validators.required],
-    email: ["", [Validators.required, Validators.email]]
+    primerNombre: ["",],
+    segundoNombre: ["",],
+    primerApellido: ["",],
+    segundoApellido: ["",]
   });
 
   constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private router: Router, private snack: MatSnackBar) { }
@@ -35,7 +34,7 @@ export class RegisterComponent {
     this.usuarioService.crearUsuario(this.registerForm.value)
       .subscribe(resp => {
         this.snack.open('Usuario guardado con exito', 'Aceptar', {
-          duration: 5000,
+          duration: 7000,
           verticalPosition: 'bottom',
           horizontalPosition: 'center'
         });
@@ -44,8 +43,8 @@ export class RegisterComponent {
 
 
       }, (err) => {
-        this.snack.open(err.error.msg, 'Aceptar', {
-          duration: 5000,
+        this.snack.open(err.error.msg, 'Error', {
+          duration: 7000,
           verticalPosition: 'bottom',
           horizontalPosition: 'center'
         });

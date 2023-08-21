@@ -5,6 +5,7 @@ import { AuthRoutingModule } from './auth-routing.module';
 import {FormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 /**Componentes de los formularios */
 import { LoginComponent } from './login/login.component';
@@ -19,13 +20,15 @@ import {MatCardModule} from "@angular/material/card";
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
-import { RouterModule } from '@angular/router';
+import { AdministradorComponent } from './administrador/administrador.component';
+
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    AdministradorComponent
   ],
   imports: [
     CommonModule,

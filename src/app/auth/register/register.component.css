@@ -1,5 +1,5 @@
 .full-width {
-  margin-left: 1%;
+  margin-left: 0.1%;
 }
 
 .full-width2 {
@@ -20,11 +20,23 @@
 }
 
 .form-container {
-  max-width: 500px;
+  max-width: 470px;
   border-radius: 5px;
 
 }
 
 .form-input {
   margin-bottom: 1px;
+}
+
+.component-class {
+  width: 100%;
+  height: 92%;
+  background-image: url("../../../assets/images/waves.png"); 
+  background-size: cover; 
+}
+
+.custom-color {
+  background-color: #ffffff05; /* Cambia el color de fondo a azul (#007bff) */
+  color: white; /* Cambia el color del texto a blanco */
 }

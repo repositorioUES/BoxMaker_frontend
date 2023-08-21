@@ -1,45 +1,51 @@
 import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router,NavigationEnd } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { timeInterval } from 'rxjs';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent{
+export class LoginComponent {
 
   public loginForm = this.fb.group({
-    userName: ["CGARCIA", [Validators.required]],
-    password: ["archivo", [Validators.required]],
+    userName: ["", ],
+    password: ["", ],
   });
 
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService,private snack:MatSnackBar){}
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService, private snack: MatSnackBar) { }
 
+  login() {
+    this.authService.login(this.loginForm.value)
+      .subscribe(resp => {
+      
+        this.router.navigateByUrl('/');
 
-  login(){
+        this.router.events.subscribe(event => {
+          if (event instanceof NavigationEnd && this.router.url === '/') {
+            window.location.reload();
+          }
+        });
 
-    this.authService.login( this.loginForm.value )
-    .subscribe( resp => {
-      this.snack.open('Bienvenido', 'Aceptar', {
-        duration: 5000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'center'
+        this.snack.open('Bienvenido', 'Aceptar', {
+          duration: 5000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+        // Navegar al Dashboard
+        // Suscripción al evento NavigationEnd
+
+      }, (err) => {
+        console.warn(err.error.msg);
+        this.snack.open(err.error.msg, 'Error', {
+          duration: 5000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
       });
-      // Navegar al Dashboard
-      this.router.navigateByUrl('/');
-
-    }, (err) => {
-      this.snack.open(err.error.msg, 'Aceptar', {
-        duration: 5000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'center'
-      });
-
-    });
-
-}
-
+  }
 }

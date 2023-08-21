@@ -23,3 +23,8 @@
   .centered-container h2 {
     margin: 0.1px 0; /* Agrega separación mínima entre los elementos h2 */
   }
+
+
+  .centered-container h4 {
+    margin: 0.1px 0; /* Agrega separación mínima entre los elementos h2 */
+  }
