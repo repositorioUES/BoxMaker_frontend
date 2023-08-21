@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
+import { FormBuilder, Validators } from '@angular/forms';
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
@@ -44,7 +44,7 @@ export class RegisterComponent {
 
 
       }, (err) => {
-        this.snack.open('Error', 'Aceptar', {
+        this.snack.open(err.error.msg, 'Aceptar', {
           duration: 5000,
           verticalPosition: 'bottom',
           horizontalPosition: 'center'

@@ -23,25 +23,18 @@
     <span class="example-spacer"></span>
     <span class="example-spacer"></span>
 
-
     <a [routerLink]="'/login'" mat-icon-button class="example-icon favorite-icon"
       aria-label="Example icon-button with heart icon" matTooltip="Iniciar sesión">
       <mat-icon>person</mat-icon>
     </a>
-
 
     <a [routerLink]="'/auth/register'" mat-icon-button class="example-icon favorite-icon mr5 ml10"
       aria-label="Example icon-button with heart icon" matTooltip="Registrar">
       <mat-icon>person_add</mat-icon>
     </a>
 
-
-    <button mat-button style="margin-right: 10px" class="example-icon favorite-icon"
-      aria-label="Example icon-button with heart icon" [routerLink]="'/admin/profile'">
-
-    </button>
-
-    <a style="margin-right: 30px" mat-icon-button class="example-icon favorite-icon mr5 ml10"
+    @{{ usuario }}
+    <a (click)="logout()" style="margin-right: 30px" mat-icon-button class="example-icon favorite-icon mr5 ml10"
       aria-label="Example icon-button with heart icon" matTooltip="Cerrar sesión">
       <mat-icon>logout</mat-icon>
     </a>

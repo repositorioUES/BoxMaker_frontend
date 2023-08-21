@@ -13,14 +13,15 @@ export class UsuarioService {
   constructor(private http: HttpClient) { }
 
   crearUsuario( formData: any ) {
-    
+
     return this.http.post(`${ base_url }/usuario/register`, formData)
                 .pipe(
                   tap( (resp: any) => {
-                    localStorage.setItem('token', resp.token )
+                    localStorage.setItem('token', resp.token );
+                    localStorage.setItem('usuario', JSON.stringify(resp.userName))
                   })
                 )
-  
+
   }
 
 }

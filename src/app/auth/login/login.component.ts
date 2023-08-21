@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -12,8 +12,8 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class LoginComponent{
 
   public loginForm = this.fb.group({
-    userName: ["", [Validators.required]],
-    password: ["", [Validators.required]],
+    userName: ["CGARCIA", [Validators.required]],
+    password: ["archivo", [Validators.required]],
   });
 
   constructor(private fb: FormBuilder, private router: Router, private authService: AuthService,private snack:MatSnackBar){}
@@ -32,7 +32,7 @@ export class LoginComponent{
       this.router.navigateByUrl('/');
 
     }, (err) => {
-      this.snack.open('Verifique Credenciales', 'Aceptar', {
+      this.snack.open(err.error.msg, 'Aceptar', {
         duration: 5000,
         verticalPosition: 'bottom',
         horizontalPosition: 'center'
