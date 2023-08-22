@@ -14,7 +14,7 @@ export class LoginComponent {
 
   public loginForm = this.fb.group({
     userName: ["", ],
-    password: ["", ],
+    password: ["archivo", ],
   });
 
   constructor(private fb: FormBuilder, private router: Router, private authService: AuthService, private snack: MatSnackBar) { }
@@ -23,7 +23,7 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value)
       .subscribe(resp => {
       
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/auth/admin');
 
         this.router.events.subscribe(event => {
           if (event instanceof NavigationEnd && this.router.url === '/') {

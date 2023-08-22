@@ -3,29 +3,33 @@ import Swal from 'sweetalert2';
 
 import { Usuario } from 'src/app/models/user.model';
 import { AdminService } from 'src/app/services/admin.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-administrador',
   templateUrl: './administrador.component.html',
   styleUrls: ['./administrador.component.css']
 })
+
 export class AdministradorComponent implements OnInit {
 
-  constructor(private adminSrv: AdminService){}
-  
+  constructor(private adminSrv: AdminService, private router: Router){}
+
   usuarios: Usuario[] = []
 
-  displayedColumns: string[] = ['Nombre', 'Nombre de Usuario', 'Fec. Creación', 'Estado','Bloqueo', 'Contraseña', 'Eliminar'];
-
+  displayedColumns: string[] = ['Permisos', 'Nombre', 'Nombre de Usuario', 'Fec. Creación', 'Estado','Bloqueo', 'Contraseña', 'Eliminar'];
+  
   ngOnInit(): void {
     this.cargarUsuarios()
   }
-
+  
   cargarUsuarios(){
     this.adminSrv.getUsers()
     .subscribe((resp:any) => {
       this.usuarios = resp.result
-    }, (err)=> console.warn(err))
+    }, (err)=> {
+      console.warn(err) 
+    })
   }
 
   async deleteUser(id: string, userName: string){
@@ -60,7 +64,6 @@ export class AdministradorComponent implements OnInit {
   }
 
   changeState(id: string){
-    console.log(id)
     this.adminSrv.changeState(id)
     .subscribe((res:any) => {
       Swal.fire(res.msg, 'Completado')
@@ -75,4 +78,9 @@ export class AdministradorComponent implements OnInit {
       this.cargarUsuarios()
     }, (err)=> console.warn(err))
   }
+
+async permissions(id: string){
+
+}
+
 }

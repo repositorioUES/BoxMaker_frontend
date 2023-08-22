@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { Usuario } from '../models/usuario.model';
@@ -10,6 +10,7 @@ const base_url = environment.base_url;
 @Injectable({
   providedIn: 'root'
 })
+
 export class AdminService {
 
   constructor(private http: HttpClient) {}
@@ -33,4 +34,13 @@ export class AdminService {
   resetPassword (id: string) : Observable<void>{
     return this.http.get<void>(`${ base_url }/usuario/resetPassword/${ id }`)
   }
+  
+  getPermissions (id: string) : Observable<void>{
+    return this.http.get<void>(`${ base_url }/permiso/byUser/${ id }`)
+  }
+
+  denyPermission (id: string) : Observable<void>{
+    return this.http.delete<void>(`${ base_url }/usuario/delete/${ id }`)
+  }
+
 }
