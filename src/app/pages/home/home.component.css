@@ -1,6 +1,6 @@
 .custom-width {
-    margin-left: 4%;
-    margin-right: 4%;
+    margin-left: 3%;
+    margin-right: 3%;
   }
   
   .custom-color {
@@ -25,3 +25,8 @@
     font-size: 1px; /* Puedes ajustar este valor según tus necesidades */
   }
 
+  .center-content {
+    text-align: center;
+  }
+
+  
