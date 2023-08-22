@@ -1,0 +1,25 @@
+
+.full-width{
+    margin-left: 1%;
+  }
+  
+  .center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+  }
+  
+  .center-content {
+    text-align: center;
+  }
+
+  .component-class {
+    width:auto;
+    height: 92%;
+  }
+
+  .custom-color {
+    background-color: #ffffff05; /* Cambia el color de fondo a azul (#007bff) */
+    color: rgb(0, 0, 0); /* Cambia el color del texto a blanco */
+  }
