@@ -13,8 +13,8 @@ import { timeInterval } from 'rxjs';
 export class LoginComponent {
 
   public loginForm = this.fb.group({
-    userName: ["", ],
-    password: ["", ],
+    userName: ["admin", ],
+    password: ["archivo", ],
   });
 
   constructor(private fb: FormBuilder, private router: Router, private authService: AuthService, private snack: MatSnackBar) { }
