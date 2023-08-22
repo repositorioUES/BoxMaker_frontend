@@ -39,7 +39,7 @@ export class RegisterComponent {
           horizontalPosition: 'center'
         });
         // Navegar al Dashboard
-        this.router.navigateByUrl('/login');
+        this.router.navigateByUrl('/auth/admin');
 
 
       }, (err) => {
