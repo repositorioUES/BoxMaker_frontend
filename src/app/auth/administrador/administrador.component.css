@@ -7,7 +7,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 40vh;
+    height: 75vh;
   }
   
   .center-content {
@@ -15,7 +15,7 @@
   }
 
   .component-class {
-    width:auto;
+    width:100%;
     height: 92%;
   }
 
@@ -23,3 +23,25 @@
     background-color: #ffffff05; /* Cambia el color de fondo a azul (#007bff) */
     color: rgb(0, 0, 0); /* Cambia el color del texto a blanco */
   }
+
+  .demo-table {
+    width: 100%;
+  }
+  
+  .mat-mdc-row .mat-mdc-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+  }
+  
+  .mat-mdc-row:hover .mat-mdc-cell {
+    border-color: currentColor;
+    background-color: rgb(231, 231, 231);
+  }
+
+  .scroll-container {
+     height: 600px; 
+    overflow: auto;
+  }
+  
+  

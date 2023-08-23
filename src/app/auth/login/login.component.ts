@@ -23,7 +23,7 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value)
       .subscribe(resp => {
       
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/auth/admin');
 
         this.router.events.subscribe(event => {
           if (event instanceof NavigationEnd && this.router.url === '/') {

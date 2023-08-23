@@ -22,6 +22,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import { AdministradorComponent } from './administrador/administrador.component';
 import {MatTableModule} from '@angular/material/table';
+import { ModalComponent } from './administrador/modal/modal.component';
 
 
 
@@ -29,7 +30,8 @@ import {MatTableModule} from '@angular/material/table';
   declarations: [
     LoginComponent,
     RegisterComponent,
-    AdministradorComponent
+    AdministradorComponent,
+    ModalComponent
   ],
   imports: [
     CommonModule,
