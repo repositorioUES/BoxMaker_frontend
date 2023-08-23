@@ -13,7 +13,7 @@ import { timeInterval } from 'rxjs';
 export class LoginComponent {
 
   public loginForm = this.fb.group({
-    userName: ["admin", ],
+    userName: ["cgarcia", ],
     password: ["archivo", ],
   });
 
@@ -31,11 +31,7 @@ export class LoginComponent {
           }
         });
 
-        this.snack.open('Bienvenido', 'Aceptar', {
-          duration: 5000,
-          verticalPosition: 'bottom',
-          horizontalPosition: 'center'
-        });
+
         // Navegar al Dashboard
         // Suscripción al evento NavigationEnd
 
