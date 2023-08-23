@@ -1,0 +1,22 @@
+<!-- <div class="modal">
+    <div class="modal-body">
+        <h1>Contenido del modal XD</h1>
+
+        <button>x</button>
+    </div>
+</div> -->
+
+<div class='ng-modal-dialog' >
+    <div class='ng-modal-overlay'></div>
+    <div class='ng-modal-dialog'  ng-style='dialogStyle'>
+      <!--<div class='ng-modal-close' ng-click='hideModal()'>X</div>-->
+      <div class='ng-modal-dialog-content'>
+        Prueba de ventana de dialogo: <strong>my-customer.html</strong>
+        <p>Nombre: modalUser.name</p>
+        <p>Surname: modalUser.surname</p>
+        <p>PIN: modalUser.shortKey</p>
+        <input type="text" ng-model="modalUser.shortKey" />
+        <button (click)="closeModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>

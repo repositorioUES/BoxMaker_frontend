@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 
 import { Usuario } from 'src/app/models/user.model';
 import { AdminService } from 'src/app/services/admin.service';
-import { Router } from '@angular/router';
+import { SwitchService } from 'src/app/services/switch.service';
 
 @Component({
   selector: 'app-administrador',
@@ -13,7 +13,9 @@ import { Router } from '@angular/router';
 
 export class AdministradorComponent implements OnInit {
 
-  constructor(private adminSrv: AdminService, private router: Router){}
+  constructor(private adminSrv: AdminService, private switchSrv: SwitchService){}
+  
+  modalSwitch: boolean = false;
 
   usuarios: Usuario[] = []
 
@@ -21,6 +23,8 @@ export class AdministradorComponent implements OnInit {
   
   ngOnInit(): void {
     this.cargarUsuarios()
+    // Suscribirse al observer para escuchar el "valor" que nos mande
+    this.switchSrv.$switch.subscribe((valor)=>{this.modalSwitch = valor})
   }
   
   cargarUsuarios(){
@@ -81,6 +85,11 @@ export class AdministradorComponent implements OnInit {
 
 async permissions(id: string){
 
+}
+
+openModal(){
+  this.modalSwitch = true;
+  console.log(this.modalSwitch)
 }
 
 }
