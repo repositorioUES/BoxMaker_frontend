@@ -3,13 +3,13 @@
 <mat-card class="custom-width custom-color custom-border">
     <div class="container mt-6 ">
 
-        <form autocomplete="off">
-            <h4 class="text-center">ÁREA DE ANALISIS CONTABLE (388)</h4>
+        <form (ngSubmit)="crearCaja()" autocomplete="off" [formGroup]="cajaForm">
+            <h4>ÁREA DE ANALISIS CONTABLE (388)</h4>
             <div class="mb-1 row">
                 <!– Input para la descripcion de la caja –>
                 <label for="descripcion" class="col-sm-1 col-form-label">Descripción</label>
                  <div class="col-sm-6">
-                    <input type="text" class="form-control form-control-sm" id="descripcion" name="descripcion">
+                    <input formControlName="descripcion" type="text" class="form-control form-control-sm" id="descripcion" name="descripcion">
                 </div>
 
                 <!– Input para el Grupo de la caja –>
@@ -24,18 +24,23 @@
                 <!– Input para el codigo de la caja –>
                     <label for="codigo" class="col-sm-1 col-form-label">Código</label>
                     <div class="col-sm-1">
-                        <input type="text" class="form-control form-control-sm" id="codigo" name="codigo">
+                        <input type="text" class="form-control form-control-sm custom-font-size" id="codigo" name="codigo">
                     </div>
 
                 <!– Input para la fecha de caducidad de la caja –>
                     <label for="fecha" class="col-sm-1 col-form-label">Caducidad</label>
                     <div class="col-sm-1">
-                        <input type="text" class="form-control form-control-sm" id="fecha" name="fecha">
+                        <input type="text" class="form-control form-control-sm custom-font-size" id="fecha" name="fecha">
+                    </div>
+
+                    <!– Botón Para buscar caja –>
+                    <div class="col-sm-1 offset-sm-1">
+                        <button type="submit" class="btn btn-sm btn-primary"> <i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
                     </div>
 
                 <!– Botón Guardar –>
-                    <div class="col-sm-2 offset-sm-2">
-                        <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                    <div class="col-sm-2">
+                        <button type="submit" class="btn btn-sm btn-primary" (click)="crearCaja()"><i class="fa fa-archive" aria-hidden="true"></i> Guardar</button>
                     </div>
 
                 <!– Input para el Estante de la caja –>
@@ -139,11 +144,12 @@
         </div>
     </mat-card>
 
-    <!– Tabla de comprobantes>
+    
+    <!-- Tabla de comprobantes -->
     <mat-card class="custom-width custom-color custom-border"><br>
         <div class="container mt-6">
             <section class="example-container mat-elevation-z8" tabindex="0">
-                <table class="table custom-table-style" mat-table [dataSource]="dataSource">
+                <!-- <table class="table custom-table-style" mat-table [dataSource]="dataSource"> -->
 
                     <!-- Position Column -->
                     <ng-container matColumnDef="position">
@@ -174,10 +180,10 @@
                         <td mat-cell *matCellDef="let element"> {{element.comprobante}} </td>
                     </ng-container>
 
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
-
+ -->
 
 
             </section><br>
@@ -187,3 +193,4 @@
 
         </div>
     </mat-card>
+    

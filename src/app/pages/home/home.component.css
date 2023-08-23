@@ -1,6 +1,6 @@
 .custom-width {
-    margin-left: 3%;
-    margin-right: 3%;
+    margin-left: 4%;
+    margin-right: 4%;
   }
   
   .custom-color {
@@ -9,7 +9,7 @@
   }
 
   .example-container {
-    height: 410px;
+    height: 420px;
     overflow: auto;
   }
   
@@ -21,12 +21,15 @@
     border-radius: 0.1px;
   }
 
-  .custom-table-style {
-    font-size: 1px; /* Puedes ajustar este valor según tus necesidades */
+  .custom-font-size {
+    font-size: 11.5px; /* Puedes ajustar este valor según tus necesidades */
   }
 
   .center-content {
     text-align: center;
   }
 
-  
+  .text-color{
+    color: white; /* Cambia el color del texto a blanco */
+  }
+
