@@ -23,6 +23,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import { AdministradorComponent } from './administrador/administrador.component';
 import {MatTableModule} from '@angular/material/table';
 import { ModalComponent } from './administrador/modal/modal.component';
+import { DialogComponent } from './administrador/dialog/dialog.component';
 
 
 
@@ -49,7 +50,8 @@ import { ModalComponent } from './administrador/modal/modal.component';
     MatToolbarModule,
     MatIconModule,
     MatTooltipModule,
-    MatTableModule
+    MatTableModule,
+    DialogComponent
   ],
   exports:[
     LoginComponent,

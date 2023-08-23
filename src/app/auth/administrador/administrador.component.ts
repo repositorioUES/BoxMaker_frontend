@@ -4,6 +4,8 @@ import Swal from 'sweetalert2';
 import { Usuario } from 'src/app/models/user.model';
 import { AdminService } from 'src/app/services/admin.service';
 import { SwitchService } from 'src/app/services/switch.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from './dialog/dialog.component';
 
 @Component({
   selector: 'app-administrador',
@@ -13,9 +15,10 @@ import { SwitchService } from 'src/app/services/switch.service';
 
 export class AdministradorComponent implements OnInit {
 
-  constructor(private adminSrv: AdminService, private switchSrv: SwitchService){}
-  
-  modalSwitch: boolean = false;
+  constructor(private adminSrv: AdminService, private dialog: MatDialog){}
+
+  userId: string = "";
+  userName: string = "";
 
   usuarios: Usuario[] = []
 
@@ -23,8 +26,11 @@ export class AdministradorComponent implements OnInit {
   
   ngOnInit(): void {
     this.cargarUsuarios()
-    // Suscribirse al observer para escuchar el "valor" que nos mande
-    this.switchSrv.$switch.subscribe((valor)=>{this.modalSwitch = valor})
+
+    // Suscribirse al observer para escuchar el "valor" que nos mande el id del usuairo
+    this.adminSrv.$userId.subscribe((id)=>{this.userId = id})
+    // Suscribirse al observer para escuchar el "valor" que nos mande el nombre del usuairo
+    this.adminSrv.$userName.subscribe((nombre)=>{this.userName= nombre})
   }
   
   cargarUsuarios(){
@@ -83,13 +89,17 @@ export class AdministradorComponent implements OnInit {
     }, (err)=> console.warn(err))
   }
 
-async permissions(id: string){
-
+openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
+  this.dialog.open(DialogComponent, {
+    width: '400px',
+    enterAnimationDuration,
+    exitAnimationDuration,
+  });
 }
 
-openModal(){
-  this.modalSwitch = true;
-  console.log(this.modalSwitch)
-}
+// openModal(){
+//   this.modalSwitch = true;
+//   console.log(this.modalSwitch)
+// }
 
 }
