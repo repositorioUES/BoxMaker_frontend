@@ -22,7 +22,7 @@ export class AdminService {
   constructor(private http: HttpClient) {}
 
   get token(): string {
-    return localStorage.getItem('token') || '';
+    return localStorage.getItem('token') || 'baaaka!';
   }
 
   private globalHeaders = new HttpHeaders({'authorization': this.token});
@@ -30,6 +30,7 @@ export class AdminService {
 
   getUsers () : Observable<Usuario[]>{
     const headers = this.globalHeaders
+    console.log(headers)
     return this.http.get<Usuario[]>(`${ base_url }/usuario/all`, {headers})
   }
 
@@ -51,23 +52,6 @@ export class AdminService {
   resetPassword (id: string) : Observable<void>{
     const headers = this.globalHeaders
     return this.http.get<void>(`${ base_url }/usuario/resetPassword/${ id }`, {headers})
-  }
-
-  // FUNCIONES PARA LA GESTION DE PERMISOS==========================================================
-  getPermissions (id: string) : Observable<void>{
-    const headers = this.globalHeaders
-    console.log(id)
-    return this.http.get<void>(`${ base_url }/permiso/byUser/${ id }`, {headers})
-  }
-
-  grantPermission () : Observable<void>{
-    const headers = this.globalHeaders
-    return this.http.delete<void>(`${ base_url }/permiso/grant/${ this.$userId }`, {headers})
-  }
-
-  denyPermission () : Observable<void>{
-    const headers = this.globalHeaders
-    return this.http.delete<void>(`${ base_url }/permiso/deny/${ this.$userId }`, {headers})
   }
 
 

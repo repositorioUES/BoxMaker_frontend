@@ -4,13 +4,13 @@
 <div mat-dialog-content style="width: 300px;">
     <table class="table table-bordered">
         <thead>
-            <td style="font-weight: bold;"><input type="checkbox" (click)="grantDenyAll()" class="mainChk" name="mainChk"></td>&nbsp;&nbsp;&nbsp;
+            <td style="font-weight: bold;"><input type="checkbox" class="mainChk" name="mainChk"></td>&nbsp;&nbsp;&nbsp;
             <td style="font-weight: bold;"> Permisos</td>
         </thead>
-        <tr *ngFor="let item of permisos" mat-cell title="{{item.descripcion}}">
+        <!-- <tr *ngFor="let item of permisos" mat-cell title="{{item.descripcion}}">
             <td><input type="checkbox" (click)="addToIds(item._id)" class="chk" name="chk"></td>&nbsp;&nbsp;&nbsp;
             <td> {{item.nombre}} </td>
-        </tr>
+        </tr> -->
     </table>
 </div>
 

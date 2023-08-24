@@ -23,15 +23,20 @@ export class AdministradorComponent implements OnInit {
 
   usuarios: Usuario[] = []
 
-  displayedColumns: string[] = ['Permisos', 'Nombre', 'Nombre de Usuario', 'Fec. Creación', 'Estado','Bloqueo', 'Contraseña', 'Eliminar'];
+  displayedColumns: string[] = ['Nombre', 'Nombre de Usuario', 'Fec. Creación', 'Estado','Bloqueo', 'Contraseña', 'Editar', 'Eliminar'];
   
   ngOnInit(): void {
     this.cargarUsuarios()
 
     // Suscribirse al observer para escuchar el "valor" que nos mande el id del usuairo
-    this.adminSrv.$userId.subscribe((id)=>{this.userId = id})
+    // this.adminSrv.$userId.subscribe((id)=>{this.userId = id})
     // Suscribirse al observer para escuchar el "valor" que nos mande el nombre del usuairo
     this.adminSrv.$userName.subscribe((nombre)=>{this.userName= nombre})
+  }
+
+  setUserId(id: string){
+    this.adminSrv.$userId.emit(id)
+    this.openDialog()
   }
   
   cargarUsuarios(){
@@ -123,8 +128,8 @@ export class AdministradorComponent implements OnInit {
     })
   }
 
-  openDialog(id: string) {
-    this.adminSrv.$userId.emit(id)
+  openDialog() {
+    console.log(this.userId)
     this.dialog.open(DialogComponent, {
       width: '350px',
       enterAnimationDuration: '400ms',
