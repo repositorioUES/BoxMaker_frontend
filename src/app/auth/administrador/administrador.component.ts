@@ -6,6 +6,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { SwitchService } from 'src/app/services/switch.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from './dialog/dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-administrador',
@@ -15,7 +16,7 @@ import { DialogComponent } from './dialog/dialog.component';
 
 export class AdministradorComponent implements OnInit {
 
-  constructor(private adminSrv: AdminService, private dialog: MatDialog){}
+  constructor(private adminSrv: AdminService, private dialog: MatDialog, private snack: MatSnackBar){}
 
   userId: string = "";
   userName: string = "";
@@ -38,7 +39,12 @@ export class AdministradorComponent implements OnInit {
     .subscribe((resp:any) => {
       this.usuarios = resp.result
     }, (err)=> {
-      console.warn(err) 
+        console.warn(err) 
+        this.snack.open(err.error.msg, 'Error', {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center'
+      });
     })
   }
 
@@ -53,7 +59,14 @@ export class AdministradorComponent implements OnInit {
       .subscribe((res:any) => {
         Swal.fire(res.msg + ' ' + userName, 'Completado')
         this.cargarUsuarios()
-      }, (err)=> console.warn(err))
+      }, (err)=> {
+          console.warn(err)
+          this.snack.open(err.error.msg, 'Error', {
+          duration: 5000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+      })
     }
   }
 
@@ -69,7 +82,14 @@ export class AdministradorComponent implements OnInit {
       .subscribe((res:any) => {
         Swal.fire(res.msg, 'Completado')
         this.cargarUsuarios()
-      }, (err)=> console.warn(err))
+      }, (err)=> {
+          console.warn(err)
+          this.snack.open(err.error.msg, 'Error', {
+          duration: 5000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+      })
     }
   }
 
@@ -78,7 +98,14 @@ export class AdministradorComponent implements OnInit {
     .subscribe((res:any) => {
       Swal.fire(res.msg, 'Completado')
       this.cargarUsuarios()
-    }, (err)=> console.warn(err))
+    }, (err)=> {
+        console.warn(err)
+        this.snack.open(err.error.msg, 'Error', {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center'
+      });
+    })
   }
 
   unlock(id: string){
@@ -86,20 +113,23 @@ export class AdministradorComponent implements OnInit {
     .subscribe((res:any) => {
       Swal.fire(res.msg, 'Completado')
       this.cargarUsuarios()
-    }, (err)=> console.warn(err))
+    }, (err)=> {
+        console.warn(err)
+        this.snack.open(err.error.msg, 'Error', {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center'
+      });
+    })
   }
 
-openDialog(enterAnimationDuration: string, exitAnimationDuration: string): void {
-  this.dialog.open(DialogComponent, {
-    width: '400px',
-    enterAnimationDuration,
-    exitAnimationDuration,
-  });
-}
-
-// openModal(){
-//   this.modalSwitch = true;
-//   console.log(this.modalSwitch)
-// }
+  openDialog(id: string) {
+    this.adminSrv.$userId.emit(id)
+    this.dialog.open(DialogComponent, {
+      width: '350px',
+      enterAnimationDuration: '400ms',
+      exitAnimationDuration: '400ms',
+    });
+  }
 
 }

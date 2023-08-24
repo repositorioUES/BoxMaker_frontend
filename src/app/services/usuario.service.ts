@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
@@ -12,16 +12,15 @@ export class UsuarioService {
 
   constructor(private http: HttpClient) { }
 
+  get token(): string {
+    return localStorage.getItem('token') || '';
+  }
+
+  private globalHeaders = new HttpHeaders({'authorization': this.token});
+
   crearUsuario( formData: any ) {
-
-    return this.http.post(`${ base_url }/usuario/register`, formData)
-                .pipe(
-                  tap( (resp: any) => {
-                    localStorage.setItem('token', resp.token );
-                    localStorage.setItem('usuario', JSON.stringify(resp.userName))
-                  })
-                )
-
+    const headers = this.globalHeaders
+    return this.http.post(`${ base_url }/usuario/register`, formData, {headers})
   }
 
 }
