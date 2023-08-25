@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
@@ -14,21 +14,16 @@ export class CajaService {
   constructor(private http: HttpClient, private router : Router) { }
 
   get token(): string {
-    return localStorage.getItem('token') || '';
+    return localStorage.getItem('token') || 'baaaka!';
   }
 
-  get headers() {
-    return {
-      headers: {
-        'authorization': this.token
-      }
-    }
-  }
+  private globalHeaders = new HttpHeaders({'authorization': this.token});
 
 
 
   crearCaja(formData: any){
-    return this.http.post(`${ base_url }/caja/create`, formData, this.headers )
+    const headers = this.globalHeaders
+    return this.http.post(`${ base_url }/caja/create`, formData, {headers} )
   }
 
 

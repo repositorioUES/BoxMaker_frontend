@@ -13,7 +13,7 @@ const base_url = environment.base_url;
 export class AuthService {
 
   get token(): string {
-    return localStorage.getItem('token') || 'baaaka!';
+    return localStorage.getItem('token') || '';
   }
 
   private globalHeaders = new HttpHeaders({'authorization': this.token});
@@ -21,10 +21,12 @@ export class AuthService {
   constructor(private http: HttpClient, private router : Router) { }
 
     login( formData: any ) {
-
+      console.log(formData)
       return this.http.post(`${ base_url }/usuario/login`, formData )
                   .pipe(
                     tap( (resp: any) => {
+                      console.log(resp)
+
                       localStorage.setItem('token', resp.token );
                       localStorage.setItem('usuario', JSON.stringify(resp.username))
                     })
