@@ -29,7 +29,6 @@ export class LoginComponent implements OnInit{
       .subscribe(resp => {
         if (resp.ok === true) {
           
-          
           const loggedUser = resp.username
           if(loggedUser.toLowerCase() == 'admin')
           this.router.navigateByUrl('/auth/admin-lobby');
@@ -48,10 +47,6 @@ export class LoginComponent implements OnInit{
             horizontalPosition: 'center'
           });
         }
-
-
-        // Navegar al Dashboard
-        // Suscripción al evento NavigationEnd
 
       }, (err) => {
         console.warn(err.error.msg);
