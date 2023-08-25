@@ -34,11 +34,11 @@ export class LoginComponent implements OnInit{
         else
           this.router.navigateByUrl('/');
 
-        // this.router.events.subscribe(event => {
-        //   if (event instanceof NavigationEnd && this.router.url === '/') {
-        //     window.location.reload();
-        //   }
-        // });
+        this.router.events.subscribe(event => {
+          if (event instanceof NavigationEnd && this.router.url === '/') {
+            window.location.reload();
+          }
+        });
 
 
         // Navegar al Dashboard
