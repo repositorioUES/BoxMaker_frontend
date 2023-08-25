@@ -1,9 +1,9 @@
-<br>
-<!– Creacion de la caja –>
-<mat-card class="custom-width custom-color custom-border">
-    <div class="container mt-6 ">
 
-        <form (ngSubmit)="crearCaja()" autocomplete="off" [formGroup]="cajaForm">
+<!– Creacion de la caja –>
+<mat-card class="custom-width custom-border">
+    <div class="container mt-6 border custom-border-bottom custom-color">
+
+        <form autocomplete="off" ><br>
             <h4>ÁREA DE ANALISIS CONTABLE (388)</h4>
             <div class="mb-1 row">
                 <!– Input para la descripcion de la caja –>
@@ -40,7 +40,7 @@
 
                 <!– Botón Guardar –>
                     <div class="col-sm-2">
-                        <button type="submit" class="btn btn-sm btn-primary" (click)="crearCaja()"><i class="fa fa-archive" aria-hidden="true"></i> Guardar</button>
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-archive" aria-hidden="true"></i> Guardar</button>
                     </div>
 
                 <!– Input para el Estante de la caja –>
@@ -60,9 +60,9 @@
 
 
 <!– Ingreso de comprobantes –>
-    <mat-card class="custom-width custom-color custom-border"><br>
-        <div class="container mt-6">
-            <form autocomplete="off">
+    <mat-card class="custom-width  custom-border">
+        <div class="container mt-6 border custom-border-bottom custom-color">
+            <form autocomplete="off"><br>
                 <div class="mb-1 row">
 
                     <!– Input para el Tipo de documento –>
@@ -146,10 +146,10 @@
 
     
     <!-- Tabla de comprobantes -->
-    <mat-card class="custom-width custom-color custom-border"><br>
-        <div class="container mt-6">
+    <mat-card class="custom-width  custom-border">
+        <div class="container mt-6 border custom-border-bottom custom-color"><br>
             <section class="example-container mat-elevation-z8" tabindex="0">
-                <!-- <table class="table custom-table-style" mat-table [dataSource]="dataSource"> -->
+                <table class="table custom-table-style" mat-table [dataSource]="dataSource">
 
                     <!-- Position Column -->
                     <ng-container matColumnDef="position">
@@ -180,10 +180,10 @@
                         <td mat-cell *matCellDef="let element"> {{element.comprobante}} </td>
                     </ng-container>
 
-                    <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 </table>
- -->
+
 
 
             </section><br>

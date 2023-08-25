@@ -1,6 +1,6 @@
 .custom-width {
-    margin-left: 4%;
-    margin-right: 4%;
+    margin-left: 0%;
+    margin-right: 0%;
   }
   
   .custom-color {
@@ -9,7 +9,7 @@
   }
 
   .example-container {
-    height: 420px;
+    height: 410px;
     overflow: auto;
   }
   
@@ -31,5 +31,12 @@
 
   .text-color{
     color: white; /* Cambia el color del texto a blanco */
+  }
+
+  .custom-border-bottom{
+    margin-bottom: 1px;
+    border-radius: 10px;
+    border-color: rgb(245, 0, 0);
+    border-width: 100px;
   }
 
