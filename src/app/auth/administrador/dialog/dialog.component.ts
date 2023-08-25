@@ -1,29 +1,44 @@
-import {Component, INJECTOR, Input, OnInit} from '@angular/core';
-import { MatDialogRef, MatDialogModule} from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
+
+import { Component, Inject, OnInit } from '@angular/core';
+
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 import { AdminService } from 'src/app/services/admin.service';
-import { Permiso } from 'src/app/models/permiso.model';
-import { NgFor, NgIf } from '@angular/common';
-import { MatSnackBar } from '@angular/material/snack-bar';
+
+export interface DialogData {
+  userName: string;
+  primerNombre: string; 
+  segundoNombre:string;
+  primerApellido: string;
+  segundoApellido: string; 
+  email: string; 
+  passCaducidad: string;
+  _id: string;
+}
 
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
   standalone: true,
-  imports: [MatDialogModule, MatButtonModule, NgFor, NgIf],
+  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
 })
+export class DialogComponent {
+  constructor(
+    public dialogRef: MatDialogRef<DialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private adminSrv: AdminService
+  ) {}
 
-export class DialogComponent implements OnInit{
-
-  constructor(public dialogRef: MatDialogRef<DialogComponent>, private adminSrv: AdminService, private snack: MatSnackBar) {}
-
-  public checkSwitch: boolean = false
-
-
-  ngOnInit(): void {
- 
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
+  upadateUser(){
+    // this.adminSrv.updateUser(),
 
-  
+  }
 }

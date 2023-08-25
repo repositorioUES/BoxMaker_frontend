@@ -1,20 +1,33 @@
-
-
-<h1 mat-dialog-title >Permisos del Usuario [$userName]="$userName</h1>
-<div mat-dialog-content style="width: 300px;">
-    <table class="table table-bordered">
-        <thead>
-            <td style="font-weight: bold;"><input type="checkbox" class="mainChk" name="mainChk"></td>&nbsp;&nbsp;&nbsp;
-            <td style="font-weight: bold;"> Permisos</td>
-        </thead>
-        <!-- <tr *ngFor="let item of permisos" mat-cell title="{{item.descripcion}}">
-            <td><input type="checkbox" (click)="addToIds(item._id)" class="chk" name="chk"></td>&nbsp;&nbsp;&nbsp;
-            <td> {{item.nombre}} </td>
-        </tr> -->
-    </table>
+<h1 mat-dialog-title>Datos del Usuario: {{data.userName}}</h1>
+<div mat-dialog-content>
+    <div>
+        <mat-form-field>
+          <mat-label>Primer Nombre</mat-label>
+          <input matInput [(ngModel)]="data.primerNombre">
+        </mat-form-field>
+        &nbsp;&nbsp;
+        <mat-form-field>
+          <mat-label>Segundo Nombre</mat-label>
+          <input matInput [(ngModel)]="data.segundoNombre">
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+          <mat-label>Primer Apellido</mat-label>
+          <input matInput [(ngModel)]="data.primerApellido">
+        </mat-form-field>
+        &nbsp;&nbsp;
+        <mat-form-field>
+          <mat-label>Segundo Apellido</mat-label>
+          <input matInput [(ngModel)]="data.segundoApellido">
+        </mat-form-field>
+    </div>
+    <div>
+        <p>Correo Electrónico: {{data.email}}</p>
+        <p>Caducidad de Contraseña: {{data.passCaducidad}}</p>
+    </div>
 </div>
-
-<div mat-dialog-actions>
-    <button mat-button mat-dialog-close>Cerrar</button>
-    <button mat-button mat-dialog-close cdkFocusInitial >Guardar</button>
+<div mat-dialog-actions align="center">
+  <button mat-button (click)="onNoClick()">Cerrar</button>
+  <button mat-button [mat-dialog-close]="data._id" cdkFocusInitial>Guardar</button>
 </div>

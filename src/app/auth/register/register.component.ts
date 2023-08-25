@@ -24,7 +24,7 @@ export class RegisterComponent {
 
   crearUsuario() {
     this.formSubmitted = true;
-    console.log(this.registerForm.value);
+    // console.log(this.registerForm.value);
 
     if (this.registerForm.invalid) {
       return;
@@ -39,7 +39,7 @@ export class RegisterComponent {
           horizontalPosition: 'center'
         });
         // Navegar al Dashboard
-        // this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/auth/admin');
 
 
       }, (err) => {

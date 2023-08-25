@@ -1,12 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 
 import { Usuario } from 'src/app/models/user.model';
 import { AdminService } from 'src/app/services/admin.service';
-import { SwitchService } from 'src/app/services/switch.service';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from './dialog/dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DialogComponent } from './dialog/dialog.component';
+
 
 @Component({
   selector: 'app-administrador',
@@ -16,12 +16,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 export class AdministradorComponent implements OnInit {
 
-  constructor(private adminSrv: AdminService, private dialog: MatDialog, private snack: MatSnackBar){}
+  constructor(private adminSrv: AdminService, private dialog: MatDialog, private snack: MatSnackBar, ){}
 
-  userId: string = "";
   userName: string = "";
-
-  usuarios: Usuario[] = []
+  
+  usuario!: Usuario; // Solo 1
+  usuarios: Usuario[] = [] // Todos los usuarios
 
   displayedColumns: string[] = ['Nombre', 'Nombre de Usuario', 'Fec. Creación', 'Estado','Bloqueo', 'Contraseña', 'Editar', 'Eliminar'];
   
@@ -134,13 +134,44 @@ export class AdministradorComponent implements OnInit {
     })
   }
 
-  openDialog() {
-    console.log(this.userId)
-    this.dialog.open(DialogComponent, {
-      width: '350px',
-      enterAnimationDuration: '400ms',
-      exitAnimationDuration: '400ms',
-    });
+  primerNombre!: string;
+  segundoNombre!: string;
+  primerApellido!: string;
+  segundoApellido!: string;
+  
+  openDialoge(id: string): void {
+
+    this.adminSrv.getUser(id)
+    .subscribe((res:any) => {
+      const usuario = res.user
+
+      //Abrir el Dialog con la inof
+      const dialogRef = this.dialog.open(DialogComponent, {
+        data: {
+          userName: usuario.userName,
+          primerNombre: usuario.primerNombre,
+          segundoNombre: usuario.segundoNombre,
+          primerApellido: usuario.primerApellido,
+          segundoApellido: usuario.segundoApellido,
+          email: usuario.email,
+          passCaducidad: usuario.passCaducidad + " (Faltan " + usuario.dias + " días)",
+          _id: usuario._id
+        },
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+      });
+    }, (err)=> {
+        console.warn(err)
+        this.snack.open(err.error.msg, 'Error', {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center'
+      });
+    })
   }
 
+  
 }
+

@@ -13,8 +13,6 @@ const base_url = environment.base_url;
 
 export class AdminService {
 
-  $switch = new EventEmitter<any>();
-
   //Observable que emitirá cada ve que cambie el valor de $userId
   $userId = new EventEmitter<string>();
   $userName = new EventEmitter<any>();
@@ -31,6 +29,16 @@ export class AdminService {
   getUsers () : Observable<Usuario[]>{
     const headers = this.globalHeaders
     return this.http.get<Usuario[]>(`${ base_url }/usuario/all`, {headers})
+  }
+
+  getUser (id: string) : Observable<Usuario>{
+    const headers = this.globalHeaders
+    return this.http.get<Usuario>(`${ base_url }/usuario/one/${ id }`, {headers})
+  }
+
+  updateUser (id: string, data: any) : Observable<void>{
+    const headers = this.globalHeaders
+    return this.http.put<void>(`${ base_url }/usuario/edit/${ id }`, data, {headers})
   }
 
   deleteUser (id: string) : Observable<void>{
@@ -52,6 +60,5 @@ export class AdminService {
     const headers = this.globalHeaders
     return this.http.get<void>(`${ base_url }/usuario/resetPassword/${ id }`, {headers})
   }
-
 
 }
