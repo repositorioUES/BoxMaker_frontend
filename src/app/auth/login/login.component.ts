@@ -27,14 +27,18 @@ export class LoginComponent implements OnInit{
   login() {
     this.authService.login(this.loginForm.value)
       .subscribe(resp => {
-      
-        this.router.navigateByUrl('/');
 
-        this.router.events.subscribe(event => {
-          if (event instanceof NavigationEnd && this.router.url === '/') {
-            window.location.reload();
-          }
-        });
+        const loggedUser = resp.username
+        if(loggedUser.toLowerCase() == 'admin')
+          this.router.navigateByUrl('/auth/admin-lobby');
+        else
+          this.router.navigateByUrl('/');
+
+        // this.router.events.subscribe(event => {
+        //   if (event instanceof NavigationEnd && this.router.url === '/') {
+        //     window.location.reload();
+        //   }
+        // });
 
 
         // Navegar al Dashboard
