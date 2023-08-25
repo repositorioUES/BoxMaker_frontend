@@ -3,7 +3,7 @@
 <mat-card class="custom-width custom-border">
     <div class="container mt-6 border custom-border-bottom custom-color">
 
-        <form autocomplete="off" ><br>
+        <form (ngSubmit)="crearCaja()" autocomplete="off" [formGroup]="cajaForm"><br>
             <h4>ÁREA DE ANALISIS CONTABLE (388)</h4>
             <div class="mb-1 row">
                 <!– Input para la descripcion de la caja –>
@@ -15,27 +15,27 @@
                 <!– Input para el Grupo de la caja –>
                 <label for="grupo" class="col-sm-1 col-form-label offset-sm-1">Grupo</label>
                 <div class="col-sm-1">
-                    <input type="text" class="form-control form-control-sm" id="grupo" name="grupo">
+                    <input  formControlName="grupo" type="text" class="form-control form-control-sm" id="grupo" name="grupo">
                 </div>
             </div>
 
             <div class="mb-1 row">
-
                 <!– Input para el codigo de la caja –>
                     <label for="codigo" class="col-sm-1 col-form-label">Código</label>
                     <div class="col-sm-1">
-                        <input type="text" class="form-control form-control-sm custom-font-size" id="codigo" name="codigo">
+                        <input formControlName="codigo" type="text" class="form-control form-control-sm custom-font-size" id="codigo" name="codigo">
                     </div>
 
                 <!– Input para la fecha de caducidad de la caja –>
                     <label for="fecha" class="col-sm-1 col-form-label">Caducidad</label>
                     <div class="col-sm-1">
-                        <input type="text" class="form-control form-control-sm custom-font-size" id="fecha" name="fecha">
+                        <input formControlName="caducidad" type="text" class="form-control form-control-sm custom-font-size" id="fecha" name="fecha"
+                        [value]="cajaForm.get('caducidad')?.value | date: 'dd/MM/yyyy'">
                     </div>
 
                     <!– Botón Para buscar caja –>
                     <div class="col-sm-1 offset-sm-1">
-                        <button type="submit" class="btn btn-sm btn-primary"> <i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
+                        <button class="btn btn-sm btn-primary"> <i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
                     </div>
 
                 <!– Botón Guardar –>
@@ -46,12 +46,12 @@
                 <!– Input para el Estante de la caja –>
                     <label for="estante" class="col-sm-1 col-form-label">Estante</label>
                     <div class="col-sm-1">
-                        <input type="text" class="form-control form-control-sm" id="estante" name="estante">
+                        <input formControlName="estante" type="text" class="form-control form-control-sm" id="estante" name="estante">
                     </div>
                 <!– Input para el nivel de la caja –>
                     <label for="nivel" class="col-sm-1 col-form-label">Nivel</label>
                     <div class="col-sm-1">
-                        <input type="text" class="form-control form-control-sm" id="nivel" name="nivel">
+                        <input formControlName="nivel" type="text" class="form-control form-control-sm" id="nivel" name="nivel">
                     </div>
             </div>
         </form>
