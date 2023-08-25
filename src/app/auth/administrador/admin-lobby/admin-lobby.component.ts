@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-lobby',
@@ -6,6 +7,12 @@ import { Component } from '@angular/core';
   styles: [
   ]
 })
-export class AdminLobbyComponent {
+export class AdminLobbyComponent implements OnInit{
+
+  constructor(private router: Router){}
+  
+  ngOnInit(): void {
+    this.router.navigateByUrl('/auth/admin');
+  }
 
 }

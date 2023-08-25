@@ -97,7 +97,12 @@ export class AdministradorComponent implements OnInit {
   changeState(id: string){
     this.adminSrv.changeState(id)
     .subscribe((res:any) => {
-      Swal.fire(res.msg, 'Completado')
+      // Swal.fire(res.msg, 'Completado')
+      this.snack.open(res.msg, 'Completado', {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center'
+      });
       this.cargarUsuarios()
     }, (err)=> {
         console.warn(err)
@@ -112,7 +117,12 @@ export class AdministradorComponent implements OnInit {
   unlock(id: string){
     this.adminSrv.unlock(id)
     .subscribe((res:any) => {
-      Swal.fire(res.msg, 'Completado')
+      // Swal.fire(res.msg, 'Completado')
+      this.snack.open(res.msg, 'Completado', {
+        duration: 5000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center'
+      });
       this.cargarUsuarios()
     }, (err)=> {
         console.warn(err)
