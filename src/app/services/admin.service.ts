@@ -30,7 +30,6 @@ export class AdminService {
 
   getUsers () : Observable<Usuario[]>{
     const headers = this.globalHeaders
-    console.log(headers)
     return this.http.get<Usuario[]>(`${ base_url }/usuario/all`, {headers})
   }
 

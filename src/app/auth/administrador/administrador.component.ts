@@ -34,10 +34,6 @@ export class AdministradorComponent implements OnInit {
     this.adminSrv.$userName.subscribe((nombre)=>{this.userName= nombre})
   }
 
-  setUserId(id: string){
-    this.adminSrv.$userId.emit(id)
-    this.openDialog()
-  }
   
   cargarUsuarios(){
     this.adminSrv.getUsers()
