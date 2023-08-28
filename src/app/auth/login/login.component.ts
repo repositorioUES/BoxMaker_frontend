@@ -31,9 +31,9 @@ export class LoginComponent implements OnInit{
           
           const loggedUser = resp.username
           if(loggedUser.toLowerCase() == 'admin')
-          this.router.navigateByUrl('/auth/admin-lobby');
+            this.router.navigateByUrl('/auth/admin-lobby');
           else
-          this.router.navigateByUrl('/');
+            this.router.navigateByUrl('/');
           
           this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd && this.router.url === '/') {

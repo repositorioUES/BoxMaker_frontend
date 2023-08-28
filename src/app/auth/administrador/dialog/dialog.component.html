@@ -28,6 +28,7 @@
     </div>
 </div>
 <div mat-dialog-actions align="center">
-  <button mat-button (click)="onNoClick()">Cerrar</button>
-  <button mat-button [mat-dialog-close]="data._id" cdkFocusInitial>Guardar</button>
+  <button  (click)="onNoClick()" class="btn btn-danger">Cerrar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <button  (click)="upadateUser(data._id, data.primerNombre, data.segundoNombre, data.primerApellido, data.segundoApellido)" 
+    class="btn btn-primary" >Guardar</button>
 </div>

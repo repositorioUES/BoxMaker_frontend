@@ -133,13 +133,8 @@ export class AdministradorComponent implements OnInit {
       });
     })
   }
-
-  primerNombre!: string;
-  segundoNombre!: string;
-  primerApellido!: string;
-  segundoApellido!: string;
   
-  openDialoge(id: string): void {
+  openDialog(id: string): void {
 
     this.adminSrv.getUser(id)
     .subscribe((res:any) => {
@@ -155,12 +150,13 @@ export class AdministradorComponent implements OnInit {
           segundoApellido: usuario.segundoApellido,
           email: usuario.email,
           passCaducidad: usuario.passCaducidad + " (Faltan " + usuario.dias + " días)",
-          _id: usuario._id
+          _id: id
         },
       });
   
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
+        // console.log('The dialog was closed');
+        this.cargarUsuarios()
       });
     }, (err)=> {
         console.warn(err)
