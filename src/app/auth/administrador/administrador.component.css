@@ -17,6 +17,8 @@
   .component-class {
     width:100%;
     height: 92%;
+    background-image: url("../../../assets/images/waves.png"); 
+    background-size: cover; 
   }
 
   .custom-color {
@@ -43,5 +45,3 @@
      height: 600px; 
     overflow: auto;
   }
-  
-  

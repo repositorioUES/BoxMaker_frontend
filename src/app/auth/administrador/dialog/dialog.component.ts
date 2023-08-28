@@ -40,6 +40,7 @@ export class DialogComponent {
     this.dialogRef.close();
   }
 
+
   upadateUser(id: string, pn: string, sn: string, pa: string, sa: string){
     
     const data = ({

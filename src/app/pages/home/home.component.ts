@@ -28,6 +28,7 @@ export class HomeComponent implements OnInit {
     grupo: ["",],
     estante: ["",],
     nivel: ["",],
+    numero: ["",],
   });
 
 
@@ -55,6 +56,7 @@ export class HomeComponent implements OnInit {
           grupo: resp.grupo,
           estante: resp.estante,
           nivel: resp.nivel,
+          numero: resp.numero,
         });
       }, (err) => {
         console.warn(err.error.msg);
@@ -92,6 +94,7 @@ export class HomeComponent implements OnInit {
             grupo: resp.caja.grupo,
             estante: resp.caja.estante,
             nivel: resp.caja.nivel,
+            numero: resp.caja.numero,
           });
         }, (err) => {
           console.warn(err.error.msg);

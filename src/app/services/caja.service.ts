@@ -14,7 +14,7 @@ export class CajaService {
   constructor(private http: HttpClient, private router : Router) { }
 
   get token(): string {
-    return localStorage.getItem('token') || 'baaaka!';
+    return localStorage.getItem('token') || '';
   }
 
   private globalHeaders = new HttpHeaders({'authorization': this.token});
