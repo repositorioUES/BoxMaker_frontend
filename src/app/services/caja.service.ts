@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
@@ -24,10 +24,9 @@ export class CajaService {
     return this.http.post(`${ base_url }/caja/create`, formData, {headers} )
   }
 
-  cargarCaja(codigo: string){
+  cargarCaja(formData: any){
     const headers = this.globalHeaders
-
-    return this.http.get(`${ base_url }/caja/one${ codigo }`, {headers} )
+    return this.http.post(`${ base_url }/caja/one`, formData, {headers} )
 }
 
 

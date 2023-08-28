@@ -1,196 +1,221 @@
-
 <!– Creacion de la caja –>
 <mat-card class="custom-width custom-border">
-    <div class="container mt-6 border custom-border-bottom custom-color">
+  <div class="container mt-6 border custom-border-bottom custom-color">
 
-        <form (ngSubmit)="crearCaja()" autocomplete="off" [formGroup]="cajaForm"><br>
-            <h4>ÁREA DE ANALISIS CONTABLE (388)</h4>
-            <div class="mb-1 row">
-                <!– Input para la descripcion de la caja –>
-                <label for="descripcion" class="col-sm-1 col-form-label">Descripción</label>
-                 <div class="col-sm-6">
-                    <input formControlName="descripcion" type="text" class="form-control form-control-sm" id="descripcion" name="descripcion">
-                </div>
+    <form autocomplete="off" [formGroup]="cajaForm"><br>
+      <h4>ÁREA DE ANALISIS CONTABLE (388)</h4>
+      <div class="mb-1 row">
+        <!– Input para la descripcion de la caja –>
+        <label for="descripcion" class="col-sm-1 col-form-label">Descripción</label>
+        <div class="col-sm-6">
+          <input formControlName="descripcion" type="text" class="form-control form-control-sm" id="descripcion"
+                 name="descripcion">
+        </div>
 
-                <!– Input para el Grupo de la caja –>
-                <label for="grupo" class="col-sm-1 col-form-label offset-sm-1">Grupo</label>
-                <div class="col-sm-1">
-                    <input  formControlName="grupo" type="text" class="form-control form-control-sm" id="grupo" name="grupo">
-                </div>
-            </div>
+        <!– Input para el Grupo de la caja –>
+        <label for="grupo" class="col-sm-1 col-form-label offset-sm-1">Grupo</label>
+        <div class="col-sm-1">
+          <input formControlName="grupo" type="text" class="form-control form-control-sm" id="grupo" name="grupo">
+        </div>
+      </div>
 
-            <div class="mb-1 row">
-                <!– Input para el codigo de la caja –>
-                    <label for="codigo" class="col-sm-1 col-form-label">Código</label>
-                    <div class="col-sm-1">
-                        <input formControlName="codigo" type="text" class="form-control form-control-sm custom-font-size" id="codigo" name="codigo">
-                    </div>
+      <div class="mb-1 row">
+        <!– Input para el codigo de la caja –>
+        <label for="codigo" class="col-sm-1 col-form-label">Código</label>
+        <div class="col-sm-1">
+          <input formControlName="codigo" type="text" class="form-control form-control-sm custom-font-size" id="codigo"
+                 name="codigo">
+        </div>
 
-                <!– Input para la fecha de caducidad de la caja –>
-                    <label for="fecha" class="col-sm-1 col-form-label">Caducidad</label>
-                    <div class="col-sm-1">
-                        <input formControlName="caducidad" type="text" class="form-control form-control-sm custom-font-size" id="fecha" name="fecha"
-                        [value]="cajaForm.get('caducidad')?.value | date: 'dd/MM/yyyy'">
-                    </div>
+        <!– Input para la fecha de caducidad de la caja –>
+        <label for="fecha" class="col-sm-1 col-form-label">Caducidad</label>
+        <div class="col-sm-1">
+          <input formControlName="caducidad" type="text" class="form-control form-control-sm custom-font-size"
+                 id="fecha" name="fecha"
+                 [value]="cajaForm.get('caducidad')?.value | date: 'dd/MM/yyyy'">
+        </div>
 
-                    <!– Botón Para buscar caja –>
-                    <div class="col-sm-1 offset-sm-1">
-                        <button class="btn btn-sm btn-primary"> <i class="fa fa-search" aria-hidden="true"></i> Buscar</button>
-                    </div>
+        <!– Botón Para limpiar el formulario de la caja –>
+        <div class="col-sm-1">
+          <button type="reset" class="btn btn-sm btn-warning"><i class="fa fa-close" aria-hidden="true"></i> Limpiar
+          </button>
+        </div>
 
-                <!– Botón Guardar –>
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-archive" aria-hidden="true"></i> Guardar</button>
-                    </div>
+        <!– Botón Para buscar caja –>
+        <div class="col-sm-1 ">
+          <button class="btn btn-sm btn-primary" (click)="cargarCaja()"><i class="fa fa-search" aria-hidden="true"></i>
+            Buscar
+          </button>
+        </div>
 
-                <!– Input para el Estante de la caja –>
-                    <label for="estante" class="col-sm-1 col-form-label">Estante</label>
-                    <div class="col-sm-1">
-                        <input formControlName="estante" type="text" class="form-control form-control-sm" id="estante" name="estante">
-                    </div>
-                <!– Input para el nivel de la caja –>
-                    <label for="nivel" class="col-sm-1 col-form-label">Nivel</label>
-                    <div class="col-sm-1">
-                        <input formControlName="nivel" type="text" class="form-control form-control-sm" id="nivel" name="nivel">
-                    </div>
-            </div>
-        </form>
-    </div>
+        <!– Botón Guardar –>
+        <div class="col-sm-2">
+          <button class="btn btn-sm btn-primary" (click)="crearCaja()"><i class="fa fa-archive" aria-hidden="true"></i>
+            Guardar
+          </button>
+        </div>
+
+        <!– Input para el Estante de la caja –>
+        <label for="estante" class="col-sm-1 col-form-label">Estante</label>
+        <div class="col-sm-1">
+          <input formControlName="estante" type="text" class="form-control form-control-sm" id="estante" name="estante">
+        </div>
+
+        <!– Input para el nivel de la caja –>
+        <label for="nivel" class="col-sm-1 col-form-label">Nivel</label>
+        <div class="col-sm-1">
+          <input formControlName="nivel" type="text" class="form-control form-control-sm" id="nivel" name="nivel">
+        </div>
+      </div>
+    </form>
+  </div>
 </mat-card>
 
 
 <!– Ingreso de comprobantes –>
-    <mat-card class="custom-width  custom-border">
-        <div class="container mt-6 border custom-border-bottom custom-color">
-            <form autocomplete="off"><br>
-                <div class="mb-1 row">
+<mat-card class="custom-width  custom-border">
+  <div class="container mt-6 border custom-border-bottom custom-color">
+    <form autocomplete="off"><br>
+      <div class="mb-1 row">
 
-                    <!– Input para el Tipo de documento –>
-                    <label for="codigo" class="col-sm-1 col-form-label"></label>
-                    <div class="col-sm-1">
-                        <input type="text" class="form-control form-control-sm" id="codigo" name="codigo"  placeholder="Tipo">
-                    </div>
-
-                    <!– Input para la Clave –>
-                    <div class="col-sm-1">
-                        <input type="text" class="form-control form-control-sm" id="grupo" name="grupo" placeholder="Clave">
-                    </div>
-                    <!– Input para el Mes y año –>
-                    
-                    <div class="col-sm-1 offset-sm-1">
-                        <input type="text" class="form-control form-control-sm" id="grupo" name="grupo" placeholder="MM/AAAA">
-                    </div>
-
-                    <!– Botón Guardar –>
-                    <div class="col-sm-2 offset-sm-3">
-                        <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus-square" aria-hidden="true"></i> Quedan</button>
-                    </div>
-
-                    <!– Botón Reporte PDF –>
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Reporte PDF</button>
-                    </div>
-
-
-                </div>
-
-                <div class="mb-1 row">
-
-                    <!– Input para el Tipo de documento Bloqueado –>
-                    <label for="codigo" class="col-sm-1 col-form-label"></label>
-                    <div class="col-sm-1">
-                        <input type="text" disabled class="form-control form-control-sm" id="codigo" name="codigo"  placeholder="Tipo">
-                    </div>
-
-                    <!– Input para la Clave Bloqueado –>
-                    <div class="col-sm-1">
-                        <input type="text" disabled class="form-control form-control-sm" id="grupo" name="grupo" placeholder="Clave">
-                    </div>
-
-                    <!– Input para el dia –>
-                    <div class="col-sm-1">
-                        <input type="text" class="form-control form-control-sm" id="grupo" name="grupo" placeholder="DD">
-                    </div>
-
-                    <!– Input para el Mes y año Bloqueado –>
-                    <div class="col-sm-1">
-                        <input type="text" disabled class="form-control form-control-sm" id="grupo" name="grupo" placeholder="MM/AAAA">
-                    </div>
-
-                    <!– Input para el N° Comprobante –>
-                    <div class="col-sm-1">
-                        <input type="text" class="form-control form-control-sm" id="grupo" name="grupo" placeholder="N° Comp">
-                    </div>
-
-                    <!– Botón Guardar –>
-                    <div class="col-sm-1">
-                        <button type="submit" class="btn btn-sm btn-primary">Agregar</button>
-                    </div>
-
-                    <!– Botón Borrar Todos –>
-                    <div class="col-sm-2 offset-sm-1">
-                        <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Borrar Todos</button>
-                    </div>
-
-                    <!– Botón Reporte PDF –>
-                    <div class="col-sm-2">
-                        <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i> Reporte Excel</button>
-                    </div>
-
-
-                </div>
-
-            </form>
+        <!– Input para el Tipo de documento –>
+        <label for="tipo" class="col-sm-1 col-form-label"></label>
+        <div class="col-sm-1">
+          <input type="text" class="form-control form-control-sm" id="tipo" name="tipo" placeholder="Tipo">
         </div>
-    </mat-card>
 
-    
-    <!-- Tabla de comprobantes -->
-    <mat-card class="custom-width  custom-border">
-        <div class="container mt-6 border custom-border-bottom custom-color"><br>
-            <section class="example-container mat-elevation-z8" tabindex="0">
-                <table class="table custom-table-style" mat-table [dataSource]="dataSource">
-
-                    <!-- Position Column -->
-                    <ng-container matColumnDef="position">
-                        <th mat-header-cell *matHeaderCellDef> No. </th>
-                        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                    </ng-container>
-
-                    <!-- Name Column -->
-                    <ng-container matColumnDef="tipo">
-                        <th mat-header-cell *matHeaderCellDef> Tipo </th>
-                        <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
-                    </ng-container>
-
-                    <!-- Weight Column -->
-                    <ng-container matColumnDef="clave">
-                        <th mat-header-cell *matHeaderCellDef> Clave </th>
-                        <td mat-cell *matCellDef="let element"> {{element.clave}} </td>
-                    </ng-container>
-
-                    <!-- Symbol Column -->
-                    <ng-container matColumnDef="fecha">
-                        <th mat-header-cell *matHeaderCellDef> fecha </th>
-                        <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
-                    </ng-container>
-
-                    <ng-container matColumnDef="comprobante">
-                        <th mat-header-cell *matHeaderCellDef> N° Comprobante </th>
-                        <td mat-cell *matCellDef="let element"> {{element.comprobante}} </td>
-                    </ng-container>
-
-                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-
-
-
-            </section><br>
-            <div class="text-end">
-                <button type="submit" class="btn btn-primary">Guardar</button>
-            </div><br>
-
+        <!– Input para la Clave –>
+        <div class="col-sm-1">
+          <input type="text" class="form-control form-control-sm" id="clave" name="clave" placeholder="Clave">
         </div>
-    </mat-card>
-    
+
+        <!– Input para el Mes y año –>
+        <div class="col-sm-1 offset-sm-1">
+          <input type="text" class="form-control form-control-sm" id="mesanio" name="mesanio" placeholder="MM/AAAA">
+        </div>
+
+        <!– Botón Agregar –>
+        <div class="col-sm-2 offset-sm-3">
+          <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus-square" aria-hidden="true"></i>
+            Quedan
+          </button>
+        </div>
+
+        <!– Botón Reporte PDF –>
+        <div class="col-sm-2">
+          <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+            Reporte PDF
+          </button>
+        </div>
+
+
+      </div>
+
+      <div class="mb-1 row">
+
+        <!– Input para el Tipo de documento Bloqueado –>
+        <label for="tipobloqueado" class="col-sm-1 col-form-label"></label>
+        <div class="col-sm-1">
+          <input type="text" disabled class="form-control form-control-sm" id="tipobloqueado" name="tipobloqueado"
+                 placeholder="Tipo">
+        </div>
+
+        <!– Input para la Clave Bloqueado –>
+        <div class="col-sm-1">
+          <input type="text" disabled class="form-control form-control-sm" id="clavebloqueada" name="clavebloqueada"
+                 placeholder="Clave">
+        </div>
+
+        <!– Input para el dia –>
+        <div class="col-sm-1">
+          <input type="text" class="form-control form-control-sm" id="dia" name="dia" placeholder="DD">
+        </div>
+
+        <!– Input para el Mes y año Bloqueado –>
+        <div class="col-sm-1">
+          <input type="text" disabled class="form-control form-control-sm" id="mesaniobloqueado" name="mesaniobloqueado"
+                 placeholder="MM/AAAA">
+        </div>
+
+        <!– Input para el N° Comprobante –>
+        <div class="col-sm-1">
+          <input type="text" class="form-control form-control-sm" id="comprobante" name="comprobante"
+                 placeholder="N° Comp">
+        </div>
+
+        <!– Botón Guardar –>
+        <div class="col-sm-1">
+          <button type="submit" class="btn btn-sm btn-primary">Agregar</button>
+        </div>
+
+        <!– Botón Borrar Todos –>
+        <div class="col-sm-2 offset-sm-1">
+          <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-times" aria-hidden="true"></i> Borrar
+            Todos
+          </button>
+        </div>
+
+        <!– Botón Reporte PDF –>
+        <div class="col-sm-2">
+          <button type="submit" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o" aria-hidden="true"></i>
+            Reporte Excel
+          </button>
+        </div>
+
+
+      </div>
+
+    </form>
+  </div>
+</mat-card>
+
+
+<!-- Tabla de comprobantes -->
+<mat-card class="custom-width  custom-border">
+  <div class="container mt-6 border custom-border-bottom custom-color"><br>
+    <section class="example-container mat-elevation-z8" tabindex="0">
+      <table class="table custom-table-style" mat-table [dataSource]="dataSource">
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef> No.</th>
+          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="tipo">
+          <th mat-header-cell *matHeaderCellDef> Tipo</th>
+          <td mat-cell *matCellDef="let element"> {{element.tipo}} </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="clave">
+          <th mat-header-cell *matHeaderCellDef> Clave</th>
+          <td mat-cell *matCellDef="let element"> {{element.clave}} </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="fecha">
+          <th mat-header-cell *matHeaderCellDef> fecha</th>
+          <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="comprobante">
+          <th mat-header-cell *matHeaderCellDef> N° Comprobante</th>
+          <td mat-cell *matCellDef="let element"> {{element.comprobante}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+
+    </section>
+    <br>
+    <div class="text-end">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+    <br>
+
+  </div>
+</mat-card>
