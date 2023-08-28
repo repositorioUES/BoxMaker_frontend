@@ -32,26 +32,27 @@ export class HomeComponent implements OnInit {
     numero: ["",],
   });
 
+  public contenidoForm = this.fb.group({
+    codigo: ["",],
+    tipo: ["",],
+    clave: ["",],
+    fecha: ["",],
+    correlativo: ["",],
+  });
 
-  constructor(private fb: FormBuilder, private cajaService: CajaService, private snack: MatSnackBar, private toastr: ToastrService) {
+
+  constructor(private fb: FormBuilder, private cajaService: CajaService, private toastr: ToastrService) {
   }
 
   ngOnInit() {
 
   }
 
+  /* Funcion que permite CREAR una caja y CARGAR sus datos en el formulario */
   crearCaja() {
     this.cajaService.crearCaja(this.cajaForm.value)
       .subscribe((resp: any) => {
         console.log(resp);
-
-        this.toastr.success(resp.msg, '', {
-          timeOut: 5000,
-          progressBar: true,
-          progressAnimation: 'decreasing',
-          positionClass: 'toast-top-right',
-        });
-
         this.cajaForm.setValue({
           descripcion: resp.caja.descripcion,
           codigo: resp.caja.codigo,
@@ -62,19 +63,26 @@ export class HomeComponent implements OnInit {
           numero: resp.caja.numero,
         });
 
-      }, (err) => {
-        console.warn(err.error.msg);
-
-        this.toastr.success(err.error.msg, '', {
+        this.toastr.success(resp.msg, '', {
           timeOut: 5000,
           progressBar: true,
           progressAnimation: 'decreasing',
           positionClass: 'toast-top-right',
         });
 
+      }, (err) => {
+        console.warn(err.error.msg);
+        this.toastr.success(err.error.msg, '', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'decreasing',
+          positionClass: 'toast-top-right',
+        });
       });
   }
+  /* Fin de la funcion crearCaja */
 
+  /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
   cargarCaja() {
 
     const formData = this.cajaForm.value;
@@ -86,16 +94,7 @@ export class HomeComponent implements OnInit {
         .subscribe((resp: any) => {
           console.log(this.cajaForm)
           console.log(resp)
-
-          this.toastr.success(resp.msg, '', {
-            timeOut: 5000,
-            progressBar: true,
-            progressAnimation: 'decreasing',
-            positionClass: 'toast-top-right',
-          });
-
-
-
+          
           this.cajaForm.setValue({
             descripcion: resp.caja.descripcion,
             codigo: resp.caja.codigo,
@@ -104,6 +103,13 @@ export class HomeComponent implements OnInit {
             estante: resp.caja.estante,
             nivel: resp.caja.nivel,
             numero: resp.caja.numero,
+          });
+
+          this.toastr.success(resp.msg, '', {
+            timeOut: 5000,
+            progressBar: true,
+            progressAnimation: 'decreasing',
+            positionClass: 'toast-top-right',
           });
 
         }, (err) => {
@@ -121,6 +127,37 @@ export class HomeComponent implements OnInit {
       // Cualquier validacion con codigo
     }
   }
+  /* Fin de la funcion cargarCaja */
+
+  /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
+  ingresarComprobantes(){
+    const formData = this.contenidoForm.value;
+    this.cajaService.ingresarComprobantes(formData)
+      .subscribe((resp: any) => {
+      console.log(this.contenidoForm)
+      console.log(resp)
+
+      this.toastr.success(resp.msg, '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+
+    }, (err) => {
+      console.warn(err.error.msg);
+
+      this.toastr.error(err.error.msg, '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+
+    });
+} 
+
+
 }
 
 
