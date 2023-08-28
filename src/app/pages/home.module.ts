@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home/home.component';
@@ -35,6 +37,7 @@ import {MatTableModule} from '@angular/material/table';
     FormsModule,
     HttpClientModule,
     RouterModule,
+    ToastrModule.forRoot(),
 
     MatButtonModule,
     MatInputModule,

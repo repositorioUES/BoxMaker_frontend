@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {CajaService} from 'src/app/services/caja.service';
 import {MatSnackBar} from "@angular/material/snack-bar";
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class HomeComponent implements OnInit {
   });
 
 
-  constructor(private fb: FormBuilder, private cajaService: CajaService, private snack: MatSnackBar) {
+  constructor(private fb: FormBuilder, private cajaService: CajaService, private snack: MatSnackBar, private toastr: ToastrService) {
   }
 
   ngOnInit() {
@@ -43,6 +44,7 @@ export class HomeComponent implements OnInit {
     this.cajaService.crearCaja(this.cajaForm.value)
       .subscribe((resp: any) => {
         console.log(resp);
+        
         this.snack.open('Caja Creada', 'Aceptar', {
           duration: 7000,
           verticalPosition: 'bottom',
@@ -58,8 +60,10 @@ export class HomeComponent implements OnInit {
           nivel: resp.nivel,
           numero: resp.numero,
         });
+
       }, (err) => {
         console.warn(err.error.msg);
+        
         this.snack.open(err.error.msg, 'Error', {
           duration: 5000,
           verticalPosition: 'bottom',
@@ -80,11 +84,16 @@ export class HomeComponent implements OnInit {
           console.log(this.cajaForm)
           console.log(resp)
 
-          this.snack.open('Caja recuperada', 'Aceptar', {
+/*           this.snack.open('Caja recuperada', 'Aceptar', {
             duration: 7000,
             verticalPosition: 'bottom',
             horizontalPosition: 'center'
+          }); */
+
+          this.toastr.success('Caja recuperada', 'Aceptar', {
+            timeOut: 3000,
           });
+
 
 
           this.cajaForm.patchValue({
@@ -104,11 +113,19 @@ export class HomeComponent implements OnInit {
                       horizontalPosition: 'center'
                     });*/
 
-          this.snack.open('Caja No encontrada', 'ERROR', {
+                    this.toastr.error('Caja no encontrada', '', {
+                      timeOut: 5000,
+                      progressBar: true,
+                      progressAnimation: 'decreasing',
+                      positionClass: 'toast-top-right',
+                    });
+
+
+/*           this.snack.open('Caja No encontrada', 'ERROR', {
             duration: 7000,
             verticalPosition: 'bottom',
             horizontalPosition: 'center'
-          });
+          }); */
 
         });
     } else {
@@ -116,6 +133,7 @@ export class HomeComponent implements OnInit {
     }
   }
 }
+
 
 
 /* --------------------------------------------INFORMACION DE TABLA----------------------------------------------- */
