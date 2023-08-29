@@ -161,9 +161,9 @@ export class HomeComponent implements OnInit {
     });
 } 
 
-openDialog(id: string): void {
+openDialog(): void {
 
-    const code = document.querySelector('#codigo')?.getAttribute('value')
+    const code = this.cajaForm.value.codigo
 
     //Abrir el Dialog con la inof
     const dialogRef = this.dialog.open(QuedanComponent, {
@@ -171,6 +171,9 @@ openDialog(id: string): void {
         codigo: code
       },
     });
+
+    console.log(code);
+    
 
     dialogRef.afterClosed().subscribe(() => {
       console.log('The dialog was closed');

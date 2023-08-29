@@ -1,5 +1,50 @@
-<h1 mat-dialog-title>Datos del Usuario: {{data.codigo}}</h1>
+<h1 mat-dialog-title>Búsqueda de Comprobantes por QUEDAN</h1>
 <div mat-dialog-content>
+
+  <div class="container mt-6 border custom-border-bottom custom-color separator">
+    <form autocomplete="off" [formGroup]="quedanForm" >
+      <div class="mb-1 row">
+        
+        <!– Input para la fecha de inicio del filtro –>
+        <label for="fInicio" class="col-sm-1 col-form-label">Fecha Inicio</label>
+        <div class="col-sm-1">
+          <input formControlName="fInicio" type="date" class="form-control form-control-sm custom-font-size" id="fInicio"
+            name="fInicio" />
+        </div>
+        
+        <!– Input para la fecha de Final del filtro –>
+        <label for="fFinal" class="col-sm-1 col-form-label">Fecha Final</label>
+        <div class="col-sm-1">
+          <input formControlName="fFinal" type="date" class="form-control form-control-sm custom-font-size" id="fFinal"
+            name="fFinal" />
+        </div>
+
+        <!– Botón Para limpiar el formulario de la caja –>
+        <div class="col-sm-1">
+          <button type="reset" class="btn btn-sm btn-warning">
+            <i class="fa fa-close" aria-hidden="true"></i>
+            Limpiar
+          </button>
+        </div>
+
+        <!– Botón Para buscar caja –>
+        <div class="col-sm-1">
+          <button class="btn btn-sm btn-primary" >
+            <i class="fa fa-search" aria-hidden="true"></i>
+            Buscar
+          </button>
+        </div>
+
+        <!– Botón Guardar –>
+        <div class="col-sm-2">
+          <button class="btn btn-sm btn-primary" >
+            <i class="fa fa-archive" aria-hidden="true"></i>
+            Guardar
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
 
 
     
