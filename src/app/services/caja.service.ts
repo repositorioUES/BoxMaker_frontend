@@ -29,6 +29,12 @@ export class CajaService {
     return this.http.post(`${ base_url }/caja/one`, formData, {headers} )
 }
 
+  ingresarComprobantes(formData : any){
+    const headers = this.globalHeaders
+    return this.http.post(`${ base_url }/contenido/insert`, formData, {headers} )
+  }
+
+
 
 
 

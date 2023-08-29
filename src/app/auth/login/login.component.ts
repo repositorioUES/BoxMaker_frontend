@@ -4,6 +4,7 @@ import { Router,NavigationEnd } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { timeInterval } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,7 @@ export class LoginComponent implements OnInit{
     password: ["archivo", ],
   });
 
-  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService, private snack: MatSnackBar) { }
+  constructor(private fb: FormBuilder, private router: Router, private authService: AuthService, private snack: MatSnackBar, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.init() // Disparar al terminar de cargar el componente
@@ -41,19 +42,21 @@ export class LoginComponent implements OnInit{
             }
           });
         }else{
-          this.snack.open(resp.msg, 'Error', {
-            duration: 5000,
-            verticalPosition: 'bottom',
-            horizontalPosition: 'center'
+          this.toastr.error(resp.msg, '', {
+            timeOut: 5000,
+            progressBar: true,
+            progressAnimation: 'decreasing',
+            positionClass: 'toast-top-right',
           });
         }
 
       }, (err) => {
         console.warn(err.error.msg);
-        this.snack.open(err.error.msg, 'Error', {
-          duration: 5000,
-          verticalPosition: 'bottom',
-          horizontalPosition: 'center'
+        this.toastr.error(err.error.msg, '', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'decreasing',
+          positionClass: 'toast-top-right',
         });
       });
   }
