@@ -3,6 +3,8 @@ import { FormBuilder } from '@angular/forms';
 import { CajaService } from 'src/app/services/caja.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ToastrService } from 'ngx-toastr';
+import { QuedanComponent } from 'src/app/pages/quedan/quedan.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -41,7 +43,7 @@ export class HomeComponent implements OnInit {
   });
 
 
-  constructor(private fb: FormBuilder, private cajaService: CajaService, private toastr: ToastrService) {
+  constructor(private fb: FormBuilder, private cajaService: CajaService, private toastr: ToastrService, private dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -157,6 +159,21 @@ export class HomeComponent implements OnInit {
     });
 } 
 
+openDialog(id: string): void {
+
+    const code = document.querySelector('#codigo')?.getAttribute('value')
+
+    //Abrir el Dialog con la inof
+    const dialogRef = this.dialog.open(QuedanComponent, {
+      data: {
+        codigo: code
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      console.log('The dialog was closed');
+    });
+  }
 
 }
 

@@ -21,6 +21,7 @@ import {MatIconModule} from "@angular/material/icon";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatTableModule} from '@angular/material/table';
+import { QuedanComponent } from './quedan/quedan.component';
 
 
 
@@ -28,7 +29,8 @@ import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
-    HomeComponent
+    HomeComponent,
+    QuedanComponent
   ],
   imports: [
     CommonModule,
