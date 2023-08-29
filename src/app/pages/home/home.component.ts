@@ -35,11 +35,14 @@ export class HomeComponent implements OnInit {
   });
 
   public contenidoForm = this.fb.group({
-    codigo: ["",],
+    caja: ["",],
     tipo: ["",],
     clave: ["",],
     fecha: ["",],
     correlativo: ["",],
+    tipodefault: ["",],
+    clavedefault: ["",],
+    mesaniodefault: ["",],
   });
 
 
@@ -133,8 +136,7 @@ export class HomeComponent implements OnInit {
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
   ingresarComprobantes(){
-    const formData = this.contenidoForm.value;
-    this.cajaService.ingresarComprobantes(formData)
+    this.cajaService.ingresarComprobantes(this.contenidoForm.value)
       .subscribe((resp: any) => {
       console.log(this.contenidoForm)
       console.log(resp)
