@@ -56,21 +56,36 @@
     position: fixed;
     top: 0;
     left: 0;
-    background: #ffffff;
     height: 100%;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f1f1f1;
     z-index: 99999;
+    transition: opacity 1.5s, visibility 1s;
   }
 
-  .disappear{
-    animation: vanish 1s forwards;
+  .loader--hidden{
+    opacity: 0;
+    visibility: hidden;
   }
 
-  @keyframes vanish {
-    100%{
-      opacity: 0;
-      visibility: hidden;
-    }
+  .loader--image{
+    width: 55px;
+    height: 55px;
+    animation: loading 1s ease infinite;
+    transition: width 1s, height 1s;
+  }
+  
+  .loader--image--size{
+    width: 150px;
+    height: 150px;
+  }
+
+  @keyframes loading {
+    from { transform: rotate(0turn);}
+    to { transform: rotate(1turn);}
   }
 
   .loader__figure {
