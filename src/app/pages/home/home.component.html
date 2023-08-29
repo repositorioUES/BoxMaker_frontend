@@ -23,7 +23,7 @@
         <label for="codigo" class="col-sm-1 col-form-label">Código</label>
         <div class="col-sm-1">
           <input formControlName="codigo" type="text" class="form-control form-control-sm custom-font-size" id="codigo"
-            name="codigo" [(ngModel)]="contenidoForm.value.codigo"/>
+            name="codigo" />
         </div>
 
         <!– Input para la fecha de caducidad de la caja –>
@@ -77,7 +77,7 @@
 <!– Ingreso de comprobantes –>
 <mat-card class="custom-width  custom-border">
   <div class="container mt-6 border custom-border-bottom custom-color separator">
-    <form autocomplete="off" [formGroup]="contenidoForm">
+    <form [formGroup]="contenidoForm">
         <div class="mb-1 row">
 
           <!-- INICIO DE INPUTS QUE SON DEFAULT -->
@@ -85,17 +85,17 @@
           <!– Input para el Tipo de documento default–>
           <label for="tipo" class="col-sm-1 col-form-label"></label>
           <div class="col-sm-1">
-            <input type="text" class="form-control form-control-sm" id="tipoDefault" name="tipoDefault" placeholder="Tipo" />
+            <input type="text" formControlName="tipoDefault" class="form-control form-control-sm" id="tipoDefault" name="tipoDefault" placeholder="Tipo" />
           </div>
 
           <!– Input para la Clave default –>
           <div class="col-sm-1">
-            <input type="text" class="form-control form-control-sm" id="claveDefault" name="claveDefault" placeholder="Clave" />
+            <input type="text" formControlName="claveDefault" class="form-control form-control-sm" id="claveDefault" name="claveDefault" placeholder="Clave" />
           </div>
 
           <!– Input para el Mes y año default–>
           <div class="col-sm-1 offset-sm-1">
-            <input type="text" class="form-control form-control-sm" id="mesanioDefault" name="mesanioDefault" placeholder="MM/AAAA" />
+            <input type="text" formControlName="mesanioDefault" class="form-control form-control-sm" id="mesanioDefault" name="mesanioDefault" placeholder="MM/AAAA" />
           </div>
 
           <!– Botón buscar por quedan –>
@@ -119,9 +119,14 @@
         <!-- INICIO DE INPUTS -->
 
         <div class="mb-1 row">
-          <!– Input para el Tipo de documento –>
-          <label for="tipobloqueado" class="col-sm-1 col-form-label"></label>
+          <!– Input para el codigo de la caja –>
           <div class="col-sm-1">
+            <input formControlName="caja" type="text"  class="form-control form-control-sm" id="caja" name="caja"
+              placeholder="caja" hidden [(ngModel)]="cajaForm.value.codigo"/>
+          </div>
+
+          <!– Input para el Tipo de documento –>
+         <div class="col-sm-1">
             <input formControlName="tipo" type="text"  class="form-control form-control-sm" id="tipo" name="tipo"
               placeholder="Tipo" />
           </div>
@@ -129,7 +134,7 @@
           <!– Input para la Clave –>
           <div class="col-sm-1">
             <input type="text" formControlName="clave" class="form-control form-control-sm" id="clave" name="clave"
-              placeholder="Clave" />
+              placeholder="Clave"  />
           </div>
 
           <!– Input para el dia –>
@@ -140,7 +145,7 @@
           <!– Input para el Mes y año  –>
           <div class="col-sm-1">
             <input type="text" formControlName="fecha" class="form-control form-control-sm" id="mesanio" name="mesanio"
-              placeholder="MM/AAAA" />
+              placeholder="MM/AAAA"  />
           </div>
 
           <!– Input para el N° Comprobante –>
@@ -150,7 +155,7 @@
 
           <!– Botón Agregar Comprobantes –>
           <div class="col-sm-1">
-            <button type="submit" class="btn btn-sm btn-primary" (click)="ingresarComprobantes()">
+            <button class="btn btn-sm btn-primary" (click)="ingresarComprobantes()">
               Agregar
             </button>
           </div>
