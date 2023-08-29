@@ -27,25 +27,26 @@ export class AdministradorComponent implements OnInit {
   
   ngOnInit(): void {
     this.cargarUsuarios()
-    setTimeout(()=>{
-      this.loading = false,
-      10000
-    })
-
+    
   }
-
+  
   
   cargarUsuarios(){
     this.adminSrv.getUsers()
     .subscribe((resp:any) => {
       this.usuarios = resp.result
     }, (err)=> {
-        console.warn(err) 
-        this.snack.open(err.error.msg, 'Error', {
+      console.warn(err) 
+      this.snack.open(err.error.msg, 'Error', {
         duration: 5000,
         verticalPosition: 'bottom',
         horizontalPosition: 'center'
       });
+    })
+    setTimeout(()=>{
+      document.querySelector(".loader")?.classList.add("loader--hidden"),
+      document.querySelector(".loader--image")?.classList.add("loader--image--size"),
+      100
     })
   }
 
