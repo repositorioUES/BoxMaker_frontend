@@ -16,22 +16,22 @@ import { DialogComponent } from './dialog/dialog.component';
 
 export class AdministradorComponent implements OnInit {
 
-  constructor(private adminSrv: AdminService, private dialog: MatDialog, private snack: MatSnackBar, ){}
+  public loading: boolean // mostar el icono de cargar
+  constructor(private adminSrv: AdminService, private dialog: MatDialog, private snack: MatSnackBar, ){
+    this.loading = true
+  }
 
-  userName: string = "";
-  
-  usuario!: Usuario; // Solo 1
   usuarios: Usuario[] = [] // Todos los usuarios
 
   displayedColumns: string[] = ['Nombre', 'Nombre de Usuario', 'Fec. Creación', 'Estado','Bloqueo', 'Contraseña', 'Editar', 'Eliminar'];
   
   ngOnInit(): void {
     this.cargarUsuarios()
+    setTimeout(()=>{
+      this.loading = false,
+      10000
+    })
 
-    // Suscribirse al observer para escuchar el "valor" que nos mande el id del usuairo
-    // this.adminSrv.$userId.subscribe((id)=>{this.userId = id})
-    // Suscribirse al observer para escuchar el "valor" que nos mande el nombre del usuairo
-    this.adminSrv.$userName.subscribe((nombre)=>{this.userName= nombre})
   }
 
   

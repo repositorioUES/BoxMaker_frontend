@@ -13,18 +13,13 @@ const base_url = environment.base_url;
 
 export class AdminService {
 
-  //Observable que emitirá cada ve que cambie el valor de $userId
-  $userId = new EventEmitter<string>();
-  $userName = new EventEmitter<any>();
-
   constructor(private http: HttpClient) {}
 
   get token(): string {
-    return localStorage.getItem('token') || 'baaaka!';
+    return localStorage.getItem('token') || '';
   }
 
   private globalHeaders = new HttpHeaders({'authorization': this.token});
-
 
   getUsers () : Observable<Usuario[]>{
     const headers = this.globalHeaders
