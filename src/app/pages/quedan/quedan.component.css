@@ -2,6 +2,7 @@
 
 button {
     margin-right: 8px;
+    margin-bottom: 10px;
 }
 
 .mat-mdc-row:hover .mat-mdc-cell {

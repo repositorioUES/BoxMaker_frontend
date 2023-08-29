@@ -11,24 +11,20 @@ import { AdminService } from 'src/app/services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface DialogData {
-  codigo: string;
+  fInicio: string;
+  fFinal: string;
+  quedan: string;
 }
 
 @Component({
   selector: 'app-quedan',
   templateUrl: './quedan.component.html',
-  styles: [
+  styleUrls: [
+    './quedan.component.css'
   ]
 })
 
 export class QuedanComponent {
-
-  public quedanForm = this.fb.group({
-    fInicio: ["",],
-    fFinal: ["",],
-    quedan: ["",]
-  });
-
 
   constructor(
     public dialogRef: MatDialogRef<QuedanComponent>,
@@ -37,6 +33,7 @@ export class QuedanComponent {
     private snack: MatSnackBar,
     private fb: FormBuilder
   ) {}
+  
 
   onNoClick(): void {
     this.dialogRef.close();
