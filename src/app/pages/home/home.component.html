@@ -85,17 +85,17 @@
           <!– Input para el Tipo de documento default–>
           <label for="tipo" class="col-sm-1 col-form-label"></label>
           <div class="col-sm-1">
-            <input type="text" formControlName="tipoDefault" class="form-control form-control-sm" id="tipoDefault" name="tipoDefault" placeholder="Tipo" />
+            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipoDefault" name="tipoDefault" placeholder="Tipo" />
           </div>
 
           <!– Input para la Clave default –>
           <div class="col-sm-1">
-            <input type="text" formControlName="claveDefault" class="form-control form-control-sm" id="claveDefault" name="claveDefault" placeholder="Clave" />
+            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="claveDefault" name="claveDefault" placeholder="Clave" />
           </div>
 
           <!– Input para el Mes y año default–>
           <div class="col-sm-1 offset-sm-1">
-            <input type="text" formControlName="mesanioDefault" class="form-control form-control-sm" id="mesanioDefault" name="mesanioDefault" placeholder="MM/AAAA" />
+            <input type="text" formControlName="mesaniodefault" class="form-control form-control-sm" id="mesanioDefault" name="mesanioDefault" placeholder="MM/AAAA" />
           </div>
 
           <!– Botón buscar por quedan –>
@@ -128,13 +128,13 @@
           <!– Input para el Tipo de documento –>
          <div class="col-sm-1">
             <input formControlName="tipo" type="text"  class="form-control form-control-sm" id="tipo" name="tipo"
-              placeholder="Tipo" />
+              placeholder="Tipo" [(ngModel)]="contenidoForm.value.tipodefault"/>
           </div>
 
           <!– Input para la Clave –>
           <div class="col-sm-1">
             <input type="text" formControlName="clave" class="form-control form-control-sm" id="clave" name="clave"
-              placeholder="Clave"  />
+              placeholder="Clave"  [(ngModel)]="contenidoForm.value.clavedefault"/>
           </div>
 
           <!– Input para el dia –>
@@ -145,23 +145,17 @@
           <!– Input para el Mes y año  –>
           <div class="col-sm-1">
             <input type="text" formControlName="fecha" class="form-control form-control-sm" id="mesanio" name="mesanio"
-              placeholder="MM/AAAA"  />
+              placeholder="MM/AAAA" [(ngModel)]="contenidoForm.value.mesaniodefault" />
           </div>
 
           <!– Input para el N° Comprobante –>
           <div class="col-sm-1">
-            <input type="text" formControlName="correlativo" class="form-control form-control-sm" id="comprobante" name="comprobante" placeholder="N° Comp" />
-          </div>
-
-          <!– Botón Agregar Comprobantes –>
-          <div class="col-sm-1">
-            <button class="btn btn-sm btn-primary" (click)="ingresarComprobantes()">
-              Agregar
-            </button>
+            <input type="text" formControlName="correlativo" class="form-control form-control-sm" id="comprobante" name="comprobante" placeholder="N° Comp" 
+            (keyup.enter)="ingresarComprobantes()"/>
           </div>
 
           <!– Botón Borrar Todos –>
-          <div class="col-sm-2 offset-sm-1">
+          <div class="col-sm-2 offset-sm-2">
             <button type="submit" class="btn btn-sm btn-danger">
               <i class="fa fa-times" aria-hidden="true"></i> Borrar Todos
             </button>
