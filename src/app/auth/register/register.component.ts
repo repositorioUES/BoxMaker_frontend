@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
@@ -21,6 +21,8 @@ export class RegisterComponent {
     segundoApellido: ["",]
   });
 
+  @Output() private usuarioAgregado = new EventEmitter<any>();
+
   constructor(private fb: FormBuilder, private usuarioService: UsuarioService, private router: Router, private snack: MatSnackBar, private toastr: ToastrService) { }
 
   crearUsuario() {
@@ -42,8 +44,8 @@ export class RegisterComponent {
         });
         
         // Navegar al Dashboard
-        this.router.navigateByUrl('/auth/admin');
-
+        // this.router.navigateByUrl('/auth/admin');
+        this.usuarioAgregado.emit(true)
 
       }, (err) => {
         this.toastr.error(err.error.msg, '', {
