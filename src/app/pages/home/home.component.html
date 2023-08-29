@@ -23,7 +23,7 @@
         <label for="codigo" class="col-sm-1 col-form-label">Código</label>
         <div class="col-sm-1">
           <input formControlName="codigo" type="text" class="form-control form-control-sm custom-font-size" id="codigo"
-            name="codigo" />
+            name="codigo" [(ngModel)]="contenidoForm.value.codigo"/>
         </div>
 
         <!– Input para la fecha de caducidad de la caja –>
@@ -69,10 +69,19 @@
           <input formControlName="nivel" type="text" class="form-control form-control-sm" id="nivel" name="nivel" />
         </div>
       </div>
+    </form>
+  </div>
+</mat-card>
 
 
 <!– Ingreso de comprobantes –>
+<mat-card class="custom-width  custom-border">
+  <div class="container mt-6 border custom-border-bottom custom-color separator">
+    <form autocomplete="off" [formGroup]="contenidoForm">
         <div class="mb-1 row">
+
+          <!-- INICIO DE INPUTS QUE SON DEFAULT -->
+
           <!– Input para el Tipo de documento default–>
           <label for="tipo" class="col-sm-1 col-form-label"></label>
           <div class="col-sm-1">
@@ -106,6 +115,9 @@
           </div>
         </div>
 
+
+        <!-- INICIO DE INPUTS -->
+
         <div class="mb-1 row">
           <!– Input para el Tipo de documento –>
           <label for="tipobloqueado" class="col-sm-1 col-form-label"></label>
@@ -138,7 +150,7 @@
 
           <!– Botón Agregar Comprobantes –>
           <div class="col-sm-1">
-            <button type="submit" class="btn btn-sm btn-primary" >
+            <button type="submit" class="btn btn-sm btn-primary" (click)="ingresarComprobantes()">
               Agregar
             </button>
           </div>
