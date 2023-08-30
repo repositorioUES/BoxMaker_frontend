@@ -10,28 +10,24 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
 })
-
-
 export class HomeComponent implements OnInit {
-
   /* --------------------------------------------INFORMACION DE TABLA----------------------------------------------- */
   displayedColumns = ['position', 'tipo', 'clave', 'fecha', 'comprobante'];
   dataSource = ELEMENT_DATA;
-
 
   /* ----------------------------------------------------------------------------------------------------------------- */
 
   /* Form para los campos de la caja */
   public cajaForm = this.fb.group({
-    descripcion: ["",],
-    codigo: ["23-AAC-1",],
-    caducidad: ["",],
-    grupo: ["",],
-    estante: ["",],
-    nivel: ["",],
-    numero: ["",],
+    descripcion: [''],
+    codigo: ['23-AAC-1'],
+    caducidad: [''],
+    grupo: [''],
+    estante: [''],
+    nivel: [''],
+    numero: [''],
   });
 
   /* Inicializar el boton */
@@ -39,22 +35,25 @@ export class HomeComponent implements OnInit {
 
   /* Form para los campos del contenido (COMPROBANTES) de la caja */
   public contenidoForm = this.fb.group({
-    caja: ["",],
-    tipo: [{ value: '', disabled: this.boton_fijado },],
-    clave: [{ value: '', disabled: this.boton_fijado },],
-    fecha: [{ value: '', disabled: this.boton_fijado },],
-    correlativo: ["",],
-    tipodefault: ["",],
-    clavedefault: ["",],
-    mesaniodefault: ["",],
+    caja: [''],
+    tipo: [{ value: '', disabled: this.boton_fijado }],
+    clave: [{ value: '', disabled: this.boton_fijado }],
+    fecha: [{ value: '', disabled: this.boton_fijado }],
+    correlativo: [''],
+    tipodefault: [''],
+    clavedefault: [''],
+    mesaniodefault: [''],
   });
 
-
-  constructor(private fb: FormBuilder, private cajaService: CajaService, private toastr: ToastrService, private dialog: MatDialog) {
-  }
+  constructor(
+    private fb: FormBuilder,
+    private cajaService: CajaService,
+    private toastr: ToastrService,
+    private dialog: MatDialog
+  ) {}
 
   /* Funcion para fijar los campos  */
-  fijar(){
+  fijar() {
     this.boton_fijado = !this.boton_fijado;
     if (this.boton_fijado) {
       this.contenidoForm.get('tipo')?.disable();
@@ -67,22 +66,43 @@ export class HomeComponent implements OnInit {
     }
   }
 
-
-  ngOnInit() {
-
+  exito(resp: any) {
+    this.toastr.success(resp.msg, '', {
+      timeOut: 5000,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+      positionClass: 'toast-top-right',
+    });
   }
+
+  error(err: any) {
+    this.toastr.error(err.error.msg, '', {
+      timeOut: 5000,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+      positionClass: 'toast-top-right',
+    });
+  }
+
+  errorCaja() {
+    this.toastr.error('Caja no encontrada', '', {
+      timeOut: 5000,
+      progressBar: true,
+      progressAnimation: 'decreasing',
+      positionClass: 'toast-top-right',
+    });
+  }
+
+  ngOnInit() {}
 
   /* Funcion que permite CREAR una caja y CARGAR sus datos en el formulario */
   crearCaja() {
-    this.cajaService.crearCaja(this.cajaForm.value)
-      .subscribe((resp: any) => {
+    this.cajaService.crearCaja(this.cajaForm.value).subscribe(
+      (resp: any) => {
         console.log(resp);
-        this.toastr.success(resp.msg, '', {
-          timeOut: 5000,
-          progressBar: true,
-          progressAnimation: 'decreasing',
-          positionClass: 'toast-top-right',
-        });
+
+        /* mensaje de exito */
+        this.exito(resp);
 
         this.cajaForm.setValue({
           descripcion: resp.caja.descripcion,
@@ -93,130 +113,111 @@ export class HomeComponent implements OnInit {
           nivel: resp.caja.nivel,
           numero: resp.caja.numero,
         });
-
-
-
-      }, (err) => {
+      },
+      (err) => {
         console.warn(err.error.msg);
-        this.toastr.success(err.error.msg, '', {
-          timeOut: 5000,
-          progressBar: true,
-          progressAnimation: 'decreasing',
-          positionClass: 'toast-top-right',
-        });
-      });
+
+        /* Mensaje de error */
+        this.error(err);
+      }
+    );
   }
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
   cargarCaja() {
-
     const formData = this.cajaForm.value;
     const codigo = formData.codigo;
 
     if (codigo) {
-      this.cajaService.cargarCaja(formData)
+      this.cajaService
+        .cargarCaja(formData)
 
-        .subscribe((resp: any) => {
-          console.log(this.cajaForm.value.codigo)
-          this.cajaForm.setValue({
-            descripcion: resp.caja.descripcion,
-            codigo: resp.caja.codigo,
-            caducidad: resp.caja.caducidad,
-            grupo: resp.caja.grupo,
-            estante: resp.caja.estante,
-            nivel: resp.caja.nivel,
-            numero: resp.caja.numero,
-          });
+        .subscribe(
+          (resp: any) => {
+            console.log(this.cajaForm.value.codigo);
 
-          this.toastr.success(resp.msg, '', {
-            timeOut: 5000,
-            progressBar: true,
-            progressAnimation: 'decreasing',
-            positionClass: 'toast-top-right',
-          });
+            this.cajaForm.setValue({
+              descripcion: resp.caja.descripcion,
+              codigo: resp.caja.codigo,
+              caducidad: resp.caja.caducidad,
+              grupo: resp.caja.grupo,
+              estante: resp.caja.estante,
+              nivel: resp.caja.nivel,
+              numero: resp.caja.numero,
+            });
 
-        }, (err) => {
-          console.warn(err.error.msg);
+            /* mensaje de exito */
+            this.exito(resp);
+          },
+          (err) => {
+            console.warn(err.error.msg);
 
-          this.toastr.error(err.error.msg, '', {
-            timeOut: 5000,
-            progressBar: true,
-            progressAnimation: 'decreasing',
-            positionClass: 'toast-top-right',
-          });
-
-        });
+            /* Mensaje de error */
+            this.errorCaja();
+          }
+        );
     } else {
       // Cualquier validacion con codigo
     }
   }
-  
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
-  ingresarComprobantes(){
-    this.cajaService.ingresarComprobantes(this.contenidoForm.value)
-      .subscribe((resp: any) => {
-      console.log(this.contenidoForm)
-      console.log(resp)
+  ingresarComprobantes() {
+    this.cajaService.ingresarComprobantes(this.contenidoForm.value).subscribe(
+      (resp: any) => {
+        console.log(this.contenidoForm);
+        console.log(resp);
 
-      this.toastr.success(resp.msg, '', {
-        timeOut: 5000,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-        positionClass: 'toast-top-right',
-      });
+        /* mensaje de exito */
+        this.exito(resp);
+      },
+      (err) => {
+        console.warn(err.error.msg);
 
-    }, (err) => {
-      console.warn(err.error.msg);
-
-      this.toastr.error(err.error.msg, '', {
-        timeOut: 5000,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-        positionClass: 'toast-top-right',
-      });
-
-    });
-} 
-
-  reportePDF(){
-    const caja = this.cajaForm.value.codigo;
-    console.log(this.cajaForm.value.codigo)
-    this.cajaService.reportePDF(caja!)
-    .subscribe((resp: any) => {
-      
-      console.log(this.cajaForm.value.codigo)
-      console.log(resp)
-
-      this.toastr.success(resp.msg, '', {
-        timeOut: 5000,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-        positionClass: 'toast-top-right',
-      });
-
-    }, (err) => {
-      console.warn(err.error.msg);
-
-      this.toastr.error(err.error.msg, '', {
-        timeOut: 5000,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-        positionClass: 'toast-top-right',
-      });
-
-    });
-
+        /* Mensaje de error */
+        this.error(err);
+      }
+    );
   }
 
-openDialog(): void {
+  reportePDF() {
+    const codigo = this.cajaForm.value.codigo;
 
-    const code = this.cajaForm.value.codigo
+    if (!codigo) {
+      console.error('El codigo esta vacio');
+      return;
+    }
+
+    this.cajaService.reportePDF(codigo).subscribe(
+      (resp: any) => {
+        console.log(resp.file.data);
+
+        const blob = new Blob([resp.file.data], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+  
+        // Abrir el PDF en una nueva ventana o pestaña
+        window.open(url, '_blank');
+
+        /* mensaje de exito */
+        this.exito(resp);
+      },
+      (err) => {
+        console.warn(err.error.msg);
+        
+
+        /* Mensaje de error */
+        this.error(err);
+      }
+    );
+  }
+
+  openDialog(): void {
+    const code = this.cajaForm.value.codigo;
 
     //Abrir el Dialog con la inof
     const dialogRef = this.dialog.open(QuedanComponent, {
       data: {
-        codigo: code
+        codigo: code,
       },
     });
 
@@ -224,7 +225,6 @@ openDialog(): void {
       console.log('The dialog was closed');
     });
   }
-
 }
 
 
