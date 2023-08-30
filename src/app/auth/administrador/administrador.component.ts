@@ -16,7 +16,7 @@ import { DialogComponent } from './dialog/dialog.component';
 
 export class AdministradorComponent implements OnInit {
 
-  public loading: boolean // mostar el icono de cargar
+  public loading: boolean // mostrar el icono de cargar
   constructor(private adminSrv: AdminService, private dialog: MatDialog, private snack: MatSnackBar, ){
     this.loading = true
   }

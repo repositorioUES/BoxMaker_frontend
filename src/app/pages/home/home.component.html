@@ -1,9 +1,10 @@
-<!– Creacion de la caja –>
+<!–---------------------------------------------------------- Creacion de la caja ----------------------------------------------------------–>
 <mat-card class="custom-width custom-border">
   <div class="container mt-6 border custom-border-bottom custom-color separator">
     <form autocomplete="off" [formGroup]="cajaForm" >
       <h4>ÁREA DE ANALISIS CONTABLE (388)</h4>
       <div class="mb-1 row">
+
         <!– Input para la descripcion de la caja –>
         <label for="descripcion" class="col-sm-1 col-form-label">Descripción</label>
         <div class="col-sm-6">
@@ -74,16 +75,24 @@
 </mat-card>
 
 
-<!– Ingreso de comprobantes –>
+<!–------------------------------------------------------ Ingreso de comprobantes --------------------------------------------------------------–>
+
 <mat-card class="custom-width  custom-border">
   <div class="container mt-6 border custom-border-bottom custom-color separator">
-    <form [formGroup]="contenidoForm">
+    <form autocomplete="off" [formGroup]="contenidoForm">
         <div class="mb-1 row">
 
           <!-- INICIO DE INPUTS QUE SON DEFAULT -->
 
+          <!– Botón para bloquear inputs –>
+          <div class="col-sm-1">
+            <button [class]="boton_fijado ? 'btn btn-sm btn-danger' : 'btn btn-sm btn-primary'" (click)="fijar()">
+              <i class="fa fa-thumb-tack" aria-hidden="true"></i> 
+              Fijar
+            </button>
+          </div>
+
           <!– Input para el Tipo de documento default–>
-          <label for="tipo" class="col-sm-1 col-form-label"></label>
           <div class="col-sm-1">
             <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipoDefault" name="tipoDefault" placeholder="Tipo" />
           </div>
@@ -108,7 +117,7 @@
 
           <!– Botón Reporte PDF –>
           <div class="col-sm-2">
-            <button type="submit" class="btn btn-sm btn-danger">
+            <button type="submit" class="btn btn-sm btn-danger" (click)="reportePDF()">
               <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
               Reporte PDF
             </button>
@@ -173,7 +182,7 @@
   </div>
 </mat-card>
 
-<!-- Tabla de comprobantes -->
+<!–-------------------------------------------------------------- TABLA DE DATOS --------------------------------------------------------------–>
 
 <mat-card class="custom-width custom-border">
   <div class="container mt-6 border custom-border-bottom custom-color">
