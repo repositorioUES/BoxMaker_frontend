@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
 
   /* ----------------------------------------------------------------------------------------------------------------- */
 
-
+  /* Form para los campos de la caja */
   public cajaForm = this.fb.group({
     descripcion: ["",],
     codigo: ["23-AAC-1",],
@@ -34,11 +34,15 @@ export class HomeComponent implements OnInit {
     numero: ["",],
   });
 
+  /* Inicializar el boton */
+  public boton_fijado: boolean = false;
+
+  /* Form para los campos del contenido (COMPROBANTES) de la caja */
   public contenidoForm = this.fb.group({
     caja: ["",],
-    tipo: ["",],
-    clave: ["",],
-    fecha: ["",],
+    tipo: [{ value: '', disabled: this.boton_fijado },],
+    clave: [{ value: '', disabled: this.boton_fijado },],
+    fecha: [{ value: '', disabled: this.boton_fijado },],
     correlativo: ["",],
     tipodefault: ["",],
     clavedefault: ["",],
@@ -49,6 +53,21 @@ export class HomeComponent implements OnInit {
   constructor(private fb: FormBuilder, private cajaService: CajaService, private toastr: ToastrService, private dialog: MatDialog) {
   }
 
+  /* Funcion para fijar los campos  */
+  fijar(){
+    this.boton_fijado = !this.boton_fijado;
+    if (this.boton_fijado) {
+      this.contenidoForm.get('tipo')?.disable();
+      this.contenidoForm.get('clave')?.disable();
+      this.contenidoForm.get('fecha')?.disable();
+    } else {
+      this.contenidoForm.get('tipo')?.enable();
+      this.contenidoForm.get('clave')?.enable();
+      this.contenidoForm.get('fecha')?.enable();
+    }
+  }
+
+
   ngOnInit() {
 
   }
@@ -58,6 +77,13 @@ export class HomeComponent implements OnInit {
     this.cajaService.crearCaja(this.cajaForm.value)
       .subscribe((resp: any) => {
         console.log(resp);
+        this.toastr.success(resp.msg, '', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'decreasing',
+          positionClass: 'toast-top-right',
+        });
+
         this.cajaForm.setValue({
           descripcion: resp.caja.descripcion,
           codigo: resp.caja.codigo,
@@ -68,12 +94,7 @@ export class HomeComponent implements OnInit {
           numero: resp.caja.numero,
         });
 
-        this.toastr.success(resp.msg, '', {
-          timeOut: 5000,
-          progressBar: true,
-          progressAnimation: 'decreasing',
-          positionClass: 'toast-top-right',
-        });
+
 
       }, (err) => {
         console.warn(err.error.msg);
@@ -85,7 +106,6 @@ export class HomeComponent implements OnInit {
         });
       });
   }
-  /* Fin de la funcion crearCaja */
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
   cargarCaja() {
@@ -97,9 +117,7 @@ export class HomeComponent implements OnInit {
       this.cajaService.cargarCaja(formData)
 
         .subscribe((resp: any) => {
-          console.log(this.cajaForm)
-          console.log(resp)
-          
+          console.log(this.cajaForm.value.codigo)
           this.cajaForm.setValue({
             descripcion: resp.caja.descripcion,
             codigo: resp.caja.codigo,
@@ -132,7 +150,7 @@ export class HomeComponent implements OnInit {
       // Cualquier validacion con codigo
     }
   }
-  /* Fin de la funcion cargarCaja */
+  
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
   ingresarComprobantes(){
@@ -160,6 +178,36 @@ export class HomeComponent implements OnInit {
 
     });
 } 
+
+  reportePDF(){
+    const caja = this.cajaForm.value.codigo;
+    console.log(this.cajaForm.value.codigo)
+    this.cajaService.reportePDF(caja!)
+    .subscribe((resp: any) => {
+      
+      console.log(this.cajaForm.value.codigo)
+      console.log(resp)
+
+      this.toastr.success(resp.msg, '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+
+    }, (err) => {
+      console.warn(err.error.msg);
+
+      this.toastr.error(err.error.msg, '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+
+    });
+
+  }
 
 openDialog(): void {
 

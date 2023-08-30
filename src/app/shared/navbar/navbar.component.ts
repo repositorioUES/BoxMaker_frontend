@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from "../../services/auth.service";
 import { interval } from 'rxjs';
-import { NavigationEnd, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'navbar',
@@ -10,20 +10,29 @@ import { NavigationEnd, Router } from '@angular/router';
 })
 export class NavbarComponent implements OnInit {
 
+  /* Colocar el nombre del usuario en el Navbar sin comillas */
   usuario = (localStorage.getItem('usuario') || '').replace(/"/g, '')
+
+  /* Colocar el la fecha actual en el Navbar  */
   currentTime!: Date;
 
+  /* Inicializar el estado del usuario */
   isLoggedIn = false;
 
   constructor(private authService : AuthService,  private router: Router) {}
 
+  /* Funcion para hacer logout y set el usuario en "" */
   logout(){
     this.authService.logout();
     this.usuario = "";
   }
 
+
   ngOnInit(): void {
 
+    this.currentTime = new Date();
+    
+    /* Permite verificar el estado del usuario mediante su status */
     this.isLoggedIn = this.authService.isLoggedIn();
     this.authService.loginStatusSubjec.asObservable().subscribe(
       data => {
@@ -31,9 +40,7 @@ export class NavbarComponent implements OnInit {
       }
     )
 
-    interval(1000).subscribe(() => {
-      this.currentTime = new Date();
-    });
+
 
   }
 

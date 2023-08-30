@@ -34,7 +34,10 @@ export class CajaService {
     return this.http.post(`${ base_url }/contenido/insert`, formData, {headers} )
   }
 
-
+  reportePDF(caja: string){
+    const headers = this.globalHeaders
+    return this.http.get<any>(`${ base_url }/caja/generatePDF/${ caja }`, {headers} )
+  }
 
 
 
