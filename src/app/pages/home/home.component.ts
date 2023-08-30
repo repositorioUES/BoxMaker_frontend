@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit {
 
   public cajaForm = this.fb.group({
     descripcion: ["",],
-    codigo: ["",],
+    codigo: ["23-AAC-1",],
     caducidad: ["",],
     grupo: ["",],
     estante: ["",],

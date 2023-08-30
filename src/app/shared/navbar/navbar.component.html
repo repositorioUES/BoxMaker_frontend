@@ -31,17 +31,19 @@
       <h4>{{ usuario | uppercase }}</h4>
     </div>
 
-    <a [routerLink]="'/login'" mat-icon-button class="example-icon favorite-icon"
+    <a *ngIf="!isLoggedIn"
+    [routerLink]="'/login'" mat-icon-button class="example-icon favorite-icon"
       aria-label="Example icon-button with heart icon" matTooltip="Iniciar sesión">
       <mat-icon>person</mat-icon>
     </a>
 
-    <a [routerLink]="'/auth/register'" mat-icon-button class="example-icon favorite-icon mr5 ml10"
+<!--     <a [routerLink]="'/auth/register'" mat-icon-button class="example-icon favorite-icon mr5 ml10"
       aria-label="Example icon-button with heart icon" matTooltip="Registrar">
       <mat-icon>person_add</mat-icon>
-    </a>
+    </a> -->
 
-    <a (click)="logout()" style="margin-right: 30px" mat-icon-button class="example-icon favorite-icon mr5 ml10"
+    <a *ngIf="isLoggedIn"
+      (click)="logout()" style="margin-right: 30px" mat-icon-button class="example-icon favorite-icon mr5 ml10"
       aria-label="Example icon-button with heart icon" matTooltip="Cerrar sesión">
       <mat-icon>logout</mat-icon>
     </a>

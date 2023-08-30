@@ -63,9 +63,6 @@ export class LoginComponent implements OnInit{
 
 
 
-
-
-
   // Crear al ADMIN-GOD si no existe un user con tipo = 0
   init(){
     this.authService.init()
