@@ -29,8 +29,7 @@ import { QuedanComponent } from './quedan/quedan.component';
 
 @NgModule({
   declarations: [
-    HomeComponent,
-    QuedanComponent
+    HomeComponent
   ],
   imports: [
     CommonModule,
@@ -50,7 +49,8 @@ import { QuedanComponent } from './quedan/quedan.component';
     MatIconModule,
     MatTooltipModule,
     MatGridListModule,
-    MatTableModule
+    MatTableModule,
+    QuedanComponent
   ],
   exports:[
     HomeComponent,

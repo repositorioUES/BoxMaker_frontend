@@ -70,18 +70,14 @@ export class LoginComponent implements OnInit{
   init(){
     this.authService.init()
     .subscribe((resp:any) => {
-        this.snack.open(resp.msg, 'Aceptar', {
-        duration: 5000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'center'
-      })
+      this.toastr.success(resp.msg, '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
     }, (err)=> {
         console.warn(err) 
-        this.snack.open(err.error.msg, 'Error', {
-        duration: 5000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'center'
-      })
     })
   }
 

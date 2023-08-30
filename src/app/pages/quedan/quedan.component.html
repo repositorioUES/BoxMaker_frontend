@@ -16,6 +16,9 @@
       <mat-label>Quedan</mat-label>
       <input type="number" matInput [(ngModel)]="data.quedan">
     </mat-form-field>
+
+    <button class="btn btn-primary" (click)="getQuedan(data.quedan, data.fInicio, data.fFinal)" id="btn-save"> Buscar</button>
+
   </div>
 
   <div>
@@ -23,28 +26,21 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">First</th>
-          <th scope="col">Last</th>
-          <th scope="col">Handle</th>
+          <th scope="col">Quedan</th>
+          <th scope="col">Tipo Documento</th>
+          <th scope="col">Clave</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">N° Interno</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <th scope="row">1</th>
+         
           <td>Mark</td>
           <td>Otto</td>
           <td>@mdo</td>
-        </tr>
-        <tr>
-          <th scope="row">2</th>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <th scope="row">3</th>
-          <td colspan="2">Larry the Bird</td>
-          <td>@twitter</td>
+          <td>@mdo</td>
+          <td>@mdo</td>
         </tr>
       </tbody>
     </table>
@@ -53,5 +49,5 @@
 </div>
 <div mat-dialog-actions align="center">
   <button class="btn btn-danger" id="btn-close"  (click)="onNoClick()" >Cerrar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <button class="btn btn-primary" (click)="getQuedan(data.quedan)" id="btn-save">Guardar</button>
+  <button class="btn btn-primary" id="btn-save">Trasladar</button>
 </div>

@@ -172,9 +172,6 @@ openDialog(): void {
       },
     });
 
-    console.log(code);
-    
-
     dialogRef.afterClosed().subscribe(() => {
       console.log('The dialog was closed');
     });
