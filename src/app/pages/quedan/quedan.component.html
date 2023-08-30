@@ -1,31 +1,37 @@
-<h1 mat-dialog-title>Búsqueda de Comprobantes por QUEDAN</h1>
+<h1 mat-dialog-title>Caja: {{data.codigo}} - Búsqueda de Comprobantes por QUEDAN </h1>
 <div mat-dialog-content>
 
   <div >
     <mat-form-field style="margin-left: 10px;">
       <mat-label>Fecha Inicio</mat-label>
-      <input type="date" matInput [(ngModel)]="data.fInicio">
+      <input type="date" matInput [(ngModel)]="datos.fInicio">
     </mat-form-field>
     &nbsp;&nbsp;
     <mat-form-field>
       <mat-label>Fecha Final</mat-label>
-      <input type="date" matInput [(ngModel)]="data.fFinal">
+      <input type="date" matInput [(ngModel)]="datos.fFinal">
     </mat-form-field>
     &nbsp;&nbsp;
     <mat-form-field style="margin-right: 10px;">
       <mat-label>Quedan</mat-label>
-      <input type="number" matInput [(ngModel)]="data.quedan">
+      <input type="number" matInput [(ngModel)]="datos.quedan">
     </mat-form-field>
 
-    <button class="btn btn-primary" (click)="getQuedan(data.quedan, data.fInicio, data.fFinal)" id="btn-save"> Buscar</button>
+    <button class="btn btn-primary" (click)="getQuedan(datos.quedan, datos.fInicio, datos.fFinal)" id="btn-save"> 
+      <i class="fa fa-search" aria-hidden="true"></i>
+      Buscar
+    </button>
 
   </div>
 
-  <div>
-    <table class="table">
+  <div class="scroll-container">
+    <table class="table table-hover table-sm ">
       <thead>
         <tr>
-          <th scope="col">#</th>
+          <th scope="col" *ngIf="elegidos.length != 0">
+            <mat-checkbox [checked]="mainChecked" (change)="toggleAll()">
+            </mat-checkbox>
+          </th>
           <th scope="col">Quedan</th>
           <th scope="col">Tipo Documento</th>
           <th scope="col">Clave</th>
@@ -34,13 +40,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-         
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-          <td>@mdo</td>
-          <td>@mdo</td>
+        <tr *ngFor="let comp of elegidos" style="margin: 0%;">
+          <td style="margin: 0%;">
+            <mat-checkbox [checked]="checked" (change)="selectedItems(comp)" aria-label="`${checked ? 'select' : 'deselect'}`">
+            </mat-checkbox>
+          </td>
+          <td class="center-content">{{comp.comprobante.quedan}}</td>
+          <td class="center-content">{{comp.comprobante.tipo}}</td>
+          <td class="center-content">{{comp.comprobante.clave}}</td>
+          <td class="center-content">{{comp.comprobante.fecha | date:'dd/MM/yyyy'}}</td>
+          <td class="center-content">{{comp.comprobante.correlativo}}</td>
         </tr>
       </tbody>
     </table>
@@ -49,5 +58,5 @@
 </div>
 <div mat-dialog-actions align="center">
   <button class="btn btn-danger" id="btn-close"  (click)="onNoClick()" >Cerrar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <button class="btn btn-primary" id="btn-save">Trasladar</button>
+  <button class="btn btn-primary" id="btn-save" (click)="trasladar(data.codigo)">Trasladar</button>
 </div>

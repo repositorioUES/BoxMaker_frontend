@@ -161,20 +161,33 @@ export class HomeComponent implements OnInit {
     });
 } 
 
-openDialog(): void {
+cargarQuedan(): void {
 
-    const code = this.cajaForm.value.codigo
+    const code = this.cajaForm.value.codigo || ''
 
-    //Abrir el Dialog con la inof
-    const dialogRef = this.dialog.open(QuedanComponent, {
-      data: {
-        codigo: code
-      },
-    });
+    // if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{0,6}$/.test(code)) {
 
-    dialogRef.afterClosed().subscribe(() => {
-      console.log('The dialog was closed');
-    });
+      //Abrir el Dialog con la inof
+      const dialogRef = this.dialog.open(QuedanComponent, {
+        data: {
+          codigo: code
+        },
+      });
+
+      dialogRef.afterClosed().subscribe(() => {
+        console.log('The dialog was closed');
+      });
+
+    // } else {
+    //   this.toastr.error('No ha seleccionado una caja o no es un codigo de caja válido', '', {
+    //     timeOut: 5000,
+    //     progressBar: true,
+    //     progressAnimation: 'decreasing',
+    //     positionClass: 'toast-top-right',
+    //   });
+    // }
+
+    
   }
 
 }
