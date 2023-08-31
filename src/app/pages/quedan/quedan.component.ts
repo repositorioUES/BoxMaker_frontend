@@ -62,40 +62,88 @@ export class QuedanComponent {
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
-    } else {
-      // const datos = {
-      //   fInicio: fInicio,
-      //   fFinal: fFinal,
-      //   quedan: quedan
-      // }
-      const datos = {
-        fInicio: '2023-07-01',
-        fFinal: '2023-07-31',
-        quedan: '123456'
-      }
+      return
+    } 
+    
+    if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(fInicio) == false){
+      console.warn('La fecha de Inicio No tiene formato válido') 
+      this.toast.error('La fecha de Inicio No tiene formato válido', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      return
+    }
+    
+    if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(fFinal) == false){
+      
+      console.warn('La fecha Final No tiene formato válido') 
+      this.toast.error('La fecha Final No tiene formato válido', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      return
+    } 
+    
+    if (quedan == null || quedan == "") {
+      console.warn('El QUEDAN es oblidatorio') 
+      this.toast.error('El QUEDAN es oblidatorio', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      return
+    }
 
-      this.quedanSrv.getQuedan(datos)
-      .subscribe((resp:Comprobante[]) => {
-        this.elegidos = []
-        resp.forEach(comprobante => {
-          const compAux = {
-            comprobante: comprobante,
-            marked: true,
-            fecha: this.formatedDate(comprobante.fecha)
-          }
-          this.elegidos.push(compAux)
-          this.mainChecked = true
-        });
-      }, (err)=> {
-        console.warn(err) 
-        this.toast.error(err.error.msg, '', {
+    // const datos = {
+    //   fInicio: fInicio,
+    //   fFinal: fFinal,
+    //   quedan: quedan
+    // }
+
+    const datos = {
+      fInicio: '2023-07-01',
+      fFinal: '2023-07-31',
+      quedan: '123456'
+    }
+
+    this.quedanSrv.getQuedan(datos)
+    .subscribe((resp:Comprobante[]) => {
+      this.elegidos = []
+
+      if(resp.length == 0){
+        this.toast.error('No se hallarón comprobantes que cumplan con el filtro', '', {
           timeOut: 5000,
           progressBar: true,
           progressAnimation: 'decreasing',
           positionClass: 'toast-top-right',
         });
-      })
-    }
+        return
+      }
+
+      resp.forEach(comprobante => {
+        const compAux = {
+          comprobante: comprobante,
+          marked: true,
+          fecha: this.formatedDate(comprobante.fecha)
+        }
+        this.elegidos.push(compAux)
+        this.mainChecked = true
+      });
+    }, (err)=> {
+      console.warn(err) 
+      this.toast.error(err.error.msg, '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+    })
+    
   }
   
   // Marcar los checkboxes de maera individual

@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
 import {Router} from "@angular/router";
+import { Observable } from 'rxjs';
+import { Comprobante } from '../models/comprobante.model';
 
 const base_url = environment.base_url;
 
@@ -45,5 +47,14 @@ export class CajaService {
 
 
 
+
+
+
+
+
+  deleteOneContent (comp: any) : Observable<void>{
+    const headers = this.globalHeaders
+    return this.http.post<void>(`${ base_url }/contenido/removeOne`, comp, {headers})
+  }
 }
 

@@ -15,7 +15,7 @@ import { Comprobante } from 'src/app/models/comprobante.model';
 })
 export class HomeComponent implements OnInit {
   /* --------------------------------------------INFORMACION DE TABLA----------------------------------------------- */
-  displayedColumns = ['position', 'tipo', 'clave', 'fecha', 'comprobante'];
+  displayedColumns = ['position', 'tipo', 'clave', 'fecha', 'comprobante', 'Quitar'];
   // dataSource = ELEMENT_DATA;
 
   /* ----------------------------------------------------------------------------------------------------------------- */
@@ -220,11 +220,13 @@ export class HomeComponent implements OnInit {
 
 
 
+
+
   cargarQuedan(): void {
 
     const code = this.cajaForm.value.codigo || ''
   
-    if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{0,6}$/.test(code)) {
+    if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{1,5}$/.test(code)) {
       //Abrir el Dialog con la inof
       const dialogRef = this.dialog.open(QuedanComponent, {
         data: {
@@ -244,7 +246,42 @@ export class HomeComponent implements OnInit {
         positionClass: 'toast-top-right',
       });
     }
+  }
 
+  quitarUno(comprobante: Comprobante){
+    console.log(comprobante);
+
+    const data = {
+      caja: comprobante.caja,
+      tipo: comprobante.tipo,
+      clave: comprobante.clave,
+      fecha: comprobante.fecha,
+      correlativo: comprobante.correlativo,
+    }
+    
+    this.cajaService.deleteOneContent(data)
+    .subscribe((res:any) => {
+      this.toastr.success('Comprobante Removido con éxito', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      this.cargarCaja()
+    }, (err)=> {
+        console.warn(err)
+        this.toastr.error('No ha podido quitar el comprobante', '', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'decreasing',
+          positionClass: 'toast-top-right',
+        });
+    })
+    
+  }
+
+  vaciarCaja(codigo: string){
+    console.log(codigo);
     
   }
 }

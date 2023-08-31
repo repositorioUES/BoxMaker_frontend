@@ -2,6 +2,7 @@
 
 export class Comprobante {
     constructor(
+       public caja: string,
        public quedan: string,
        public tipo: string,
        public clave: string,
