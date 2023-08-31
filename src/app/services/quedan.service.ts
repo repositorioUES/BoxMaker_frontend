@@ -27,7 +27,7 @@ const base_url = environment.base_url;
 
     saveQuedan (caja: string, comprobantes: Comprobante[]) : Observable<void>{
       const headers = this.globalHeaders
-      return this.http.post<any>(`${ base_url }/contenido/quedanInsert`, {caja,comprobantes}, {headers})
+      return this.http.post<any>(`${ base_url }/contenido/quedanInsert`, {caja, comprobantes}, {headers})
     }
 
 }

@@ -42,13 +42,13 @@
       <tbody>
         <tr *ngFor="let comp of elegidos" style="margin: 0%;">
           <td style="margin: 0%;">
-            <mat-checkbox [checked]="checked" (change)="selectedItems(comp)" aria-label="`${checked ? 'select' : 'deselect'}`">
+            <mat-checkbox [checked]="comp.marked" (change)="selectedItems(comp)">
             </mat-checkbox>
           </td>
           <td class="center-content">{{comp.comprobante.quedan}}</td>
           <td class="center-content">{{comp.comprobante.tipo}}</td>
           <td class="center-content">{{comp.comprobante.clave}}</td>
-          <td class="center-content">{{comp.comprobante.fecha | date:'dd/MM/yyyy'}}</td>
+          <td class="center-content">{{comp.fecha}}</td>
           <td class="center-content">{{comp.comprobante.correlativo}}</td>
         </tr>
       </tbody>

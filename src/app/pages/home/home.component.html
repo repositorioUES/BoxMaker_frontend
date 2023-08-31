@@ -188,7 +188,7 @@
   <div class="container mt-6 border custom-border-bottom custom-color">
     <br />
     <section class="example-container mat-elevation-z8" tabindex="0">
-      <table class="table custom-table-style" mat-table [dataSource]="dataSource">
+      <table class="table custom-table-style" mat-table [dataSource]="contenidos">
         <!-- Position Column -->
         <ng-container matColumnDef="position">
           <th mat-header-cell *matHeaderCellDef>No.</th>
@@ -215,7 +215,7 @@
 
         <ng-container matColumnDef="comprobante">
           <th mat-header-cell *matHeaderCellDef>N° Comprobante</th>
-          <td mat-cell *matCellDef="let element">{{ element.comprobante }}</td>
+          <td mat-cell *matCellDef="let element">{{ element.correlativo }}</td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>

@@ -5,6 +5,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ToastrService } from 'ngx-toastr';
 import { QuedanComponent } from 'src/app/pages/quedan/quedan.component';
 import { MatDialog } from '@angular/material/dialog';
+import { Comprobante } from 'src/app/models/comprobante.model';
 
 
 @Component({
@@ -15,7 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class HomeComponent implements OnInit {
   /* --------------------------------------------INFORMACION DE TABLA----------------------------------------------- */
   displayedColumns = ['position', 'tipo', 'clave', 'fecha', 'comprobante'];
-  dataSource = ELEMENT_DATA;
+  // dataSource = ELEMENT_DATA;
 
   /* ----------------------------------------------------------------------------------------------------------------- */
 
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit {
 
   /* Inicializar el boton */
   public boton_fijado: boolean = false;
+  public contenidos: Comprobante[] = [] //Contenido de la caja que está en el txt, NO en la base
 
   /* Form para los campos del contenido (COMPROBANTES) de la caja */
   public contenidoForm = this.fb.group({
@@ -146,6 +148,8 @@ export class HomeComponent implements OnInit {
               numero: resp.caja.numero,
             });
 
+            this.contenidos = resp.contenido // Obtener los contenidos del txt
+
             /* mensaje de exito */
             this.exito(resp);
           },
@@ -212,11 +216,15 @@ export class HomeComponent implements OnInit {
   }
 
 
+
+
+
+
   cargarQuedan(): void {
 
-      const code = this.cajaForm.value.codigo || ''
+    const code = this.cajaForm.value.codigo || ''
   
-      // if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{0,6}$/.test(code)) {
+    if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{0,6}$/.test(code)) {
       //Abrir el Dialog con la inof
       const dialogRef = this.dialog.open(QuedanComponent, {
         data: {
@@ -225,17 +233,17 @@ export class HomeComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(() => {
-        console.log('The dialog was closed');
+        // console.log('The dialog was closed');
       });
 
-    // } else {
-    //   this.toastr.error('No ha seleccionado una caja o no es un codigo de caja válido', '', {
-    //     timeOut: 5000,
-    //     progressBar: true,
-    //     progressAnimation: 'decreasing',
-    //     positionClass: 'toast-top-right',
-    //   });
-    // }
+    } else {
+      this.toastr.error('No ha seleccionado una caja o no es un codigo de caja válido', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+    }
 
     
   }

@@ -1,5 +1,5 @@
 
-import { Component, Inject } from '@angular/core';
+import { Component, EventEmitter, Inject, Output } from '@angular/core';
 
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -45,47 +45,60 @@ export class QuedanComponent {
   ) {}
   
   elegidos: any[] = [] // Comprobantes seleccionados en el modal
-  mainChecked: boolean = true
-  checked: boolean = true
+  mainChecked: boolean = true // Para controlar el cehackbox que marca/desmarca a todos
+  @Output() private comprobantesAgregados = new EventEmitter<any>();
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   getQuedan(quedan: string, fInicio: string, fFinal: string){
-    // const datos = {
-    //   fInicio: fInicio,
-    //   fFinal: fFinal,
-    //   quedan: quedan
-    // }
-    const datos = {
-      fInicio: '2019-01-01',
-      fFinal: '2019-01-31',
-      quedan: '123456'
-    }
 
-    this.quedanSrv.getQuedan(datos)
-    .subscribe((resp:Comprobante[]) => {
-      this.elegidos = []
-      resp.forEach(comprobante => {
-        const compAux = {
-          comprobante: comprobante,
-          marked: true
-        }
-        this.elegidos.push(compAux)
-      });
-    }, (err)=> {
-      console.warn(err) 
-      this.toast.error(err.error.msg, '', {
+    if (new Date(fInicio) >= new Date(fFinal)) {
+      console.warn('La fecha de inicio debe ser menor que la fecha final') 
+      this.toast.error('La fecha de inicio debe ser menor que la fecha final', '', {
         timeOut: 5000,
         progressBar: true,
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
-    })
-    
+    } else {
+      // const datos = {
+      //   fInicio: fInicio,
+      //   fFinal: fFinal,
+      //   quedan: quedan
+      // }
+      const datos = {
+        fInicio: '2023-07-01',
+        fFinal: '2023-07-31',
+        quedan: '123456'
+      }
+
+      this.quedanSrv.getQuedan(datos)
+      .subscribe((resp:Comprobante[]) => {
+        this.elegidos = []
+        resp.forEach(comprobante => {
+          const compAux = {
+            comprobante: comprobante,
+            marked: true,
+            fecha: this.formatedDate(comprobante.fecha)
+          }
+          this.elegidos.push(compAux)
+          this.mainChecked = true
+        });
+      }, (err)=> {
+        console.warn(err) 
+        this.toast.error(err.error.msg, '', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'decreasing',
+          positionClass: 'toast-top-right',
+        });
+      })
+    }
   }
   
+  // Marcar los checkboxes de maera individual
   selectedItems(comp: any){
     
     this.elegidos.forEach(e => {
@@ -96,43 +109,29 @@ export class QuedanComponent {
 
     if (this.getMarks() == this.elegidos.length) {
       this.mainChecked = true
-      console.log('toos');
     } else {
-      console.log('No toos');
       this.mainChecked = false
     }
-
-    this.sh()
   }
 
-  sh(){
-    let toSave: Comprobante[] = [] //Comprobantes seleccionados que se guardarán
-    this.elegidos.forEach(e => {
-      if (e.marked) {
-        toSave.push(e.comprobante)
-      }
-    });
-    console.log(toSave.length);
-  }
-
+  // Marcar-Desmarcar todos los checkboxes
   toggleAll(){
 
     if (this.getMarks() == this.elegidos.length) {
         this.elegidos.forEach(e => {
           e.marked = false
         })
-        this.checked = false
-    } else {
-      this.elegidos.forEach(e => {
-        e.marked = true
-      })
-      this.checked = true
+        this.mainChecked = false
+      } else {
+        this.elegidos.forEach(e => {
+          e.marked = true
+        })
+        this.mainChecked = true
     }
-    this.sh()
   }
 
   trasladar(codigo: string){
-    let toSave: Comprobante[] = [] //Comprobantes seleccionados que se guardarán
+    let toSave: Comprobante[] = [] //Comprobantes que tienen marcado el check y que se guardarán
 
     this.elegidos.forEach(e => {
       if (e.marked) {
@@ -148,6 +147,8 @@ export class QuedanComponent {
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
+      this.comprobantesAgregados.emit(true)
+      this.onNoClick() // cerrar dialog depues de trasladar
     }, (err)=> {
       console.warn(err) 
       this.toast.error(err.error.msg, '', {
@@ -160,6 +161,10 @@ export class QuedanComponent {
     
   }
 
+
+
+// FUNCIONES DE APOYO PARA CONTROLAR LOS CHECKBOXES MARCADOS===========================================================================
+  //Obtener la cantidad de comprobantes marcados en la lista
   getMarks(){
     let marked = 0 // Cantidad de filas marcadas
 
@@ -168,8 +173,24 @@ export class QuedanComponent {
         marked++
       }
     })
-
     return marked
+  }
+
+  // Formatear la fecha como dd/mm/yyyy (proque Pipe no lo hace bien XD)
+  formatedDate(fecha: string){
+    let splitFecha = fecha.substring(0, 10).split("-")
+    return splitFecha[2] + "/" + splitFecha[1] + "/" + splitFecha[0]
+  }
+
+
+  sh(){
+    let toSave: Comprobante[] = []
+    this.elegidos.forEach(e => {
+      if (e.marked) {
+        toSave.push(e.comprobante)
+      }
+    });
+    console.log(toSave.length);
   }
 
 }
