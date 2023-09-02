@@ -4,17 +4,17 @@
   <div >
     <mat-form-field style="margin-left: 10px;">
       <mat-label>Fecha Inicio</mat-label>
-      <input type="date" matInput [(ngModel)]="datos.fInicio">
+      <input type="date" matInput  [(ngModel)]="datos.fInicio" (keyup)="$event.keyCode == 13 ? nextInput( 'finalInput' ,$event.keyCode) : null">
     </mat-form-field>
     &nbsp;&nbsp;
     <mat-form-field>
       <mat-label>Fecha Final</mat-label>
-      <input type="date"  matInput [(ngModel)]="datos.fFinal">
+      <input type="date"  matInput id="finalInput" [(ngModel)]="datos.fFinal" (keyup)="$event.keyCode == 13 ? nextInput( 'quedanInput' ,$event.keyCode) : null">
     </mat-form-field>
     &nbsp;&nbsp;
     <mat-form-field style="margin-right: 10px;">
       <mat-label>Quedan</mat-label>
-      <input type="number" matInput [(ngModel)]="datos.quedan">
+      <input type="number" matInput id="quedanInput" [(ngModel)]="datos.quedan" (keyup)="$event.keyCode == 13 ? getQuedan(datos.quedan, datos.fInicio, datos.fFinal) : null">
     </mat-form-field>
 
     <button class="btn btn-primary" (click)="getQuedan(datos.quedan, datos.fInicio, datos.fFinal)" id="btn-save"> 
@@ -32,6 +32,7 @@
             <mat-checkbox [checked]="mainChecked" (change)="toggleAll()">
             </mat-checkbox>
           </th>
+          <th scope="col">#</th>
           <th scope="col">Quedan</th>
           <th scope="col">Tipo Documento</th>
           <th scope="col">Clave</th>
@@ -40,11 +41,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let comp of elegidos" style="margin: 0%;">
+        <tr *ngFor="let comp of elegidos, let i = index" style="margin: 0%;">
           <td style="margin: 0%;">
             <mat-checkbox [checked]="comp.marked" (change)="selectedItems(comp)">
             </mat-checkbox>
           </td>
+          <td class="center-content">{{ i + 1 }}</td>
           <td class="center-content">{{comp.comprobante.quedan}}</td>
           <td class="center-content">{{comp.comprobante.tipo}}</td>
           <td class="center-content">{{comp.comprobante.clave}}</td>

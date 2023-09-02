@@ -54,7 +54,7 @@ export class QuedanComponent {
   }
 
   getQuedan(quedan: string, fInicio: string, fFinal: string){
-/*
+
     if (new Date(fInicio) >= new Date(fFinal)) {
       console.warn('La fecha de inicio debe ser menor que la fecha final') 
       this.toast.error('La fecha de inicio debe ser menor que la fecha final', '', {
@@ -98,19 +98,19 @@ export class QuedanComponent {
         positionClass: 'toast-top-right',
       });
       return
-    }*/
-
-    // const datos = {
-    //   fInicio: fInicio,
-    //   fFinal: fFinal,
-    //   quedan: quedan
-    // }
+    }
 
     const datos = {
-      fInicio: '2023-07-01',
-      fFinal: '2023-07-31',
-      quedan: '123456'
+      fInicio: fInicio,
+      fFinal: fFinal,
+      quedan: quedan
     }
+
+    // const datos = {
+    //   fInicio: '2023-07-01',
+    //   fFinal: '2023-07-31',
+    //   quedan: '123456'
+    // }
 
     this.quedanSrv.getQuedan(datos)
     .subscribe((resp:Comprobante[]) => {
@@ -188,6 +188,16 @@ export class QuedanComponent {
       }
     });
 
+    if (toSave.length == 0) {
+      this.toast.error('No hay Comprobantes seleccionados para Trasladar', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      return
+    }
+
     this.quedanSrv.saveQuedan(codigo, toSave)
     .subscribe((res:any) => {
       this.toast.success(res.msg, '', {
@@ -240,6 +250,13 @@ export class QuedanComponent {
       }
     });
     console.log(toSave.length);
+  }
+
+  nextInput(next: any, key: any) {
+    if (key == 13) {
+      document.getElementById(next)?.focus();
+    }
+  
   }
 
 }

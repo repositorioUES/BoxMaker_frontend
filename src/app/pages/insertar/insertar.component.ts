@@ -45,7 +45,34 @@ export class InsertarComponent {
   }
 
   insertarDebajo(data: DialogData){
-    console.log(data);
+    let errMsg: any[] = []
+
+    if(!['DIARIO', 'EGRESO','INGRESO'].includes(data.tipo)){
+      errMsg.push('El Tipo de Documento No es válido')
+    }
+    if(/^[A-Z]{1}[0-9,A-Z]{1}$/.test(data.clave) == false){
+      errMsg.push('La Clave No tiene un formato válido')
+    }
+
+    if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(data.fecha) == false){
+      errMsg.push('La Fecha No tiene formato válido') 
+    }
+
+    if(/^[0-9]{1,5}$/.test(data.correlativo) == false){
+      errMsg.push('El N° Comprobante No tiene formato válido') 
+    }
+    
+    if (errMsg.length != 0) {
+      errMsg.forEach(err => {
+        this.toast.error(err, '', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'decreasing',
+          positionClass: 'toast-top-right',
+        });
+      });
+      return
+    }
       
       this.cajaSrv.ingresarComprobantes(data)
       .subscribe((res:any) => {
@@ -103,6 +130,13 @@ export class InsertarComponent {
       this.datos.clave = 'XX'
     }
     
+  }
+
+  nextInput(next: any, key: any) {
+    if (key == 13) {
+      document.getElementById(next)?.focus();
+    }
+  
   }
 
 }

@@ -117,7 +117,7 @@
 
           <!– Botón Reporte PDF –>
           <div class="col-sm-2">
-            <button type="submit" class="btn btn-sm btn-danger" (click)="reportePDF()">
+            <button type="submit" class="btn btn-sm btn-danger" (click)="generatePDF()">
               <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
               Reporte PDF
             </button>
@@ -210,7 +210,7 @@
         <!-- Symbol Column -->
         <ng-container matColumnDef="fecha">
           <th mat-header-cell *matHeaderCellDef>fecha</th>
-          <td mat-cell *matCellDef="let element">{{ element.fecha }}</td>
+          <td mat-cell *matCellDef="let element">{{ element.fecha | date: 'dd/MM/yyyy'}}</td>
         </ng-container>
 
         <ng-container matColumnDef="comprobante">

@@ -39,7 +39,7 @@ export class CajaService {
     return this.http.post(`${ base_url }/contenido/insert`, formData, {headers} )
   }
 
-  reportePDF(codigo: any){
+  reportePDF(codigo: string){
     const headers = this.globalHeaders
     const url = `${base_url}/caja/generatePDF/${codigo}`;
     /* console.log('URL de solicitud:', url); */
@@ -55,10 +55,11 @@ export class CajaService {
 
 
 
-
-
-
-
+  getPDF(codigo: string): Promise<any> {
+    return fetch(`${ base_url }/caja/generatePDF/${ codigo }`, {
+      method: 'GET',
+    });
+  }
 
   deleteOneContent (caja: string, comp: any) : Observable<void>{
     const headers = this.globalHeaders

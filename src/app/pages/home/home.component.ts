@@ -231,10 +231,37 @@ export class HomeComponent implements OnInit {
 
 
 
+  
 
 
 
 
+
+
+
+  generatePDF(){
+    const codigo = this.cajaForm.value.codigo;
+
+    if (!codigo) {
+      console.error('El Código de Caja esta vacio');
+      return;
+    }
+    
+    this.cajaService.getPDF(codigo)
+    .then(response => response.blob())
+    .then(pdf => {
+      window.open(URL.createObjectURL(pdf), '_blank');
+    })
+    .catch(err => {
+      console.log(err);
+      this.toastr.error('Ha ocurrido un error al generar el reporte en PDF: ' + err, '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+    });
+  }
 
   cargarQuedan(): void {
 
