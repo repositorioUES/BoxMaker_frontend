@@ -165,7 +165,7 @@
 
           <!– Botón Borrar Todos –>
           <div class="col-sm-2 offset-sm-2">
-            <button type="submit" class="btn btn-sm btn-danger">
+            <button type="submit" class="btn btn-sm btn-danger" (click)="vaciarCaja()">
               <i class="fa fa-times" aria-hidden="true"></i> Borrar Todos
             </button>
           </div>
@@ -192,7 +192,7 @@
         <!-- Position Column -->
         <ng-container matColumnDef="position">
           <th mat-header-cell *matHeaderCellDef>No.</th>
-          <td mat-cell *matCellDef="let element let i= index">{{ i+1 }}</td>
+          <td mat-cell *matCellDef="let element let i = index">{{ i + 1 }}</td>
         </ng-container>
 
         <!-- Name Column -->
@@ -218,10 +218,21 @@
           <td mat-cell *matCellDef="let element">{{ element.correlativo }}</td>
         </ng-container>
         
+        <ng-container matColumnDef="Insertar">
+          <th mat-header-cell *matHeaderCellDef>Insetar</th>
+          <td mat-cell *matCellDef="let element let i = index">
+            <button type="button" (click)="insertarDebajo(i)" class="btn btn-outline-primary" matTooltip="Insertar Debajo" *ngIf="i != longitud">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-bar-down" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6z"></path>
+              </svg>
+            </button>
+          </td>
+        </ng-container>
+        
         <ng-container matColumnDef="Quitar">
           <th mat-header-cell *matHeaderCellDef>Quitar</th>
-          <td mat-cell *matCellDef="let element">
-            <button type="button" (click)="quitarUno(element)" class="btn btn-outline-danger" matTooltip="Quitar Comprobante" >
+          <td mat-cell *matCellDef="let element let i= index">
+            <button type="button" (click)="quitarUno(i)" class="btn btn-outline-danger" matTooltip="Quitar Comprobante" >
               <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" class="bi bi-dash-circle-fill" viewBox="0 0 16 16">
                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7z"></path>
               </svg>

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
 import {Router} from "@angular/router";
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Comprobante } from '../models/comprobante.model';
 
 const base_url = environment.base_url;
@@ -12,6 +12,9 @@ const base_url = environment.base_url;
   providedIn: 'root'
 })
 export class CajaService {
+
+  //Objeto para comuncarse entre componentes suscritos al servicio
+  public $refreshTable = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private router : Router) { }
 
@@ -52,9 +55,24 @@ export class CajaService {
 
 
 
-  deleteOneContent (comp: any) : Observable<void>{
+
+
+
+
+
+  deleteOneContent (caja: string, comp: any) : Observable<void>{
     const headers = this.globalHeaders
-    return this.http.post<void>(`${ base_url }/contenido/removeOne`, comp, {headers})
+    return this.http.post<void>(`${ base_url }/contenido/removeOne`, {caja, comp}, {headers})
+  }
+
+  deleteAllContent (codigo: string) : Observable<void>{
+    const headers = this.globalHeaders
+    return this.http.delete<void>(`${ base_url }/contenido/deleteAll/${ codigo }`, {headers})
+  }
+
+  savetoDatabase (codigo: string) : Observable<void>{
+    const headers = this.globalHeaders
+    return this.http.get<void>(`${ base_url }/contenido/save/${ codigo }`, {headers})
   }
 }
 

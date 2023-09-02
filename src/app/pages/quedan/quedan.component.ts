@@ -14,6 +14,7 @@ import { Comprobante } from 'src/app/models/comprobante.model';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe, NgForOf, NgFor, NgIf } from '@angular/common';
+import { CajaService } from 'src/app/services/caja.service';
 
 
 export interface DialogData {
@@ -40,8 +41,8 @@ export class QuedanComponent {
     @Inject(MAT_DIALOG_DATA) public datos: DialogData, 
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private quedanSrv: QuedanService,
+    private cajaSrv: CajaService,
     private toast: ToastrService,
-    private fb: FormBuilder
   ) {}
   
   elegidos: any[] = [] // Comprobantes seleccionados en el modal
@@ -53,7 +54,7 @@ export class QuedanComponent {
   }
 
   getQuedan(quedan: string, fInicio: string, fFinal: string){
-
+/*
     if (new Date(fInicio) >= new Date(fFinal)) {
       console.warn('La fecha de inicio debe ser menor que la fecha final') 
       this.toast.error('La fecha de inicio debe ser menor que la fecha final', '', {
@@ -97,7 +98,7 @@ export class QuedanComponent {
         positionClass: 'toast-top-right',
       });
       return
-    }
+    }*/
 
     // const datos = {
     //   fInicio: fInicio,
@@ -113,8 +114,7 @@ export class QuedanComponent {
 
     this.quedanSrv.getQuedan(datos)
     .subscribe((resp:Comprobante[]) => {
-      this.elegidos = []
-
+      
       if(resp.length == 0){
         this.toast.error('No se hallarón comprobantes que cumplan con el filtro', '', {
           timeOut: 5000,
@@ -124,7 +124,8 @@ export class QuedanComponent {
         });
         return
       }
-
+      
+      this.elegidos = []
       resp.forEach(comprobante => {
         const compAux = {
           comprobante: comprobante,
@@ -195,7 +196,7 @@ export class QuedanComponent {
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
-      this.comprobantesAgregados.emit(true)
+      this.cajaSrv.$refreshTable.next(true); //Emitir que se debe refrescar la tabla del home.component
       this.onNoClick() // cerrar dialog depues de trasladar
     }, (err)=> {
       console.warn(err) 

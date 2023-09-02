@@ -4,8 +4,10 @@ import { CajaService } from 'src/app/services/caja.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ToastrService } from 'ngx-toastr';
 import { QuedanComponent } from 'src/app/pages/quedan/quedan.component';
+import { InsertarComponent } from 'src/app/pages/insertar/insertar.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Comprobante } from 'src/app/models/comprobante.model';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -15,7 +17,7 @@ import { Comprobante } from 'src/app/models/comprobante.model';
 })
 export class HomeComponent implements OnInit {
   /* --------------------------------------------INFORMACION DE TABLA----------------------------------------------- */
-  displayedColumns = ['position', 'tipo', 'clave', 'fecha', 'comprobante', 'Quitar'];
+  displayedColumns = ['position', 'tipo', 'clave', 'fecha', 'comprobante', 'Insertar','Quitar'];
   // dataSource = ELEMENT_DATA;
 
   /* ----------------------------------------------------------------------------------------------------------------- */
@@ -34,6 +36,7 @@ export class HomeComponent implements OnInit {
   /* Inicializar el boton */
   public boton_fijado: boolean = false;
   public contenidos: Comprobante[] = [] //Contenido de la caja que está en el txt, NO en la base
+  public longitud: number = 0 //cuámtos contenidos se recuperaron
 
   /* Form para los campos del contenido (COMPROBANTES) de la caja */
   public contenidoForm = this.fb.group({
@@ -95,7 +98,12 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  ngOnInit() {}
+  ngOnInit() { 
+    // Se suscribe para detecter cada vez que la variable $refreshTable cambie
+    this.cajaService.$refreshTable.subscribe(data => {
+      this.cargarCaja()
+    });
+  }
 
   /* Funcion que permite CREAR una caja y CARGAR sus datos en el formulario */
   crearCaja() {
@@ -115,6 +123,9 @@ export class HomeComponent implements OnInit {
           nivel: resp.caja.nivel,
           numero: resp.caja.numero,
         });
+       
+        if(resp.from = 'update')
+          this.guardarContenidos(resp.caja.codigo)
       },
       (err) => {
         console.warn(err.error.msg);
@@ -148,7 +159,8 @@ export class HomeComponent implements OnInit {
               numero: resp.caja.numero,
             });
 
-            this.contenidos = resp.contenido // Obtener los contenidos del txt
+            this.contenidos = resp.contenido // Obtener los contenidos del json
+            this.longitud =  this.contenidos.length -1
 
             /* mensaje de exito */
             this.exito(resp);
@@ -222,6 +234,8 @@ export class HomeComponent implements OnInit {
 
 
 
+
+
   cargarQuedan(): void {
 
     const code = this.cajaForm.value.codigo || ''
@@ -248,67 +262,110 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  quitarUno(comprobante: Comprobante){
-    console.log(comprobante);
+  insertarDebajo(index: number){
+    const code = this.cajaForm.value.codigo || ''
+  
+    if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{1,5}$/.test(code)) {
+      //Abrir el Dialog con la inof
+      const dialogRef = this.dialog.open(InsertarComponent, {
+        data: {
+          codigo: code,
+          index: index
+        },
+      });
 
-    const data = {
-      caja: comprobante.caja,
-      tipo: comprobante.tipo,
-      clave: comprobante.clave,
-      fecha: comprobante.fecha,
-      correlativo: comprobante.correlativo,
-    }
-    
-    this.cajaService.deleteOneContent(data)
-    .subscribe((res:any) => {
-      this.toastr.success('Comprobante Removido con éxito', '', {
+      dialogRef.afterClosed().subscribe(() => {
+        // console.log('The dialog was closed');
+      });
+
+    } else {
+      this.toastr.error('No ha seleccionado una caja o no es un codigo de caja válido', '', {
         timeOut: 5000,
         progressBar: true,
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
-      this.cargarCaja()
+    }
+  }
+
+  async quitarUno(index: number){
+    let newArray: Comprobante[] = []
+    const codigo = this.cajaForm.value.codigo || ''
+
+    const { isConfirmed } = await Swal.fire({
+      title: '¿Quitar éste Comprobante  de la Caja '+ codigo +'?',
+      showCancelButton: true
+    })
+
+    if (isConfirmed) {
+      for (let i  = 0; i < this.contenidos.length; i++) {
+        if(i != index){
+          newArray.push(this.contenidos[i])
+        }
+      }   
+      
+      this.cajaService.deleteOneContent(codigo, newArray)
+      .subscribe((res:any) => {
+
+        Swal.fire('Comprobante Removido con éxito', 'Completado')
+        
+        this.cargarCaja()
+      }, (err)=> {
+          console.warn(err)
+          this.toastr.error('No ha podido quitar el comprobante', '', {
+            timeOut: 5000,
+            progressBar: true,
+            progressAnimation: 'decreasing',
+            positionClass: 'toast-top-right',
+          });
+      })
+    }
+  }
+
+  async vaciarCaja(){
+    const codigo = this.cajaForm.value.codigo || ''
+
+    const { isConfirmed } = await Swal.fire({
+      title: '¿Borrar todo el Contendo de la Caja '+ codigo +'?',
+      showCancelButton: true
+    })
+
+    if (isConfirmed) {
+      this.cajaService.deleteAllContent(codigo)
+      .subscribe((res:any) => {
+
+        Swal.fire('La caja ' + codigo + ' ahora está Vacia', 'Completado')
+
+        this.cargarCaja()
+      }, (err)=> {
+          console.warn(err)
+          this.toastr.error('No se ha podido vaciar la caja', '', {
+            timeOut: 5000,
+            progressBar: true,
+            progressAnimation: 'decreasing',
+            positionClass: 'toast-top-right',
+          });
+      })
+    }
+  }
+
+  guardarContenidos(codigo: string){
+    this.cajaService.savetoDatabase(codigo)
+    .subscribe((res:any) => {
+      this.toastr.success('Contenido de la caja ' + codigo +' guardado en la Base de Datos', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
     }, (err)=> {
         console.warn(err)
-        this.toastr.error('No ha podido quitar el comprobante', '', {
+        this.toastr.error('No se ha podido guardar el contenido de la caja', '', {
           timeOut: 5000,
           progressBar: true,
           progressAnimation: 'decreasing',
           positionClass: 'toast-top-right',
         });
     })
-    
-  }
-
-  vaciarCaja(codigo: string){
-    console.log(codigo);
-    
   }
 }
-
-
-
-/* --------------------------------------------INFORMACION DE TABLA----------------------------------------------- */
-export interface PeriodicElement {
-  position: number;
-  tipo: string;
-  clave: string;
-  fecha: string;
-  comprobante: number;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  { position: 1, tipo: 'DIARIO', clave: 'XX', fecha: '31/03/2023', comprobante: 100 },
-  { position: 2, tipo: 'EGRESO', clave: 'H4', fecha: '31/03/2023', comprobante: 1405 },
-  { position: 3, tipo: 'INGRESO', clave: 'M1', fecha: '31/03/2023', comprobante: 3500 },
-  { position: 4, tipo: 'DIARIO', clave: 'M3', fecha: '31/03/2023', comprobante: 933 },
-  { position: 5, tipo: 'INGRESO', clave: 'H1', fecha: '31/03/2023', comprobante: 23 },
-  { position: 6, tipo: 'EGRESO', clave: 'M3', fecha: '31/03/2023', comprobante: 60 },
-  { position: 7, tipo: 'DIARIO', clave: 'XX', fecha: '31/03/2023', comprobante: 430 },
-  { position: 8, tipo: 'INGRESO', clave: 'D2', fecha: '31/03/2023', comprobante: 349 },
-  { position: 9, tipo: 'DIARIO', clave: 'D5', fecha: '31/03/2023', comprobante: 590 },
-  { position: 10, tipo: 'EGRESO', clave: 'H2', fecha: '31/03/2023', comprobante: 100 },
-];
-
-/* ----------------------------------------------------------------------------------------------------------------- */
-

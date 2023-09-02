@@ -22,6 +22,7 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatTableModule} from '@angular/material/table';
 import { QuedanComponent } from './quedan/quedan.component';
+import { InsertarComponent } from './insertar/insertar.component';
 
 
 
@@ -50,7 +51,8 @@ import { QuedanComponent } from './quedan/quedan.component';
     MatTooltipModule,
     MatGridListModule,
     MatTableModule,
-    QuedanComponent
+    QuedanComponent,
+    InsertarComponent
   ],
   exports:[
     HomeComponent,

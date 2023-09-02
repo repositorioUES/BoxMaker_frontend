@@ -1,0 +1,31 @@
+
+<h1 mat-dialog-title>Insertar Comprobante debajo de  la fila: {{data.index + 1}}</h1>
+<div mat-dialog-content>
+
+  <div >
+    <mat-form-field style="margin-left: 10px;">
+      <mat-label>Tipo</mat-label>
+      <input type="text" matInput [(ngModel)]="datos.tipo" (keyup)="autoCompletarTipo($event.keyCode)" >
+    </mat-form-field>
+    &nbsp;&nbsp;
+    <mat-form-field>
+      <mat-label>Clave</mat-label>
+      <input maxlength="2" type="text"  matInput [(ngModel)]="datos.clave">
+    </mat-form-field>
+    &nbsp;&nbsp;
+    <mat-form-field style="margin-right: 10px;">
+      <mat-label>Fecha</mat-label>
+      <input type="date" matInput [(ngModel)]="datos.fecha">
+    </mat-form-field>
+    &nbsp;&nbsp;
+    <mat-form-field style="margin-right: 10px;">
+      <mat-label>N° Comprobante</mat-label>
+      <input maxlength="5" type="number" matInput [(ngModel)]="datos.correlativo">
+    </mat-form-field>
+
+  </div>
+
+<div mat-dialog-actions align="center">
+  <button class="btn btn-danger" id="btn-close"  (click)="onNoClick()" >Cerrar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <button class="btn btn-primary" id="btn-save" (click)="insertarDebajo(datos)">Insertar</button>
+</div>
