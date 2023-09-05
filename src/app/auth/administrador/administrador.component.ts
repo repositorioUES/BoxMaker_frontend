@@ -27,7 +27,7 @@ export class AdministradorComponent implements OnInit {
   
   ngOnInit(): void {
     this.cargarUsuarios()
-    
+    this.hideLoader()
   }
   
   
@@ -42,11 +42,6 @@ export class AdministradorComponent implements OnInit {
         verticalPosition: 'bottom',
         horizontalPosition: 'center'
       });
-    })
-    setTimeout(()=>{
-      document.querySelector(".loader")?.classList.add("loader--hidden"),
-      document.querySelector(".loader--image")?.classList.add("loader--image--size"),
-      100
     })
   }
 
@@ -169,6 +164,13 @@ export class AdministradorComponent implements OnInit {
     })
   }
 
-  
+  hideLoader(){
+
+    setTimeout(()=>{
+      document.querySelector(".loader")?.classList.add("loader--hidden")
+    },1500)
+
+  }
+
 }
 

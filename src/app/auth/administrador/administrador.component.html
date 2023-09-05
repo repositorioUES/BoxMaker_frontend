@@ -1,12 +1,23 @@
 
 <!-- loader experimental -->
     <div class="loader center-container">
-        <div class=" center-container" >
-            <img src="../../../assets/images/logocel.png" class="loader--image">
-        </div>
-        <div>
-            <h1>Box Maker</h1>
-        </div>
+        <table>
+            <tr style="vertical-align: middle;">
+                <td>
+                    <div style="height: 20px;" class="center-container loader--image--rotate">
+                        <div class="loader--image--fade">
+                            <img src="../../../assets/images/logocel.png" class="loader--image--size">
+                        </div>
+                    </div>
+                    <br><br>
+                    <br><br>
+                    <div style="height: 20px;" class="center-container">
+                        <!-- <h1 class="big-text">B<img src="../../../assets/images/logocel.png" style="height: 30px; width: 30px;">x Maker</h1> -->
+                        <h1 class="loader--image--fade big-text ">Box Maker</h1>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
 
 
@@ -26,7 +37,7 @@
                 <td>
                     <div >
                         <div class="center-container">
-                            <mat-card class="custom-color scroll-container custom-color" >
+                            <mat-card class="custom-color scroll-container" >
                                 <table mat-table [dataSource] = "usuarios" class = "mat-elevation-z8 " >
 
                                     <ng-container matColumnDef = "Nombre">

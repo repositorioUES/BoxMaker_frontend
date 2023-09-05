@@ -1,10 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { tap } from 'rxjs/operators';
 import {Router} from "@angular/router";
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Comprobante } from '../models/comprobante.model';
+import { Caja } from '../models/caja.model';
 
 const base_url = environment.base_url;
 
@@ -50,10 +49,15 @@ export class CajaService {
 
 
 
+  getBoxes () : Observable<Caja[]>{
+    const headers = this.globalHeaders
+    return this.http.get<Caja[]>(`${ base_url }/caja/all`, {headers})
+  }
 
-
-
-
+  deleteBox (codigo: string) : Observable<void>{
+    const headers = this.globalHeaders
+    return this.http.delete<void>(`${ base_url }/caja/delete/${ codigo }`, {headers})
+  }
 
   getPDF(codigo: string): Promise<any> {
     return fetch(`${ base_url }/caja/generatePDF/${ codigo }`, {
@@ -61,8 +65,15 @@ export class CajaService {
     });
   }
 
-  deleteOneContent (caja: string, comp: any) : Observable<void>{
+  getXLSX(codigo: string): Promise<any> {
+    return fetch(`${ base_url }/caja/generateExcel/${ codigo }`, {
+      method: 'GET',
+    });
+  }
+
+  deleteOneContent (caja: string, comprobantes: any) : Observable<void>{
     const headers = this.globalHeaders
+    const comp = JSON.stringify(comprobantes)
     return this.http.post<void>(`${ base_url }/contenido/removeOne`, {caja, comp}, {headers})
   }
 

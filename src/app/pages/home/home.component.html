@@ -1,3 +1,43 @@
+<!–------------------------------------------------- Loaders para Reportes y logo de CEL -------------------------------------------------–>
+
+
+
+
+
+
+
+<!-- loader de Generar un Reprote una accion -->
+<mat-card class="center-content" *ngIf="generando == 1">
+  <div class="mb-1 row loader--2">
+      <table >
+          <tr style="vertical-align: middle;">
+              <td>
+                  <div style="height: 20px;" class="mb-1 row">
+                      <div *ngIf="loadingType == 1">
+                          <img src="../../../assets/images/loading-red.gif" style="height: 200px; width: 400px; border-radius: 5%;" class="shadow" >
+                      </div>
+                      <div *ngIf="loadingType == 2">
+                          <img src="../../../assets/images/loading-green.gif" style="height: 200px; width: 400px; border-radius: 5%;" class="shadow" >
+                      </div>
+                      <div *ngIf="loadingType == 3">
+                          <img src="../../../assets/images/deleting.gif" style="height: 200px; width: 400px; border-radius: 5%;" class="shadow" >
+                      </div>
+                  </div>
+              </td>
+          </tr>
+          <tr >
+              <td>
+                  <div style="height: 20px;" class="mb-1 row">
+                      <h1 *ngIf="loadingType == 1" class="loader--image--fade big-text " style="color: red;">Generando...</h1>
+                      <h1 *ngIf="loadingType == 2" class="loader--image--fade big-text " style="color: green;">Generando...</h1>
+                      <h1 *ngIf="loadingType == 2" class="loader--image--fade big-text " style="color: rgb(255, 17, 0);">Borrando...</h1>
+                  </div>
+              </td>
+          </tr>
+      </table>
+  </div>
+</mat-card>
+
 <!–---------------------------------------------------------- Creacion de la caja ----------------------------------------------------------–>
 <mat-card class="custom-width custom-border">
   <div class="container mt-6 border custom-border-bottom custom-color separator">
@@ -24,7 +64,7 @@
         <label for="codigo" class="col-sm-1 col-form-label">Código</label>
         <div class="col-sm-1">
           <input formControlName="codigo" type="text" class="form-control form-control-sm custom-font-size" id="codigo"
-            name="codigo" />
+            name="codigo" (keyup)="upperCase()"/>
         </div>
 
         <!– Input para la fecha de caducidad de la caja –>
@@ -172,7 +212,7 @@
 
           <!– Botón Reporte PDF –>
           <div class="col-sm-2">
-            <button type="submit" class="btn btn-sm btn-success">
+            <button type="submit" class="btn btn-sm btn-success" (click)="generateXLSX()">
               <i class="fa fa-file-excel-o" aria-hidden="true"></i>
               Reporte Excel
             </button>

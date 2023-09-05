@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
 import {Router, NavigationEnd} from "@angular/router";
 import { Observable, Subject } from 'rxjs';
+import { Usuario } from '../models/user.model';
 
 
 const base_url = environment.base_url;
@@ -38,11 +39,11 @@ export class AuthService {
 
   /* Funcion de Login */
   login(formData: any) {
-    console.log(formData);
+    // console.log(formData);
     return this.http.post(`${base_url}/usuario/login`, formData)
       .pipe(
         tap((resp: any) => {
-          console.log(resp);
+          // console.log(resp);
 
           localStorage.setItem('token', resp.token);
           localStorage.setItem('usuario', JSON.stringify(resp.username));
@@ -63,9 +64,16 @@ export class AuthService {
 
   }
 
+  profile() : Observable<Usuario>{
+    const headers = this.globalHeaders
+    return this.http.post<Usuario>(`${ base_url }/usuario/profile`, { token: this.token }, {headers})
+  }
+
   // Crear al ADMIN-GOD si no existe un user con tipo = 0
   init(): Observable<void> {
     const headers = this.globalHeaders;
     return this.http.get<void>(`${base_url}/usuario/init`, { headers });
   }
+
+
 }

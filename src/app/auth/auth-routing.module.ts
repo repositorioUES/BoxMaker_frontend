@@ -4,6 +4,8 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { AdministradorComponent } from './administrador/administrador.component';
 import { AdminLobbyComponent } from './administrador/admin-lobby/admin-lobby.component';
+import { CajasComponent } from './cajas/cajas.component';
+import { UserLobbyComponent } from './user-lobby/user-lobby.component';
 
 
 const routes: Routes = [
@@ -22,6 +24,14 @@ const routes: Routes = [
   {
     path: "admin-lobby",
     component: AdminLobbyComponent
+  },
+  {
+    path: "user-lobby",
+    component: UserLobbyComponent
+  },
+  {
+    path: "cajas",
+    component: CajasComponent
   },
   {
     path: "**",

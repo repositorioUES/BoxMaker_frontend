@@ -24,6 +24,8 @@ import { AdministradorComponent } from './administrador/administrador.component'
 import {MatTableModule} from '@angular/material/table';
 import { DialogComponent } from './administrador/dialog/dialog.component';
 import { AdminLobbyComponent } from './administrador/admin-lobby/admin-lobby.component';
+import { CajasComponent } from './cajas/cajas.component';
+import { UserLobbyComponent } from './user-lobby/user-lobby.component';
 
 
 
@@ -32,7 +34,9 @@ import { AdminLobbyComponent } from './administrador/admin-lobby/admin-lobby.com
     LoginComponent,
     RegisterComponent,
     AdministradorComponent,
-    AdminLobbyComponent
+    AdminLobbyComponent,
+    CajasComponent,
+    UserLobbyComponent
   ],
   imports: [
     CommonModule,

@@ -1,4 +1,6 @@
 
+
+
 .full-width{
     margin-left: 1%;
   }
@@ -59,6 +61,10 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   }
 
+  .shadow{
+    filter: drop-shadow(5px 5px 10px black);
+  }
+
   /* Opciones para el loader ======================================================================*/
   .loader{
     position: fixed;
@@ -70,10 +76,23 @@
     align-items: center;
     justify-content: center;
     background: #f1f1f1;
-    z-index: 99998;
+    z-index: 99999;
     transition: opacity 0.5s, visibility 0.5s;
   }
   
+  .loader--2{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
+    transition: opacity 0.5s, visibility 0.5s;
+  }
+
   .loader--hidden{
     opacity: 0;
     visibility: hidden;
