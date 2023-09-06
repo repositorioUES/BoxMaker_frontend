@@ -16,7 +16,7 @@ import { CajaService } from 'src/app/services/caja.service';
 
 export interface DialogData {
   index: number;
-  codigo: string;
+  caja: string;
   tipo: string;
   clave: string;
   fecha: string;
@@ -119,10 +119,12 @@ export class InsertarComponent {
 
     if (key == 69) {
       this.datos.tipo = 'EGRESO'
+      this.datos.clave = ''
     }
 
     if (key == 73) {
       this.datos.tipo = 'INGRESO'
+      this.datos.clave = ''
     }
 
     if (key == 68) {
@@ -136,7 +138,6 @@ export class InsertarComponent {
     if (key == 13) {
       document.getElementById(next)?.focus();
     }
-  
   }
 
 }

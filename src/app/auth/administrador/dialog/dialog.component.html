@@ -3,23 +3,23 @@
     <div >
         <mat-form-field>
           <mat-label>Primer Nombre</mat-label>
-          <input matInput [(ngModel)]="data.primerNombre" (keypress)="$event.keyCode == 13 ? upadateUser(data._id, data.primerNombre, data.segundoNombre, data.primerApellido, data.segundoApellido) : null" >
+          <input matInput [(ngModel)]="data.primerNombre" (keypress)="$event.keyCode == 13 ? nextInput( 'segModal' ,$event.keyCode) : null" >
         </mat-form-field>
         &nbsp;&nbsp;
         <mat-form-field>
           <mat-label>Segundo Nombre</mat-label>
-          <input matInput [(ngModel)]="data.segundoNombre" (keypress)="$event.keyCode == 13 ? upadateUser(data._id, data.primerNombre, data.segundoNombre, data.primerApellido, data.segundoApellido) : null">
+          <input matInput id="segModal" [(ngModel)]="data.segundoNombre" (keypress)="$event.keyCode == 13 ? nextInput( 'apModal' ,$event.keyCode) : null">
         </mat-form-field>
     </div>
     <div>
         <mat-form-field>
           <mat-label>Primer Apellido</mat-label>
-          <input matInput [(ngModel)]="data.primerApellido" (keypress)="$event.keyCode == 13 ? upadateUser(data._id, data.primerNombre, data.segundoNombre, data.primerApellido, data.segundoApellido) : null">
+          <input matInput id="apModal" [(ngModel)]="data.primerApellido" (keypress)="$event.keyCode == 13 ? nextInput( 'ap2Modal' ,$event.keyCode) : null">
         </mat-form-field>
         &nbsp;&nbsp;
         <mat-form-field>
           <mat-label>Segundo Apellido</mat-label>
-          <input matInput [(ngModel)]="data.segundoApellido" (keypress)="$event.keyCode == 13 ? upadateUser(data._id, data.primerNombre, data.segundoNombre, data.primerApellido, data.segundoApellido) : null">
+          <input matInput id="ap2Modal" [(ngModel)]="data.segundoApellido" (keypress)="$event.keyCode == 13 ? upadateUser(data._id, data.primerNombre, data.segundoNombre, data.primerApellido, data.segundoApellido) : null">
         </mat-form-field>
     </div>
     <div>

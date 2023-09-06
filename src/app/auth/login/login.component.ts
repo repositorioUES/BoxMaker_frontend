@@ -29,12 +29,11 @@ export class LoginComponent implements OnInit{
     this.authService.login(this.loginForm.value)
       .subscribe(resp => {
         if (resp.ok === true) {
-          
-          const loggedUser = resp.username
-          if(loggedUser.toLowerCase() == 'admin')
+ 
+          if(resp.tipo == 0)
             this.router.navigateByUrl('/auth/admin-lobby');
           else
-            this.router.navigateByUrl('/');
+            this.router.navigateByUrl('/auth/user-lobby');
           
           this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd && this.router.url === '/') {

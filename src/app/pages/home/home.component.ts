@@ -8,6 +8,8 @@ import { InsertarComponent } from 'src/app/pages/insertar/insertar.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Comprobante } from 'src/app/models/comprobante.model';
 import Swal from 'sweetalert2';
+import { AstTransformer } from '@angular/compiler';
+import { query } from '@angular/animations';
 
 
 @Component({
@@ -31,12 +33,16 @@ export class HomeComponent implements OnInit {
     estante: [''],
     nivel: [''],
     numero: [''],
+    usuario: [localStorage.getItem('usuario')?.replace(/"+/g,'')],
   });
 
   /* Inicializar el boton */
-
+  public boton_fijado: boolean = false;
   public contenidos: Comprobante[] = [] //Contenido de la caja que está en el txt, NO en la base
-  public longitud: number = 0 //cuantos contenidos se recuperaron
+  public longitud: number = 0 //cuántos contenidos se recuperaron
+
+  public generando: number = 0//   1 = Se está generando algun documento y por tanto, mostrar el loader;   0 = nada
+  public loadingType: number = 0 // PDF = 1 ; Excel = 2
 
   /* Form para los campos del contenido (COMPROBANTES) de la caja */
   public contenidoForm = this.fb.group({
@@ -155,9 +161,10 @@ export class HomeComponent implements OnInit {
           estante: resp.caja.estante,
           nivel: resp.caja.nivel,
           numero: resp.caja.numero,
+          usuario: resp.caja.usuario || '',
         });
 
-        if(resp.from = 'update')
+        if(resp.from === 'update')
           this.guardarContenidos(resp.caja.codigo)
       },
       (err) => {
@@ -190,6 +197,7 @@ export class HomeComponent implements OnInit {
               estante: resp.caja.estante,
               nivel: resp.caja.nivel,
               numero: resp.caja.numero,
+              usuario: resp.caja.usuario ||'',
             });
 
             this.contenidos = resp.contenido // Obtener los contenidos del json
@@ -232,6 +240,7 @@ export class HomeComponent implements OnInit {
   }
 
   reportePDF() {
+    const formData = this.cajaForm.value;
     const codigo = this.cajaForm.value.codigo;
 
     if (!codigo) {
@@ -274,18 +283,26 @@ export class HomeComponent implements OnInit {
 
 
 
-  generatePDF(){
-    const codigo = this.cajaForm.value.codigo;
 
-    if (!codigo) {
-      console.error('El Código de Caja esta vacio');
-      return;
+
+
+
+  generatePDF(){
+    if(this.hasBox() == false){
+      return
     }
+
+    const codigo : string = this.cajaForm.value.codigo || ''
+
+    this.generando = 1 // Mostrar el gif de "Generando.."
+    this.loadingType = 1 // Se está genrando un PDF
 
     this.cajaService.getPDF(codigo)
     .then(response => response.blob())
     .then(pdf => {
       window.open(URL.createObjectURL(pdf), '_blank');
+      this.generando = 0
+      this.loadingType = 0
     })
     .catch(err => {
       console.log(err);
@@ -295,10 +312,45 @@ export class HomeComponent implements OnInit {
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
+      this.generando = 0
+      this.loadingType = 0
+    });
+  }
+
+  generateXLSX(){
+    if(this.hasBox() == false){
+      return
+    }
+
+    const codigo : string = this.cajaForm.value.codigo || ''
+
+    this.generando = 1 // Mostrar el gif de "Generando.."
+    this.loadingType = 2 // Se está genrando un PDF
+
+    this.cajaService.getXLSX(codigo)
+    .then(response => response.blob())
+    .then(xlsx => {
+      window.open(URL.createObjectURL(xlsx), '_blank');
+      this.generando = 0
+      this.loadingType = 0
+    })
+    .catch(err => {
+      console.log(err);
+      this.toastr.error('Ha ocurrido un error al generar el reporte en PDF: ' + err, '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      this.generando = 0
+      this.loadingType = 0
     });
   }
 
   cargarQuedan(): void {
+    if(this.hasBox() == false){
+      return
+    }
 
     const code = this.cajaForm.value.codigo || ''
 
@@ -331,7 +383,7 @@ export class HomeComponent implements OnInit {
       //Abrir el Dialog con la inof
       const dialogRef = this.dialog.open(InsertarComponent, {
         data: {
-          codigo: code,
+          caja: code,
           index: index
         },
       });
@@ -366,25 +418,36 @@ export class HomeComponent implements OnInit {
         }
       }
 
+      this.generando = 1 // Mostrar el gif de "Generando.."
+      this.loadingType = 3 // Se está genrando un PDF
+
       this.cajaService.deleteOneContent(codigo, newArray)
       .subscribe((res:any) => {
 
-        Swal.fire('Comprobante Removido con éxito', 'Completado')
+        this.hideDeleteGif(res.msg)
+        // Swal.fire(res.msg, 'Completado')
 
         this.cargarCaja()
       }, (err)=> {
           console.warn(err)
-          this.toastr.error('No ha podido quitar el comprobante', '', {
+          this.toastr.error('No se ha podido quitar el comprobante ' + err.msg, '', {
             timeOut: 5000,
             progressBar: true,
             progressAnimation: 'decreasing',
             positionClass: 'toast-top-right',
           });
+
+          this.generando = 0
+          this.loadingType = 0
       })
     }
   }
 
   async vaciarCaja(){
+    if(this.hasBox() == false){
+      return
+    }
+
     const codigo = this.cajaForm.value.codigo || ''
 
     const { isConfirmed } = await Swal.fire({
@@ -393,10 +456,14 @@ export class HomeComponent implements OnInit {
     })
 
     if (isConfirmed) {
+      this.generando = 1
+      this.loadingType = 3
+
       this.cajaService.deleteAllContent(codigo)
       .subscribe((res:any) => {
 
-        Swal.fire('La caja ' + codigo + ' ahora está Vacia', 'Completado')
+        this.hideDeleteGif(res.msg)
+        // Swal.fire('La caja ' + codigo + ' ahora está Vacia', 'Completado')
 
         this.cargarCaja()
       }, (err)=> {
@@ -407,6 +474,8 @@ export class HomeComponent implements OnInit {
             progressAnimation: 'decreasing',
             positionClass: 'toast-top-right',
           });
+          this.generando = 0
+          this.loadingType = 0
       })
     }
   }
@@ -430,4 +499,54 @@ export class HomeComponent implements OnInit {
         });
     })
   }
+
+  hasBox(){
+    // Asegurarse de tener cargada una caja antes de ejecutar acciones sobre ella
+    const {codigo, descripcion, estante, nivel, caducidad, grupo} = this.cajaForm.value;
+
+    if (!codigo || !descripcion || !estante || !nivel || !caducidad || !grupo) {
+      console.error('No hay una caja caragada');
+      this.toastr.error('Se debe seleccionar una caja para generar ejecutar ésta acción', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      return false;
+    } else {
+      return true
+    }
+  }
+
+
+  upperCase(){
+    let val = this.cajaForm.value.codigo || ''
+
+    this.cajaForm.setValue({
+      codigo: val.toUpperCase(),
+      descripcion: this.cajaForm.value.descripcion || '',
+      caducidad: this.cajaForm.value.caducidad || '',
+      grupo: this.cajaForm.value.grupo || '',
+      estante: this.cajaForm.value.estante || '',
+      nivel: this.cajaForm.value.nivel || '',
+      numero: this.cajaForm.value.numero || '',
+      usuario: this.cajaForm.value.usuario || ''
+    })
+  }
+
+  hideDeleteGif(msg: string){
+    setTimeout(()=>{
+      this.generando = 0
+      this.loadingType = 0
+
+      this.toastr.success(msg, '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+
+    },1000)
+  }
+
 }

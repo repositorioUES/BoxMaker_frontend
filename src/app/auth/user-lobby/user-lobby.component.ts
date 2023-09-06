@@ -1,21 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Usuario } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
-import { DialogComponent } from '../dialog/dialog.component';
+import { PasswordDialogComponent } from '../password-dialog/password-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { PasswordDialogComponent } from '../../password-dialog/password-dialog.component';
 
 @Component({
-  selector: 'app-admin-lobby',
-  templateUrl: './admin-lobby.component.html',
-  styleUrls: ['./admin-lobby.component.css']
+  selector: 'app-user-lobby',
+  templateUrl: './user-lobby.component.html',
+  styleUrls: ['./user-lobby.component.css']
 })
-export class AdminLobbyComponent implements OnInit{
 
-  constructor(private router: Router, private authSrv: AuthService, private toast: ToastrService, private dialog: MatDialog){}
-  
+export class UserLobbyComponent {
+
+  constructor(private dialog: MatDialog, private router: Router, private authSrv: AuthService, private toast: ToastrService) { }
+
   fakeUser: Usuario =({
     primerNombre: 'Jhon', 
     segundoNombre: 'Doe', 
@@ -29,7 +29,7 @@ export class AdminLobbyComponent implements OnInit{
     activo: 'fake', 
     bloqueado: 'fake', 
   })
-  
+
   iconNumber: number = 0
   loggedUser: Usuario = this.fakeUser // Usuario ficticio solo para la inicializacion de datos
   daysLeft: number = 0 // Días restantes hasta que caduque la contraseña
@@ -47,12 +47,14 @@ export class AdminLobbyComponent implements OnInit{
 
   getProfile(){
     const currToken = localStorage.getItem('token') || ''
-    
+
     this.authSrv.profile(currToken)
     .subscribe((resp:any) => {
       this.loggedUser = resp.userData
       this.daysLeft = resp.warning.dias
       this.expiration = resp.warning.fecha
+
+      localStorage.setItem('usuario', resp.userData.userName)
 
     }, (err)=> {
       console.warn(err) 
@@ -67,29 +69,25 @@ export class AdminLobbyComponent implements OnInit{
 
   changePassword(): void {
 
-      //Abrir el Dialog con la inof
-      const dialogRef = this.dialog.open(PasswordDialogComponent, {
-        data: {
-          userName: this.loggedUser.userName,
-          primerNombre: this.loggedUser.primerNombre,
-          segundoNombre: this.loggedUser.segundoNombre,
-          primerApellido: this.loggedUser.primerApellido,
-          segundoApellido: this.loggedUser.segundoApellido,
-          email: this.loggedUser.email,
-          passCaducidad: this.loggedUser.passCaducidad + " ( " + this.daysLeft + ")",
-          _id: this.loggedUser._id
-        },
-      });
-  
-      dialogRef.afterClosed().subscribe(() => {
-        // console.log('The dialog was closed');
-        this.getProfile()
-      });
-  }
+    //Abrir el Dialog con la inof
+    const dialogRef = this.dialog.open(PasswordDialogComponent, {
+      data: {
+        userName: this.loggedUser.userName,
+        primerNombre: this.loggedUser.primerNombre,
+        segundoNombre: this.loggedUser.segundoNombre,
+        primerApellido: this.loggedUser.primerApellido,
+        segundoApellido: this.loggedUser.segundoApellido,
+        email: this.loggedUser.email,
+        passCaducidad: this.loggedUser.passCaducidad + " ( " + this.daysLeft + ")",
+        _id: this.loggedUser._id
+      },
+    });
 
-  toUsers(){
-    this.router.navigateByUrl('/auth/admin');
-  }
+    dialogRef.afterClosed().subscribe(() => {
+      // console.log('The dialog was closed');
+      this.getProfile()
+    });
+}
 
   toDefineBox(){
     this.router.navigateByUrl('/');
@@ -119,5 +117,4 @@ export class AdminLobbyComponent implements OnInit{
   celIcon(){
     this.iconNumber = 0
   }
-
 }

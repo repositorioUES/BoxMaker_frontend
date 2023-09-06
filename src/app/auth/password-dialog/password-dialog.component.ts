@@ -1,40 +1,42 @@
-
+import { DatePipe } from '@angular/common';
 import { Component, Inject } from '@angular/core';
-
-import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
+import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormsModule } from '@angular/forms';
-import { AdminService } from 'src/app/services/admin.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 
 export interface DialogData {
-  userName: string;
-  primerNombre: string; 
-  segundoNombre:string;
-  primerApellido: string;
-  segundoApellido: string; 
-  email: string; 
-  passCaducidad: string;
-  _id: string;
+  password: string;
+  newPassword: string;
+  primerNombre: string, 
+  segundoNombre: string, 
+  primerApellido: string, 
+  segundoApellido: string, 
+  email: string, 
+  userName: string, 
+  fechaCreacion: string, 
+  passCaducidad: string, 
+  _id: string, 
+  activo: string, 
+  bloqueado: string, 
 }
 
 @Component({
-  selector: 'app-dialog',
-  templateUrl: './dialog.component.html',
+  selector: 'app-password-dialog',
+  templateUrl: './password-dialog.component.html',
+  styles: [],
   standalone: true,
-  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
+  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, DatePipe],
 })
-export class DialogComponent {
+
+export class PasswordDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<DialogComponent>,
+    public dialogRef: MatDialogRef<PasswordDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    private adminSrv: AdminService,
     private authSrv: AuthService,
     private toast: ToastrService
   ) {}
@@ -43,18 +45,8 @@ export class DialogComponent {
     this.dialogRef.close();
   }
 
-
-  upadateUser(id: string, pn: string, sn: string, pa: string, sa: string){
-    console.log(id);
-    
-    const data = ({
-      primerNombre: pn,
-      segundoNombre: sn,
-      primerApellido: pa,
-      segundoApellido: sa,
-    })
-
-    this.adminSrv.updateUser(id, data)
+  changePassword(data: any){
+    this.authSrv.changePassword(data)
     .subscribe((resp:any) => {
       this.toast.success(resp.msg, '', {
         timeOut: 5000,
@@ -62,8 +54,7 @@ export class DialogComponent {
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
-
-      this.authSrv.$refresh.next(true); //Emitir que se debe refrescar la tabla del home.component
+      this.authSrv.$refresh.next(true); //Emitir que se debe refrescar la tabla del CAJA.component
     }, (err)=> {
         console.warn(err) 
         this.toast.error(err.error.msg, '', {
@@ -74,7 +65,6 @@ export class DialogComponent {
         });
     })
     this.dialogRef.close();
-
   }
 
   nextInput(next: any, key: any) {
@@ -82,4 +72,5 @@ export class DialogComponent {
       document.getElementById(next)?.focus();
     }
   }
+  
 }

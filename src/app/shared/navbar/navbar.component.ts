@@ -40,7 +40,11 @@ export class NavbarComponent implements OnInit {
       }
     )
 
-
+    // Se suscribe para detecter cada vez que la variable $refreshTable cambie
+    this.authService.$refreshNav.subscribe(data => {
+      this.isLoggedIn = this.authService.isLoggedIn();
+      this.usuario = (localStorage.getItem('usuario') || '').replace(/"/g, '')
+    });
 
   }
 

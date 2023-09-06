@@ -1,7 +1,47 @@
+<!–------------------------------------------------- Loaders para Reportes y logo de CEL -------------------------------------------------–>
+
+
+
+
+
+
+
+<!-- loader de Generar un Reprote una accion -->
+<mat-card class="center-content" *ngIf="generando == 1">
+  <div class="mb-1 row loader--2">
+      <table >
+          <tr style="vertical-align: middle;">
+              <td>
+                  <div style="height: 20px;" class="mb-1 row">
+                      <div *ngIf="loadingType == 1">
+                          <img src="../../../assets/images/loading-red.gif" style="height: 200px; width: 400px; border-radius: 5%;" class="shadow" >
+                      </div>
+                      <div *ngIf="loadingType == 2">
+                          <img src="../../../assets/images/loading-green.gif" style="height: 200px; width: 400px; border-radius: 5%;" class="shadow" >
+                      </div>
+                      <div *ngIf="loadingType == 3">
+                          <img src="../../../assets/images/deleting.gif" style="height: 200px; width: 400px; border-radius: 5%;" class="shadow" >
+                      </div>
+                  </div>
+              </td>
+          </tr>
+          <tr >
+              <td>
+                  <div style="height: 20px;" class="mb-1 row">
+                      <h1 *ngIf="loadingType == 1" class="loader--image--fade big-text " style="color: red;">Generando...</h1>
+                      <h1 *ngIf="loadingType == 2" class="loader--image--fade big-text " style="color: green;">Generando...</h1>
+                      <h1 *ngIf="loadingType == 2" class="loader--image--fade big-text " style="color: rgb(255, 17, 0);">Borrando...</h1>
+                  </div>
+              </td>
+          </tr>
+      </table>
+  </div>
+</mat-card>
+
 <!–---------------------------------------------------------- Creacion de la caja ----------------------------------------------------------–>
 <mat-card class="custom-width custom-border">
   <div class="container mt-6 border custom-border-bottom custom-color separator">
-    <form autocomplete="on" [formGroup]="cajaForm" >
+    <form autocomplete="off" [formGroup]="cajaForm" >
       <h4>ÁREA DE ANALISIS CONTABLE (388)</h4>
       <div class="mb-1 row">
 
@@ -24,7 +64,7 @@
         <label for="codigo" class="col-sm-1 col-form-label">Código</label>
         <div class="col-sm-1">
           <input formControlName="codigo" type="text" class="form-control form-control-sm custom-font-size" id="codigo"
-            name="codigo" />
+            name="codigo" (keyup)="upperCase()"/>
         </div>
 
         <!– Input para la fecha de caducidad de la caja –>
@@ -92,23 +132,23 @@
           -->
 
           <!– Input para el Tipo de documento default–>
-          <div class="col-sm-1 offset-1">
-            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipodefault" name="tipodefault" placeholder="Tipo" (input)="inputChange()"/>
+          <div class="col-sm-1">
+            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipoDefault" name="tipoDefault" placeholder="Tipo" />
           </div>
 
           <!– Input para la Clave default –>
           <div class="col-sm-1">
-            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="clavedefault" name="clavedefault" placeholder="Clave" />
+            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="claveDefault" name="claveDefault" placeholder="Clave" />
           </div>
 
           <!– Input para el Mes y año default–>
-          <div class="col-sm-1">
-            <input type="text" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa" />
+          <div class="col-sm-1 offset-sm-1">
+            <input type="text" formControlName="mesaniodefault" class="form-control form-control-sm" id="mesanioDefault" name="mesanioDefault" placeholder="MM/AAAA" />
           </div>
 
           <!– Botón buscar por quedan –>
-          <div class="col-sm-2 offset-sm-4">
-            <button type="button" class="btn btn-sm btn-primary" (click)="cargarQuedan()">
+          <div class="col-sm-2 offset-sm-3">
+            <button type="submit" class="btn btn-sm btn-primary" (click)="cargarQuedan()">
               <i class="fa fa-plus-square" aria-hidden="true"></i>
               Quedan
             </button>
@@ -116,7 +156,7 @@
 
           <!– Botón Reporte PDF –>
           <div class="col-sm-2">
-            <button type="button" class="btn btn-sm btn-danger" (click)="generatePDF()">
+            <button type="submit" class="btn btn-sm btn-danger" (click)="generatePDF()">
               <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
               Reporte PDF
             </button>
@@ -171,7 +211,7 @@
 
           <!– Botón Reporte Excel –>
           <div class="col-sm-2">
-            <button type="button" class="btn btn-sm btn-success">
+            <button type="submit" class="btn btn-sm btn-success" (click)="generateXLSX()">
               <i class="fa fa-file-excel-o" aria-hidden="true"></i>
               Reporte Excel
             </button>
@@ -182,8 +222,9 @@
 </mat-card>
 
 <!–-------------------------------------------------------------- TABLA DE DATOS --------------------------------------------------------------–>
+
 <mat-card class="custom-width custom-border">
-  <div class="container mt-6 border custom-border-bottom custom-color ">
+  <div class="container mt-6 border custom-border-bottom custom-color">
     <br />
     <section class="example-container mat-elevation-z8" tabindex="0">
       <table class="table custom-table-style" mat-table [dataSource]="contenidos">
@@ -249,4 +290,3 @@
     <br />
   </div>
 </mat-card>
-
