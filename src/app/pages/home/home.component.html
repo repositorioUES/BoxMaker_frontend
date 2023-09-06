@@ -164,19 +164,19 @@
           <!– Input para el codigo de la caja –>
           <div class="col-sm-1">
             <input formControlName="caja" type="text"  class="form-control form-control-sm" id="caja" name="caja"
-              placeholder="caja" hidden [(ngModel)]="cajaForm.value.codigo"/>
+              placeholder="caja" hidden [(ngModel)]="cajaForm.value.codigo" (keyup.enter)=" nextInput( 'tipo')"/>
           </div>
 
           <!– Input para el Tipo de documento –>
          <div class="col-sm-1">
             <input formControlName="tipo" type="text" class="form-control form-control-sm" id="tipo" name="tipo"
-              placeholder="Tipo" />
+              placeholder="Tipo" (keyup.enter)="nextInput( 'clave')"/>
           </div>
 
           <!– Input para la Clave –>
           <div class="col-sm-1">
             <input type="text" formControlName="clave" class="form-control form-control-sm" id="clave" name="clave"
-              placeholder="Clave" />
+              placeholder="Clave" (keyup.enter)="nextInput( 'fecha')"/>
           </div>
 
 <!--          <!– Input para el dia –>
@@ -186,8 +186,8 @@
 
           <!– Input para la Fecha  –>
           <div class="col-sm-1">
-            <input type="text" formControlName="fecha" class="form-control form-control-sm" id="fecha" name="fecha"
-              placeholder="dd/mm/aa" />
+            <input type="date" formControlName="fecha" class="form-control form-control-sm" id="fecha" name="fecha"
+              placeholder="dd/mm/aa" (keyup.enter)="nextInput( 'comprobante')"/>
           </div>
 
           <!– Input para el N° Comprobante –>

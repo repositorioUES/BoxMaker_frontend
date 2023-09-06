@@ -23,11 +23,23 @@
 
 
 <div class="component-class">
-    <div class="text-center">
-        <br>
-        <h3 style="color: white;"><strong>MANTENIMIENTO DE USUARIOS </strong></h3>
-        <br>
+
+    <div class="center-header " >
+        <table>
+            <tr >
+                <td style="width: 500px; align-items: center;">
+                    <h3 style="color: white;"><strong>MANTENIMIENTO DE USUARIOS </strong></h3>
+                </td>
+                <td>
+                    <mat-form-field style="margin-top: 10px;">
+                        <mat-label>Filtrar Usuarios</mat-label>
+                        <input matInput  (keyup)="applyFilter($event)" placeholder="Buscar..." #input>
+                    </mat-form-field>
+                </td>
+            </tr>
+        </table>
     </div>
+    
     <div class="center-container">
         <table >
             <tr>
@@ -38,7 +50,7 @@
                     <div >
                         <div class="center-container">
                             <mat-card class="custom-color scroll-container" >
-                                <table mat-table [dataSource] = "usuarios" class = "mat-elevation-z8 " >
+                                <table mat-table [dataSource] = "dataSource" class = "mat-elevation-z8 " >
 
                                     <ng-container matColumnDef = "Nombre">
                                     <th mat-header-cell *matHeaderCellDef>Nombre</th>

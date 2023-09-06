@@ -163,8 +163,14 @@ export class HomeComponent implements OnInit {
           usuario: resp.caja.usuario || '',
         });
 
-        if(resp.from === 'update')
+        if(resp.from === 'update'){ // Si la respuesta viene del metodo de "Guardar"
+          //Podemos ejecutar solo si tenemos una caja cargada
+          if(this.hasBox() == false){
+            return
+          }
+          // Guardar el contenido de temporal en la BD
           this.guardarContenidos(resp.caja.codigo)
+        }
       },
       (err) => {
         console.warn(err.error.msg);
@@ -219,11 +225,24 @@ export class HomeComponent implements OnInit {
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
   ingresarComprobantes() {
+    //Podemos ejecutar solo si tenemos una caja cargada
+    if(this.hasBox() == false){
+      return
+    }
+
+    //Podemos ejecutar solo si tenemos todos los datos necesarios
+    if(this.hasAllData(this.contenidoForm.value) == false){
+      return
+    }
+
     this.cajaService.ingresarComprobantes(this.contenidoForm.value).subscribe(
       (resp: any) => {
         console.log(this.contenidoForm.value);
         console.log(resp);
 
+        this.cargarCaja()
+        document.getElementById('tipo')?.focus(); // Hacer focus al primer imput para volver a ingresar
+        
         /* mensaje de exito */
         this.exito(resp);
       },
@@ -330,6 +349,11 @@ export class HomeComponent implements OnInit {
   }
 
   insertarDebajo(index: number){
+    //Podemos ejecutar solo si tenemos una caja cargada
+    if(this.hasBox() == false){
+      return
+    }
+
     const code = this.cajaForm.value.codigo || ''
 
     if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{1,5}$/.test(code)) {
@@ -397,6 +421,7 @@ export class HomeComponent implements OnInit {
   }
 
   async vaciarCaja(){
+    //Podemos ejecutar solo si tenemos una caja cargada
     if(this.hasBox() == false){
       return
     }
@@ -459,13 +484,46 @@ export class HomeComponent implements OnInit {
 
     if (!codigo || !descripcion || !estante || !nivel || !caducidad || !grupo) {
       console.error('No hay una caja caragada');
-      this.toastr.error('Se debe seleccionar una caja para generar ejecutar ésta acción', '', {
+      this.toastr.error('Se debe seleccionar una caja para ejecutar ésta acción', '', {
         timeOut: 5000,
         progressBar: true,
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
       return false;
+    } else {
+      return true
+    }
+  }
+
+  hasAllData(data: any){
+    let errMsg: any[] = []
+
+    if(!['DIARIO', 'EGRESO','INGRESO'].includes(data.tipo)){
+      errMsg.push('El Tipo de Documento No es válido')
+    }
+    if(/^[A-Z]{1}[0-9,A-Z]{1}$/.test(data.clave) == false){
+      errMsg.push('La Clave No tiene un formato válido')
+    }
+
+    if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(data.fecha) == false){
+      errMsg.push('La Fecha No tiene formato válido') 
+    }
+
+    if(/^[0-9]{1,5}$/.test(data.correlativo) == false){
+      errMsg.push('El N° Comprobante No tiene formato válido') 
+    }
+    
+    if (errMsg.length != 0) {
+      errMsg.forEach(err => {
+        this.toastr.error(err, '', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'decreasing',
+          positionClass: 'toast-top-right',
+        });
+      });
+      return false
     } else {
       return true
     }
@@ -500,6 +558,10 @@ export class HomeComponent implements OnInit {
       });
 
     },1000)
+  }
+
+  nextInput(next: any) {
+      document.getElementById(next)?.focus();
   }
 
 }

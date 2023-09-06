@@ -49,17 +49,27 @@
 
 
 <div class="component-class">
-    <div class="text-center">
-        <br>
-        <h3 style="color: white;"><strong>INVENTARIO DE CAJAS </strong></h3>
-        <br>
+    <div class="center-header " >
+        <table>
+            <tr >
+                <td style="width: 500px; align-items: center;">
+                    <h3 style="color: white;"><strong>INVENTARIO DE CAJAS </strong></h3>
+                </td>
+                <td>
+                    <mat-form-field style="margin-top: 10px;">
+                        <mat-label>Filtrar Cajas</mat-label>
+                        <input matInput  (keyup)="applyFilter($event)" placeholder="Buscar..." #input>
+                    </mat-form-field>
+                </td>
+            </tr>
+        </table>
     </div>
-    <div class="center-container">
 
+    <div class="center-container">
         <div>
             <div class="center-container">
                 <mat-card class="custom-color scroll-container">
-                    <table mat-table [dataSource]="cajas" class="mat-elevation-z8 ">
+                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 ">
 
                         <ng-container matColumnDef="N°">
                             <th mat-header-cell *matHeaderCellDef>N°</th>

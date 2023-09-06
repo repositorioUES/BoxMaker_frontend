@@ -5,6 +5,7 @@ import { Caja } from 'src/app/models/caja.model';
 import { CajaService } from 'src/app/services/caja.service';
 import Swal from 'sweetalert2';
 import { CajaDialogComponent } from './caja-dialog/caja-dialog.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-cajas',
@@ -17,6 +18,7 @@ export class CajasComponent {
   constructor (private cajaSrv: CajaService, private dialog: MatDialog, private toast: ToastrService,){}
   
   cajas: Caja[] = [] // Todos los Cajas
+  dataSource = new MatTableDataSource(this.cajas);
   displayedColumns: string[] = ['N°', 'Codigo', 'Descripcion', 'Fec. Creacion', 'PDF', 'Excel', 'Editar', 'Eliminar'];
   
   public generando: number = 0//Se está cargando alguna opcion y mostrar el loader
@@ -32,12 +34,17 @@ export class CajasComponent {
     });
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   cargarCajas(){
     this.cajaSrv.getBoxes()
     .subscribe((resp:any) => {
       this.cajas = resp.result
-
+      this.dataSource = new MatTableDataSource(this.cajas);
+      
       this.toast.success(resp.msg, '', {
         timeOut: 5000,
         progressBar: true,

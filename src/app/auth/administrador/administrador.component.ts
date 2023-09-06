@@ -6,6 +6,7 @@ import { AdminService } from 'src/app/services/admin.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogComponent } from './dialog/dialog.component';
+import { MatTableDataSource } from '@angular/material/table';
 
 
 @Component({
@@ -22,7 +23,8 @@ export class AdministradorComponent implements OnInit {
   }
 
   usuarios: Usuario[] = [] // Todos los usuarios
-
+  dataSource = new MatTableDataSource(this.usuarios);
+  
   displayedColumns: string[] = ['Nombre', 'Nombre de Usuario', 'Fec. Creación', 'Estado','Bloqueo', 'Contraseña', 'Editar', 'Eliminar'];
   
   ngOnInit(): void {
@@ -30,11 +32,16 @@ export class AdministradorComponent implements OnInit {
     this.hideLoader()
   }
   
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
   
   cargarUsuarios(){
     this.adminSrv.getUsers()
     .subscribe((resp:any) => {
       this.usuarios = resp.result
+      this.dataSource = new MatTableDataSource(this.usuarios);
     }, (err)=> {
       console.warn(err) 
       this.snack.open(err.error.msg, 'Error', {
