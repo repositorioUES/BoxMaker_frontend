@@ -1,11 +1,5 @@
 <!–------------------------------------------------- Loaders para Reportes y logo de CEL -------------------------------------------------–>
 
-
-
-
-
-
-
 <!-- loader de Generar un Reprote una accion -->
 <mat-card class="center-content" *ngIf="generando == 1">
   <div class="mb-1 row loader--2">
@@ -70,8 +64,8 @@
         <!– Input para la fecha de caducidad de la caja –>
         <label for="fecha" class="col-sm-1 col-form-label">Caducidad</label>
         <div class="col-sm-1">
-          <input formControlName="caducidad" type="text" class="form-control form-control-sm custom-font-size" id="fecha"
-            name="fecha" [value]="cajaForm.get('caducidad')?.value | date : 'dd/MM/yyyy'" />
+          <input formControlName="caducidad" type="text" class="form-control form-control-sm custom-font-size" id="caducidad"
+            name="caducidad" [value]="cajaForm.get('caducidad')?.value | date : 'dd/MM/yyyy'" />
         </div>
 
         <!– Botón Para limpiar el formulario de la caja –>
@@ -82,7 +76,7 @@
           </button>
         </div>
 
-        <!– Botón Para buscar caja –>
+        <!– Botón para buscar caja –>
         <div class="col-sm-1">
           <button class="btn btn-sm btn-primary" (click)="cargarCaja()">
             <i class="fa fa-search" aria-hidden="true"></i>
@@ -90,7 +84,7 @@
           </button>
         </div>
 
-        <!– Botón Guardar –>
+        <!– Botón Guardar caja–>
         <div class="col-sm-2">
           <button class="btn btn-sm btn-primary" (click)="crearCaja()">
             <i class="fa fa-archive" aria-hidden="true"></i>
@@ -132,23 +126,23 @@
           -->
 
           <!– Input para el Tipo de documento default–>
-          <div class="col-sm-1">
-            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipoDefault" name="tipoDefault" placeholder="Tipo" />
+          <div class="col-sm-1 offset-sm-1">
+            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipodefault" name="tipodefault" placeholder="Tipo" (input)="inputChange()"/>
           </div>
 
           <!– Input para la Clave default –>
           <div class="col-sm-1">
-            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="claveDefault" name="claveDefault" placeholder="Clave" />
+            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="clavedefault" name="clavedefault" placeholder="Clave" />
           </div>
 
-          <!– Input para el Mes y año default–>
-          <div class="col-sm-1 offset-sm-1">
-            <input type="text" formControlName="mesaniodefault" class="form-control form-control-sm" id="mesanioDefault" name="mesanioDefault" placeholder="MM/AAAA" />
+          <!– Input para la fecha default–>
+          <div class="col-sm-1">
+            <input type="text" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa" />
           </div>
 
           <!– Botón buscar por quedan –>
-          <div class="col-sm-2 offset-sm-3">
-            <button type="submit" class="btn btn-sm btn-primary" (click)="cargarQuedan()">
+          <div class="col-sm-2 offset-sm-4">
+            <button type="button" class="btn btn-sm btn-primary" (click)="cargarQuedan()">
               <i class="fa fa-plus-square" aria-hidden="true"></i>
               Quedan
             </button>
@@ -156,7 +150,7 @@
 
           <!– Botón Reporte PDF –>
           <div class="col-sm-2">
-            <button type="submit" class="btn btn-sm btn-danger" (click)="generatePDF()">
+            <button type="button" class="btn btn-sm btn-danger" (click)="generatePDF()">
               <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
               Reporte PDF
             </button>
@@ -192,7 +186,7 @@
 
           <!– Input para la Fecha  –>
           <div class="col-sm-1">
-            <input type="text" formControlName="fecha" class="form-control form-control-sm" id="mesanio" name="mesanio"
+            <input type="text" formControlName="fecha" class="form-control form-control-sm" id="fecha" name="fecha"
               placeholder="dd/mm/aa" />
           </div>
 
@@ -211,7 +205,7 @@
 
           <!– Botón Reporte Excel –>
           <div class="col-sm-2">
-            <button type="submit" class="btn btn-sm btn-success" (click)="generateXLSX()">
+            <button type="button" class="btn btn-sm btn-success" (click)="generateXLSX()">
               <i class="fa fa-file-excel-o" aria-hidden="true"></i>
               Reporte Excel
             </button>

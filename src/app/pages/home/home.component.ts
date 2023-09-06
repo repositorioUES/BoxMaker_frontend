@@ -37,7 +37,6 @@ export class HomeComponent implements OnInit {
   });
 
   /* Inicializar el boton */
-  public boton_fijado: boolean = false;
   public contenidos: Comprobante[] = [] //Contenido de la caja que está en el txt, NO en la base
   public longitud: number = 0 //cuántos contenidos se recuperaron
 
@@ -229,7 +228,7 @@ export class HomeComponent implements OnInit {
         this.exito(resp);
       },
       (err) => {
-        console.log(this.contenidoForm.value.tipo);
+        console.log(this.contenidoForm.value);
         console.log('Valor de "tipo" a enviar:', this.contenidoForm.get('tipo')?.value);
         console.warn(err.error.msg);
 
@@ -239,54 +238,8 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  reportePDF() {
-    const formData = this.cajaForm.value;
-    const codigo = this.cajaForm.value.codigo;
 
-    if (!codigo) {
-      console.error('El codigo esta vacio');
-      return;
-    }
-
-    this.cajaService.reportePDF(codigo).subscribe(
-      (resp: any) => {
-        console.log(resp.file.data);
-
-        const blob = new Blob([resp.file.data], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-
-        // Abrir el PDF en una nueva ventana o pestaña
-        window.open(url, '_blank');
-
-        /* mensaje de exito */
-        this.exito(resp);
-      },
-      (err) => {
-        console.warn(err.error.msg);
-
-
-        /* Mensaje de error */
-        this.error(err);
-      }
-    );
-  }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  /*Funcion para generar el reporte PDF*/
   generatePDF(){
     if(this.hasBox() == false){
       return
