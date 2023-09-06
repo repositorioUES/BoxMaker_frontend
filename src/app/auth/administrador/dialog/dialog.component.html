@@ -19,16 +19,33 @@
         &nbsp;&nbsp;
         <mat-form-field>
           <mat-label>Segundo Apellido</mat-label>
-          <input matInput id="ap2Modal" [(ngModel)]="data.segundoApellido" (keypress)="$event.keyCode == 13 ? upadateUser(data._id, data.primerNombre, data.segundoNombre, data.primerApellido, data.segundoApellido) : null">
+          <input matInput id="ap2Modal" [(ngModel)]="data.segundoApellido" (keypress)="$event.keyCode == 13 ? upadateUser(data) : null">
         </mat-form-field>
     </div>
     <div>
         <p>Correo Electrónico: {{data.email}}</p>
         <p>Caducidad de Contraseña: {{data.passCaducidad}}</p>
     </div>
+    <div class="center-container " style="vertical-align: middle;">
+      <mat-checkbox [checked]="checked" color="warn" (change)="onChange()" >
+        <h3><strong>¿Convertir a {{data.userName }} en Administrador?</strong></h3>
+      </mat-checkbox>
+    </div>
+    <div *ngIf="checked == true">
+      <p><strong>Para realizar ésta acción debe ingresar su Contraseña</strong></p>
+      <mat-form-field>
+        <mat-label>Contraseña Actual</mat-label>
+        <input matInput [(ngModel)]="data.password" type="password" (keypress)="$event.keyCode == 13 ? nextInput( 'confirmModal' ,$event.keyCode) : null" >
+      </mat-form-field>
+      &nbsp;&nbsp;
+      <mat-form-field>
+        <mat-label>Confirmar Contraseña</mat-label>
+        <input matInput id="confirmModal" type="password" [(ngModel)]="data.confirmPassword">
+      </mat-form-field>
+    </div>
 </div>
 <div mat-dialog-actions align="center">
   <button  (click)="onNoClick()" class="btn btn-danger" id="btn-close">Cerrar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <button  (click)="upadateUser(data._id, data.primerNombre, data.segundoNombre, data.primerApellido, data.segundoApellido)" 
+  <button  (click)="upadateUser(data)" 
     class="btn btn-primary" id="btn-save">Guardar</button>
 </div>

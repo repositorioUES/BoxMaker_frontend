@@ -11,6 +11,8 @@ import { AdminService } from 'src/app/services/admin.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { NgIf } from '@angular/common';
 
 export interface DialogData {
   userName: string;
@@ -21,15 +23,19 @@ export interface DialogData {
   email: string; 
   passCaducidad: string;
   _id: string;
+  password: string;
+  confirmPassword: string;
 }
 
 @Component({
   selector: 'app-dialog',
   templateUrl: './dialog.component.html',
   standalone: true,
-  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule],
+  imports: [MatDialogModule, MatFormFieldModule, MatInputModule, FormsModule, MatButtonModule, MatCheckboxModule, NgIf],
 })
 export class DialogComponent {
+
+  public checked: boolean = false
 
   constructor(
     public dialogRef: MatDialogRef<DialogComponent>,
@@ -44,17 +50,16 @@ export class DialogComponent {
   }
 
 
-  upadateUser(id: string, pn: string, sn: string, pa: string, sa: string){
-    console.log(id);
+  upadateUser(recivedData: any){
     
     const data = ({
-      primerNombre: pn,
-      segundoNombre: sn,
-      primerApellido: pa,
-      segundoApellido: sa,
+      primerNombre: recivedData.primerNombre,
+      segundoNombre: recivedData.segundoNombre,
+      primerApellido: recivedData.primerApellido,
+      segundoApellido: recivedData.segundoApellido,
     })
 
-    this.adminSrv.updateUser(id, data)
+    this.adminSrv.updateUser(recivedData._id, data)
     .subscribe((resp:any) => {
       this.toast.success(resp.msg, '', {
         timeOut: 5000,
@@ -75,6 +80,10 @@ export class DialogComponent {
     })
     this.dialogRef.close();
 
+  }
+
+  onChange(){
+    this.checked = !this.checked
   }
 
   nextInput(next: any, key: any) {

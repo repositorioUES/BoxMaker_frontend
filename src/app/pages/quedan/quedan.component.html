@@ -29,7 +29,7 @@
       <thead>
         <tr>
           <th scope="col" *ngIf="elegidos.length != 0">
-            <mat-checkbox [checked]="mainChecked" (change)="toggleAll()">
+            <mat-checkbox [checked]="mainChecked" (change)="toggleAll()" color="primary">
             </mat-checkbox>
           </th>
           <th scope="col">#</th>
@@ -43,7 +43,7 @@
       <tbody>
         <tr *ngFor="let comp of elegidos, let i = index" style="margin: 0%;">
           <td style="margin: 0%;">
-            <mat-checkbox [checked]="comp.marked" (change)="selectedItems(comp)">
+            <mat-checkbox [checked]="comp.marked" (change)="selectedItems(comp)" color="primary">
             </mat-checkbox>
           </td>
           <td class="center-content">{{ i + 1 }}</td>
