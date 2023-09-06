@@ -114,19 +114,19 @@ export class HomeComponent implements OnInit {
 
     this.contenidoForm.get('tipodefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('tipo')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
+        this.contenidoForm.get('tipo')?.setValue('');
       }
     });
 
     this.contenidoForm.get('clavedefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('clave')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
+        this.contenidoForm.get('clave')?.setValue('');
       }
     });
 
     this.contenidoForm.get('fechadefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('fecha')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
+        this.contenidoForm.get('fecha')?.setValue('');
       }
     });
 
@@ -219,7 +219,7 @@ export class HomeComponent implements OnInit {
       (resp: any) => {
         console.log(this.contenidoForm.value);
         console.log(resp);
-
+        this.cargarCaja()
         /* mensaje de exito */
         this.exito(resp);
       },
@@ -242,7 +242,7 @@ export class HomeComponent implements OnInit {
     const codigo : string = this.cajaForm.value.codigo || ''
 
     this.generando = 1 // Mostrar el gif de "Generando.."
-    this.loadingType = 1 // Se está genrando un PDF
+    this.loadingType = 1 // Se está generando un PDF
 
     this.cajaService.getPDF(codigo)
     .then(response => response.blob())
@@ -366,7 +366,7 @@ export class HomeComponent implements OnInit {
       }
 
       this.generando = 1 // Mostrar el gif de "Generando.."
-      this.loadingType = 3 // Se está genrando un PDF
+      this.loadingType = 3 // Se está generando un PDF
 
       this.cajaService.deleteOneContent(codigo, newArray)
       .subscribe((res:any) => {
@@ -452,8 +452,8 @@ export class HomeComponent implements OnInit {
     const {codigo, descripcion, estante, nivel, caducidad, grupo} = this.cajaForm.value;
 
     if (!codigo || !descripcion || !estante || !nivel || !caducidad || !grupo) {
-      console.error('No hay una caja caragada');
-      this.toastr.error('Se debe seleccionar una caja para generar ejecutar ésta acción', '', {
+      console.error('No hay una caja cargada');
+      this.toastr.error('Se debe seleccionar una caja para generar ejecutar esta acción', '', {
         timeOut: 5000,
         progressBar: true,
         progressAnimation: 'decreasing',
