@@ -26,6 +26,8 @@ import { DialogComponent } from './administrador/dialog/dialog.component';
 import { AdminLobbyComponent } from './administrador/admin-lobby/admin-lobby.component';
 import { CajasComponent } from './cajas/cajas.component';
 import { UserLobbyComponent } from './user-lobby/user-lobby.component';
+import { CajaDialogComponent } from './cajas/caja-dialog/caja-dialog.component';
+import { PasswordDialogComponent } from './password-dialog/password-dialog.component';
 
 
 
@@ -55,7 +57,9 @@ import { UserLobbyComponent } from './user-lobby/user-lobby.component';
     MatIconModule,
     MatTooltipModule,
     MatTableModule,
-    DialogComponent
+    DialogComponent,
+    CajaDialogComponent,
+    PasswordDialogComponent
   ],
   exports:[
     LoginComponent,

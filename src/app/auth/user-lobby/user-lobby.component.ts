@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Usuario } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth.service';
+import { PasswordDialogComponent } from '../password-dialog/password-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-lobby',
@@ -13,13 +14,13 @@ import { AuthService } from 'src/app/services/auth.service';
 
 export class UserLobbyComponent {
 
-  constructor(private fb: FormBuilder, private router: Router, private authSrv: AuthService, private toast: ToastrService) { }
+  constructor(private dialog: MatDialog, private router: Router, private authSrv: AuthService, private toast: ToastrService) { }
 
   fakeUser: Usuario =({
     primerNombre: 'Jhon', 
-    segundoNombre: 'fake', 
+    segundoNombre: 'Doe', 
     primerApellido: 'fake', 
-    segundoApellido: 'fake', 
+    segundoApellido: 'User', 
     email: 'fake', 
     userName: 'fake', 
     fechaCreacion: 'fake', 
@@ -34,17 +35,26 @@ export class UserLobbyComponent {
   daysLeft: number = 0 // Días restantes hasta que caduque la contraseña
   expiration: string = '' // Mensaje y fecha de vencimiento de contraseña
 
+  // Se suscribe para detecter cada vez que la variable $refreshTable cambie
+  refresh = this.authSrv.$refresh.subscribe(() => {
+    this.getProfile()
+  });
+
   ngOnInit(): void {
     this.getProfile()
+    this.authSrv.$refreshNav.next(true); //Emitir que se debe refrescar la tabla del home.component
   }
 
   getProfile(){
+    const currToken = localStorage.getItem('token') || ''
 
-    this.authSrv.profile()
+    this.authSrv.profile(currToken)
     .subscribe((resp:any) => {
       this.loggedUser = resp.userData
       this.daysLeft = resp.warning.dias
       this.expiration = resp.warning.fecha
+
+      localStorage.setItem('usuario', resp.userData.userName)
 
     }, (err)=> {
       console.warn(err) 
@@ -56,6 +66,28 @@ export class UserLobbyComponent {
       });
     })
   }
+
+  changePassword(): void {
+
+    //Abrir el Dialog con la inof
+    const dialogRef = this.dialog.open(PasswordDialogComponent, {
+      data: {
+        userName: this.loggedUser.userName,
+        primerNombre: this.loggedUser.primerNombre,
+        segundoNombre: this.loggedUser.segundoNombre,
+        primerApellido: this.loggedUser.primerApellido,
+        segundoApellido: this.loggedUser.segundoApellido,
+        email: this.loggedUser.email,
+        passCaducidad: this.loggedUser.passCaducidad + " ( " + this.daysLeft + ")",
+        _id: this.loggedUser._id
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      // console.log('The dialog was closed');
+      this.getProfile()
+    });
+}
 
   toDefineBox(){
     this.router.navigateByUrl('/');

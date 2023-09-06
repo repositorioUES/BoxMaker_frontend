@@ -11,6 +11,7 @@ export class Caja {
         public estante : number,
         public nivel : number,
         public caducidad : number,
+        public usuario : string,
         public _id: number,
     ) {}
 }

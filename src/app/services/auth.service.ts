@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { tap } from 'rxjs/operators';
 import {Router, NavigationEnd} from "@angular/router";
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Usuario } from '../models/user.model';
 
 
@@ -16,6 +16,11 @@ export class AuthService {
 
   /* Verificar el status de el Usuario definido como observable */
   public loginStatusSubjec = new Subject<boolean>();
+  
+  //Objeto para comuncarse entre componentes suscritos al servicio
+  public $logged = new BehaviorSubject<boolean>(false);
+   //Objeto para comuncarse entre componentes suscritos al servicio
+   public $refresh = new BehaviorSubject<boolean>(false);
 
   /* Verificar el estado del token para comprobar si esta Logueado o No */
   public isLoggedIn() {
@@ -33,9 +38,12 @@ export class AuthService {
   }
 
   /* Obtener el header para validacion */
-  private globalHeaders = new HttpHeaders({ authorization: this.token });
+  private globalHeaders = new HttpHeaders({ authorization: this.token});
 
   constructor(private http: HttpClient, private router: Router) {}
+
+  //Objeto para comuncarse entre componentes suscritos al servicio
+  public $refreshNav = new BehaviorSubject<boolean>(false);
 
   /* Funcion de Login */
   login(formData: any) {
@@ -64,9 +72,14 @@ export class AuthService {
 
   }
 
-  profile() : Observable<Usuario>{
+  profile(currToken: string): Observable<void> {
+    const headers = new HttpHeaders({ authorization: currToken});
+    return this.http.get<void>(`${base_url}/usuario/profile`, { headers });
+  }
+
+  changePassword(data: any): Observable<void> {
     const headers = this.globalHeaders
-    return this.http.post<Usuario>(`${ base_url }/usuario/profile`, { token: this.token }, {headers})
+    return this.http.post<void>(`${base_url}/usuario/changePassword`, { data }, { headers });
   }
 
   // Crear al ADMIN-GOD si no existe un user con tipo = 0

@@ -119,7 +119,7 @@
                         <ng-container matColumnDef="Editar">
                             <th mat-header-cell *matHeaderCellDef>Editar</th>
                             <td mat-cell *matCellDef="let element">
-                                <p align="center" style="margin: 0%;" (click)="openDialog()">
+                                <p align="center" style="margin: 0%;" (click)="updateBox(element)">
                                     <button type="button" class="btn btn-outline-primary"
                                         matTooltip="Editar datos de {{element.userName}}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"

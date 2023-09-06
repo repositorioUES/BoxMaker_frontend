@@ -8,7 +8,7 @@
                         <table class="table table-bordered">
                             <tr>
                                 <div class="alert alert-info center-container" role="alert" style="height: 20px; margin-bottom: 5px; margin-left: 50px; margin-right: 50px;">
-                                    Días restantes para Vencimiento de la contraseña de Box Maker: {{ daysLeft }}
+                                    Vencimiento de Contraseña de Box Maker: {{ daysLeft }}
                                 </div>
                           
                                 <div class="alert alert-warning center-container" role="alert" *ngIf="expiration != ''" style="height: 20px; margin-left: 50px; margin-right: 50px; margin-bottom: 0px; vertical-align: middle;">
@@ -72,14 +72,12 @@
                                         <br>
                                         <div>
                                             <button type="button" class="btn btn-outline-danger" style="width: 250px;"
-                                                (mouseover)="showIcon('admin')" (mouseout)="celIcon()">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="25"
-                                                    fill="currentColor" class="bi bi-person-gear" viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382l.045-.148ZM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z">
-                                                    </path>
+                                                (mouseover)="showIcon('admin')" (mouseout)="celIcon()" (click)="changePassword()" >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="25" fill="currentColor" class="bi bi-shield-lock" viewBox="0 0 16 16">
+                                                    <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"></path>
+                                                    <path d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415z"></path>
                                                 </svg>
-                                                Opciones de Perfil
+                                                Cambiar Contraseña
                                             </button>
                                         </div>
                                     </td>
@@ -130,8 +128,8 @@
                                     </div>
 
                                     <div *ngIf="iconNumber == 3" class="fade--in"
-                                        style="background-color: rgb(255, 255, 255); border-radius: 2%; margin: 10px;">
-                                        <div style="font-size: 10em; color: rgb(138, 138, 138);" role="img">
+                                        style="background-color: rgb(255, 255, 255); border-radius: 2%; margin-top: 15px;">
+                                        <div style="font-size: 10em; color: rgb(138, 138, 138); margin-top: 15px;" role="img">
                                             <img src="../../../../assets/images/cajas.png"
                                                 style="height: 120px; width: 120px;">
                                         </div>
@@ -146,19 +144,16 @@
 
                                     <div *ngIf="iconNumber == 4" class="fade--in"
                                         style="background-color: rgb(255, 255, 255); border-radius: 2%; margin: 10px;">
-                                        <div style="font-size: 10em; color: rgb(139, 139, 139);" role="img"
+                                        <div style="font-size: 10em; color: rgb(139, 139, 139); margin-top: 15px;" role="img"
                                             aria-label="Person gear - large preview">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="125" height="125"
-                                                fill="currentColor" class="bi bi-person-gear" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm.256 7a4.474 4.474 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10c.26 0 .507.009.74.025.226-.341.496-.65.804-.918C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4s1 1 1 1h5.256Zm3.63-4.54c.18-.613 1.048-.613 1.229 0l.043.148a.64.64 0 0 0 .921.382l.136-.074c.561-.306 1.175.308.87.869l-.075.136a.64.64 0 0 0 .382.92l.149.045c.612.18.612 1.048 0 1.229l-.15.043a.64.64 0 0 0-.38.921l.074.136c.305.561-.309 1.175-.87.87l-.136-.075a.64.64 0 0 0-.92.382l-.045.149c-.18.612-1.048.612-1.229 0l-.043-.15a.64.64 0 0 0-.921-.38l-.136.074c-.561.305-1.175-.309-.87-.87l.075-.136a.64.64 0 0 0-.382-.92l-.148-.045c-.613-.18-.613-1.048 0-1.229l.148-.043a.64.64 0 0 0 .382-.921l-.074-.136c-.306-.561.308-1.175.869-.87l.136.075a.64.64 0 0 0 .92-.382l.045-.148ZM14 12.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0Z">
-                                                </path>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="125" height="125" fill="currentColor" class="bi bi-shield-lock" viewBox="0 0 16 16">
+                                                <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"></path>
+                                                <path d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415z"></path>
                                             </svg>
                                         </div>
                                         <div style="text-align: left; margin: 10px;">
-                                            <h3><b>Opciones de Administrador.</b></h3>
-                                            <p>Editar ciertos datos del Administrador, como cambiar su nombre y
-                                                contraseña.</p>
+                                            <h3><b>Contraseña de Usuario</b></h3>
+                                            <p>Realizar el cambio de su contraseña, no es necesario esperar a que caduque para poder cambiarla.</p>
                                         </div>
                                     </div>
                                 </mat-card>

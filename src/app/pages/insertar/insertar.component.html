@@ -5,12 +5,12 @@
   <div >
     <mat-form-field style="margin-left: 10px;">
       <mat-label>Tipo</mat-label>
-      <input type="text" matInput [(ngModel)]="datos.tipo" id="tipoModal" (keyup)="$event.keyCode != 13 ? autoCompletarTipo($event.keyCode) : null" (keyup)="nextInput( 'claveModal' ,$event.keyCode)">
+      <input type="text"  autocomplete="false" matInput [(ngModel)]="datos.tipo" id="tipoModal" (keyup)="$event.keyCode != 13 ? autoCompletarTipo($event.keyCode) : null" (keyup)="nextInput( 'claveModal' ,$event.keyCode)">
     </mat-form-field>
     &nbsp;&nbsp;
     <mat-form-field>
       <mat-label>Clave</mat-label>
-      <input maxlength="2" type="text" id="claveModal"  matInput [(ngModel)]="datos.clave" (keyup)="$event.keyCode == 13 ?nextInput( 'fechaModal' ,$event.keyCode) : null">
+      <input maxlength="2" type="text" id="claveModal" autocomplete="false" matInput [(ngModel)]="datos.clave" (keyup)="$event.keyCode == 13 ?nextInput( 'fechaModal' ,$event.keyCode) : null">
     </mat-form-field>
     &nbsp;&nbsp;
     <mat-form-field style="margin-right: 10px;">

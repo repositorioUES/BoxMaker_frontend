@@ -27,12 +27,13 @@ export class HomeComponent implements OnInit {
   /* Form para los campos de la caja */
   public cajaForm = this.fb.group({
     descripcion: [''],
-    codigo: ['23-AAC-1'],
+    codigo: [''],
     caducidad: [''],
     grupo: [''],
     estante: [''],
     nivel: [''],
     numero: [''],
+    usuario: [localStorage.getItem('usuario')?.replace(/"+/g,'')],
   });
 
   /* Inicializar el boton */
@@ -127,6 +128,7 @@ export class HomeComponent implements OnInit {
           estante: resp.caja.estante,
           nivel: resp.caja.nivel,
           numero: resp.caja.numero,
+          usuario: resp.caja.usuario || '',
         });
        
         if(resp.from === 'update')
@@ -162,6 +164,7 @@ export class HomeComponent implements OnInit {
               estante: resp.caja.estante,
               nivel: resp.caja.nivel,
               numero: resp.caja.numero,
+              usuario: resp.caja.usuario ||'',
             });
 
             this.contenidos = resp.contenido // Obtener los contenidos del json
@@ -274,6 +277,8 @@ export class HomeComponent implements OnInit {
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
+      this.generando = 0
+      this.loadingType = 0
     });
   }
 
@@ -302,6 +307,8 @@ export class HomeComponent implements OnInit {
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
+      this.generando = 0
+      this.loadingType = 0
     });
   }
 
@@ -341,7 +348,7 @@ export class HomeComponent implements OnInit {
       //Abrir el Dialog con la inof
       const dialogRef = this.dialog.open(InsertarComponent, {
         data: {
-          codigo: code,
+          caja: code,
           index: index
         },
       });
@@ -487,7 +494,8 @@ export class HomeComponent implements OnInit {
       grupo: this.cajaForm.value.grupo || '',
       estante: this.cajaForm.value.estante || '',
       nivel: this.cajaForm.value.nivel || '',
-      numero: this.cajaForm.value.numero || ''
+      numero: this.cajaForm.value.numero || '',
+      usuario: this.cajaForm.value.usuario || ''
     })
   }
 

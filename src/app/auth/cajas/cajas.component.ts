@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Caja } from 'src/app/models/caja.model';
 import { CajaService } from 'src/app/services/caja.service';
 import Swal from 'sweetalert2';
+import { CajaDialogComponent } from './caja-dialog/caja-dialog.component';
 
 @Component({
   selector: 'app-cajas',
@@ -17,12 +18,18 @@ export class CajasComponent {
   
   cajas: Caja[] = [] // Todos los Cajas
   displayedColumns: string[] = ['N°', 'Codigo', 'Descripcion', 'Fec. Creacion', 'PDF', 'Excel', 'Editar', 'Eliminar'];
+  
   public generando: number = 0//Se está cargando alguna opcion y mostrar el loader
   public docType: number = 0 // PDF = 1 ; Excel = 2
   
   ngOnInit(): void {
     this.cargarCajas()
     this.hideLoader()
+
+    // Se suscribe para detecter cada vez que la variable $refreshTable cambie
+    this.cajaSrv.$refreshTable.subscribe(data => {
+      this.cargarCajas()
+    });
   }
 
 
@@ -115,8 +122,28 @@ export class CajasComponent {
     }
   }
 
-  openDialog(){
+  updateBox(caja: any){
+    const cajaTemp = {
+      fechaCreacion : caja.fechaCreacion,
+      entidad : caja.entidad,
+      grupo : caja.grupo,
+      numero : caja.numero,
+      codigo : caja.codigo,
+      descripcion: caja.descripcion,
+      estante : caja.estante,
+      nivel : caja.nivel,
+      caducidad : caja.caducidad,
+      usuario : caja.usuario,
+    }
+    //Abrir el Dialog con la info de la caja
+    const dialogRef = this.dialog.open(CajaDialogComponent, {
+      data: { caja : cajaTemp },
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log('The dialog was closed');
+    });
+    
   }
 
 
