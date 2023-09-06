@@ -79,6 +79,8 @@ export class HomeComponent implements OnInit {
   inputChange() {
     // Copia el valor de tipodefault a tipo cuando tipodefault cambia
     this.contenidoForm.get('tipo')?.setValue(this.contenidoForm.get('tipodefault')?.value ?? '');
+    this.contenidoForm.get('clave')?.setValue(this.contenidoForm.get('clavedefault')?.value ?? '');
+    this.contenidoForm.get('fecha')?.setValue(this.contenidoForm.get('fechadefault')?.value ?? '');
   }
 
   exito(resp: any) {
@@ -112,25 +114,19 @@ export class HomeComponent implements OnInit {
 
     this.contenidoForm.get('tipodefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('tipo')?.disable();
-      } else {
-        this.contenidoForm.get('tipo')?.enable();
+        this.contenidoForm.get('tipo')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
       }
     });
 
     this.contenidoForm.get('clavedefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('clave')?.disable();
-      } else {
-        this.contenidoForm.get('clave')?.enable();
+        this.contenidoForm.get('clave')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
       }
     });
 
     this.contenidoForm.get('fechadefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('fecha')?.disable();
-      } else {
-        this.contenidoForm.get('fecha')?.enable();
+        this.contenidoForm.get('fecha')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
       }
     });
 
@@ -228,8 +224,6 @@ export class HomeComponent implements OnInit {
         this.exito(resp);
       },
       (err) => {
-        console.log(this.contenidoForm.value);
-        console.log('Valor de "tipo" a enviar:', this.contenidoForm.get('tipo')?.value);
         console.warn(err.error.msg);
 
         /* Mensaje de error */

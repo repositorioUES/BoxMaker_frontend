@@ -38,13 +38,13 @@ export class QuedanComponent {
 
   constructor(
     public dialogRef: MatDialogRef<QuedanComponent>,
-    @Inject(MAT_DIALOG_DATA) public datos: DialogData, 
+    @Inject(MAT_DIALOG_DATA) public datos: DialogData,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     private quedanSrv: QuedanService,
     private cajaSrv: CajaService,
     private toast: ToastrService,
   ) {}
-  
+
   elegidos: any[] = [] // Comprobantes seleccionados en el modal
   mainChecked: boolean = true // Para controlar el cehackbox que marca/desmarca a todos
   @Output() private comprobantesAgregados = new EventEmitter<any>();
@@ -56,7 +56,7 @@ export class QuedanComponent {
   getQuedan(quedan: string, fInicio: string, fFinal: string){
 
     if (new Date(fInicio) >= new Date(fFinal)) {
-      console.warn('La fecha de inicio debe ser menor que la fecha final') 
+      console.warn('La fecha de inicio debe ser menor que la fecha final')
       this.toast.error('La fecha de inicio debe ser menor que la fecha final', '', {
         timeOut: 5000,
         progressBar: true,
@@ -64,10 +64,10 @@ export class QuedanComponent {
         positionClass: 'toast-top-right',
       });
       return
-    } 
-    
+    }
+
     if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(fInicio) == false){
-      console.warn('La fecha de Inicio No tiene formato válido') 
+      console.warn('La fecha de Inicio No tiene formato válido')
       this.toast.error('La fecha de Inicio No tiene formato válido', '', {
         timeOut: 5000,
         progressBar: true,
@@ -76,10 +76,10 @@ export class QuedanComponent {
       });
       return
     }
-    
+
     if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(fFinal) == false){
-      
-      console.warn('La fecha Final No tiene formato válido') 
+
+      console.warn('La fecha Final No tiene formato válido')
       this.toast.error('La fecha Final No tiene formato válido', '', {
         timeOut: 5000,
         progressBar: true,
@@ -87,11 +87,11 @@ export class QuedanComponent {
         positionClass: 'toast-top-right',
       });
       return
-    } 
-    
+    }
+
     if (quedan == null || quedan == "") {
-      console.warn('El QUEDAN es oblidatorio') 
-      this.toast.error('El QUEDAN es oblidatorio', '', {
+      console.warn('El QUEDAN es obligatorio')
+      this.toast.error('El QUEDAN es obligatorio', '', {
         timeOut: 5000,
         progressBar: true,
         progressAnimation: 'decreasing',
@@ -114,9 +114,9 @@ export class QuedanComponent {
 
     this.quedanSrv.getQuedan(datos)
     .subscribe((resp:Comprobante[]) => {
-      
+
       if(resp.length == 0){
-        this.toast.error('No se hallarón comprobantes que cumplan con el filtro', '', {
+        this.toast.error('No se encontraron comprobantes que cumplan con el filtro', '', {
           timeOut: 5000,
           progressBar: true,
           progressAnimation: 'decreasing',
@@ -124,7 +124,7 @@ export class QuedanComponent {
         });
         return
       }
-      
+
       this.elegidos = []
       resp.forEach(comprobante => {
         const compAux = {
@@ -136,7 +136,7 @@ export class QuedanComponent {
         this.mainChecked = true
       });
     }, (err)=> {
-      console.warn(err) 
+      console.warn(err)
       this.toast.error(err.error.msg, '', {
         timeOut: 5000,
         progressBar: true,
@@ -144,12 +144,12 @@ export class QuedanComponent {
         positionClass: 'toast-top-right',
       });
     })
-    
+
   }
-  
+
   // Marcar los checkboxes de maera individual
   selectedItems(comp: any){
-    
+
     this.elegidos.forEach(e => {
       if (e.comprobante._id == comp.comprobante._id) {
         e.marked = !e.marked
@@ -209,7 +209,7 @@ export class QuedanComponent {
       this.cajaSrv.$refreshTable.next(true); //Emitir que se debe refrescar la tabla del home.component
       this.onNoClick() // cerrar dialog depues de trasladar
     }, (err)=> {
-      console.warn(err) 
+      console.warn(err)
       this.toast.error(err.error.msg, '', {
         timeOut: 5000,
         progressBar: true,
@@ -217,7 +217,7 @@ export class QuedanComponent {
         positionClass: 'toast-top-right',
       });
     })
-    
+
   }
 
 
@@ -256,7 +256,7 @@ export class QuedanComponent {
     if (key == 13) {
       document.getElementById(next)?.focus();
     }
-  
+
   }
 
 }
