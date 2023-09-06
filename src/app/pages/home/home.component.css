@@ -2,9 +2,9 @@
     margin-left: 0%;
     margin-right: 0%;
   }
-  
+
   .custom-color {
-    background-color: #00275a; /* Cambia el color de fondo a azul (#007bff) */
+    background-color: #00275a; /* Cambia el color de fondo a azul */
     color: white; /* Cambia el color del texto a blanco */
   }
 
@@ -12,7 +12,7 @@
     height: 410px;
     overflow: auto;
   }
-  
+
   table {
     width: 100%;
   }
@@ -22,7 +22,7 @@
   }
 
   .custom-font-size {
-    font-size: 11.5px; /* Puedes ajustar este valor según tus necesidades */
+    font-size: 11.5px;
   }
 
   .center-content {
@@ -30,7 +30,7 @@
   }
 
   .text-color{
-    color: white; /* Cambia el color del texto a blanco */
+    color: white;
   }
 
   .custom-border-bottom{
@@ -43,8 +43,6 @@
   .separator{
     padding-top: 5px;
   }
-
-
 
 
   .big-text {
@@ -72,7 +70,7 @@
     z-index: 99999;
     transition: opacity 0.5s, visibility 0.5s;
   }
-  
+
   .loader--2{
     position: fixed;
     top: 0;
@@ -107,12 +105,12 @@
     from { height: 5px; width: 5px;}
     to { height: 175px; width: 175px;}
   }
-  
+
   @keyframes fadeImage {
     from { opacity: 1;}
     to { opacity: 0;}
   }
-  
+
   @keyframes rotateImage {
     from { transform: rotate(0turn);}
     to { transform: rotate(1turn);}

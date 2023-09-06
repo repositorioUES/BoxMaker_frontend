@@ -1,11 +1,5 @@
 <!–------------------------------------------------- Loaders para Reportes y logo de CEL -------------------------------------------------–>
 
-
-
-
-
-
-
 <!-- loader de Generar un Reprote una accion -->
 <mat-card class="center-content" *ngIf="generando == 1">
   <div class="mb-1 row loader--2">
@@ -70,8 +64,8 @@
         <!– Input para la fecha de caducidad de la caja –>
         <label for="fecha" class="col-sm-1 col-form-label">Caducidad</label>
         <div class="col-sm-1">
-          <input formControlName="caducidad" type="text" class="form-control form-control-sm custom-font-size" id="fecha"
-            name="fecha" [value]="cajaForm.get('caducidad')?.value | date : 'dd/MM/yyyy'" />
+          <input formControlName="caducidad" type="text" class="form-control form-control-sm custom-font-size" id="caducidad"
+            name="caducidad" [value]="cajaForm.get('caducidad')?.value | date : 'dd/MM/yyyy'" />
         </div>
 
         <!– Botón Para limpiar el formulario de la caja –>
@@ -82,7 +76,7 @@
           </button>
         </div>
 
-        <!– Botón Para buscar caja –>
+        <!– Botón para buscar caja –>
         <div class="col-sm-1">
           <button class="btn btn-sm btn-primary" (click)="cargarCaja()">
             <i class="fa fa-search" aria-hidden="true"></i>
@@ -90,7 +84,7 @@
           </button>
         </div>
 
-        <!– Botón Guardar –>
+        <!– Botón Guardar caja–>
         <div class="col-sm-2">
           <button class="btn btn-sm btn-primary" (click)="crearCaja()">
             <i class="fa fa-archive" aria-hidden="true"></i>
@@ -114,42 +108,41 @@
   </div>
 </mat-card>
 
-
-<!–------------------------------------------------------ Ingreso de comprobantes --------------------------------------------------------------–>
-
-<mat-card class="custom-width  custom-border">
+<!–---------------------------------------------------------- Ingreso de comprobantes --------------------------------------------------------------–>
+<mat-card class="custom-width custom-border">
   <div class="container mt-6 border custom-border-bottom custom-color separator">
     <form autocomplete="off" [formGroup]="contenidoForm">
         <div class="mb-1 row">
 
           <!-- INICIO DE INPUTS QUE SON DEFAULT -->
 
-          <!– Botón para bloquear inputs –>
+<!--          <!– Botón para bloquear inputs –>
           <div class="col-sm-1">
             <button [class]="boton_fijado ? 'btn btn-sm btn-danger' : 'btn btn-sm btn-primary'" (click)="fijar()">
-              <i class="fa fa-thumb-tack" aria-hidden="true"></i> 
+              <i class="fa fa-thumb-tack" aria-hidden="true"></i>
               Fijar
             </button>
           </div>
+          -->
 
           <!– Input para el Tipo de documento default–>
-          <div class="col-sm-1">
-            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipoDefault" name="tipoDefault" placeholder="Tipo" />
+          <div class="col-sm-1 offset-sm-1">
+            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipodefault" name="tipodefault" placeholder="Tipo" (input)="inputChange()"/>
           </div>
 
           <!– Input para la Clave default –>
           <div class="col-sm-1">
-            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="claveDefault" name="claveDefault" placeholder="Clave" />
+            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="clavedefault" name="clavedefault" placeholder="Clave" />
           </div>
 
-          <!– Input para el Mes y año default–>
-          <div class="col-sm-1 offset-sm-1">
-            <input type="text" formControlName="mesaniodefault" class="form-control form-control-sm" id="mesanioDefault" name="mesanioDefault" placeholder="MM/AAAA" />
+          <!– Input para la fecha default–>
+          <div class="col-sm-1">
+            <input type="text" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa" />
           </div>
 
           <!– Botón buscar por quedan –>
-          <div class="col-sm-2 offset-sm-3">
-            <button type="submit" class="btn btn-sm btn-primary" (click)="cargarQuedan()">
+          <div class="col-sm-2 offset-sm-4">
+            <button type="button" class="btn btn-sm btn-primary" (click)="cargarQuedan()">
               <i class="fa fa-plus-square" aria-hidden="true"></i>
               Quedan
             </button>
@@ -157,7 +150,7 @@
 
           <!– Botón Reporte PDF –>
           <div class="col-sm-2">
-            <button type="submit" class="btn btn-sm btn-danger" (click)="generatePDF()">
+            <button type="button" class="btn btn-sm btn-danger" (click)="generatePDF()">
               <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
               Reporte PDF
             </button>
@@ -176,43 +169,43 @@
 
           <!– Input para el Tipo de documento –>
          <div class="col-sm-1">
-            <input formControlName="tipo" type="text"  class="form-control form-control-sm" id="tipo" name="tipo"
-              placeholder="Tipo" [(ngModel)]="contenidoForm.value.tipodefault"/>
+            <input formControlName="tipo" type="text" class="form-control form-control-sm" id="tipo" name="tipo"
+              placeholder="Tipo" />
           </div>
 
           <!– Input para la Clave –>
           <div class="col-sm-1">
             <input type="text" formControlName="clave" class="form-control form-control-sm" id="clave" name="clave"
-              placeholder="Clave"  [(ngModel)]="contenidoForm.value.clavedefault"/>
+              placeholder="Clave" />
           </div>
 
-          <!– Input para el dia –>
+<!--          <!– Input para el dia –>
           <div class="col-sm-1">
             <input type="text" class="form-control form-control-sm" id="dia" name="dia" placeholder="DD" />
-          </div>
+          </div>-->
 
-          <!– Input para el Mes y año  –>
+          <!– Input para la Fecha  –>
           <div class="col-sm-1">
-            <input type="text" formControlName="fecha" class="form-control form-control-sm" id="mesanio" name="mesanio"
-              placeholder="MM/AAAA" [(ngModel)]="contenidoForm.value.mesaniodefault" />
+            <input type="text" formControlName="fecha" class="form-control form-control-sm" id="fecha" name="fecha"
+              placeholder="dd/mm/aa" />
           </div>
 
           <!– Input para el N° Comprobante –>
           <div class="col-sm-1">
-            <input type="text" formControlName="correlativo" class="form-control form-control-sm" id="comprobante" name="comprobante" placeholder="N° Comp" 
+            <input type="text" formControlName="correlativo" class="form-control form-control-sm" id="comprobante" name="comprobante" placeholder="N° Comp"
             (keyup.enter)="ingresarComprobantes()"/>
           </div>
 
           <!– Botón Borrar Todos –>
-          <div class="col-sm-2 offset-sm-2">
-            <button type="submit" class="btn btn-sm btn-danger" (click)="vaciarCaja()">
+          <div class="col-sm-2 offset-sm-3">
+            <button type="button" class="btn btn-sm btn-danger" (click)="vaciarCaja()">
               <i class="fa fa-times" aria-hidden="true"></i> Borrar Todos
             </button>
           </div>
 
-          <!– Botón Reporte PDF –>
+          <!– Botón Reporte Excel –>
           <div class="col-sm-2">
-            <button type="submit" class="btn btn-sm btn-success" (click)="generateXLSX()">
+            <button type="button" class="btn btn-sm btn-success" (click)="generateXLSX()">
               <i class="fa fa-file-excel-o" aria-hidden="true"></i>
               Reporte Excel
             </button>
@@ -257,9 +250,9 @@
           <th mat-header-cell *matHeaderCellDef>N° Comprobante</th>
           <td mat-cell *matCellDef="let element">{{ element.correlativo }}</td>
         </ng-container>
-        
+
         <ng-container matColumnDef="Insertar">
-          <th mat-header-cell *matHeaderCellDef>Insetar</th>
+          <th mat-header-cell *matHeaderCellDef>Insertar</th>
           <td mat-cell *matCellDef="let element let i = index">
             <button type="button" (click)="insertarDebajo(i)" class="btn btn-outline-primary" matTooltip="Insertar Debajo" *ngIf="i != longitud">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-bar-down" viewBox="0 0 16 16">
@@ -268,7 +261,7 @@
             </button>
           </td>
         </ng-container>
-        
+
         <ng-container matColumnDef="Quitar">
           <th mat-header-cell *matHeaderCellDef>Quitar</th>
           <td mat-cell *matCellDef="let element let i= index">

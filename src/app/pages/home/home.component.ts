@@ -37,7 +37,6 @@ export class HomeComponent implements OnInit {
   });
 
   /* Inicializar el boton */
-  public boton_fijado: boolean = false;
   public contenidos: Comprobante[] = [] //Contenido de la caja que está en el txt, NO en la base
   public longitud: number = 0 //cuántos contenidos se recuperaron
 
@@ -47,13 +46,13 @@ export class HomeComponent implements OnInit {
   /* Form para los campos del contenido (COMPROBANTES) de la caja */
   public contenidoForm = this.fb.group({
     caja: [''],
-    tipo: [{ value: '', disabled: this.boton_fijado }],
-    clave: [{ value: '', disabled: this.boton_fijado }],
-    fecha: [{ value: '', disabled: this.boton_fijado }],
+    tipo: [''],
+    clave: [''],
+    fecha: [''],
     correlativo: [''],
     tipodefault: [''],
     clavedefault: [''],
-    mesaniodefault: [''],
+    fechadefault: [''],
   });
 
   constructor(
@@ -63,7 +62,7 @@ export class HomeComponent implements OnInit {
     private dialog: MatDialog
   ) {}
 
-  /* Funcion para fijar los campos  */
+/*  /!* Funcion para fijar los campos  *!/
   fijar() {
     this.boton_fijado = !this.boton_fijado;
     if (this.boton_fijado) {
@@ -75,6 +74,11 @@ export class HomeComponent implements OnInit {
       this.contenidoForm.get('clave')?.enable();
       this.contenidoForm.get('fecha')?.enable();
     }
+  }*/
+
+  inputChange() {
+    // Copia el valor de tipodefault a tipo cuando tipodefault cambia
+    this.contenidoForm.get('tipo')?.setValue(this.contenidoForm.get('tipodefault')?.value ?? '');
   }
 
   exito(resp: any) {
@@ -104,11 +108,39 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  ngOnInit() { 
-    // Se suscribe para detecter cada vez que la variable $refreshTable cambie
+  ngOnInit() {
+
+    this.contenidoForm.get('tipodefault')?.valueChanges.subscribe(value => {
+      if (value) {
+        this.contenidoForm.get('tipo')?.disable();
+      } else {
+        this.contenidoForm.get('tipo')?.enable();
+      }
+    });
+
+    this.contenidoForm.get('clavedefault')?.valueChanges.subscribe(value => {
+      if (value) {
+        this.contenidoForm.get('clave')?.disable();
+      } else {
+        this.contenidoForm.get('clave')?.enable();
+      }
+    });
+
+    this.contenidoForm.get('fechadefault')?.valueChanges.subscribe(value => {
+      if (value) {
+        this.contenidoForm.get('fecha')?.disable();
+      } else {
+        this.contenidoForm.get('fecha')?.enable();
+      }
+    });
+
+    // Se suscribe para detectar cada vez que la variable $refreshTable cambie
     this.cajaService.$refreshTable.subscribe(data => {
       this.cargarCaja()
     });
+
+
+
   }
 
   /* Funcion que permite CREAR una caja y CARGAR sus datos en el formulario */
@@ -130,7 +162,7 @@ export class HomeComponent implements OnInit {
           numero: resp.caja.numero,
           usuario: resp.caja.usuario || '',
         });
-       
+
         if(resp.from === 'update')
           this.guardarContenidos(resp.caja.codigo)
       },
@@ -189,13 +221,15 @@ export class HomeComponent implements OnInit {
   ingresarComprobantes() {
     this.cajaService.ingresarComprobantes(this.contenidoForm.value).subscribe(
       (resp: any) => {
-        console.log(this.contenidoForm);
+        console.log(this.contenidoForm.value);
         console.log(resp);
 
         /* mensaje de exito */
         this.exito(resp);
       },
       (err) => {
+        console.log(this.contenidoForm.value);
+        console.log('Valor de "tipo" a enviar:', this.contenidoForm.get('tipo')?.value);
         console.warn(err.error.msg);
 
         /* Mensaje de error */
@@ -204,54 +238,8 @@ export class HomeComponent implements OnInit {
     );
   }
 
-  reportePDF() {
-    const formData = this.cajaForm.value;
-    const codigo = this.cajaForm.value.codigo;
 
-    if (!codigo) {
-      console.error('El codigo esta vacio');
-      return;
-    }
-
-    this.cajaService.reportePDF(codigo).subscribe(
-      (resp: any) => {
-        console.log(resp.file.data);
-
-        const blob = new Blob([resp.file.data], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-  
-        // Abrir el PDF en una nueva ventana o pestaña
-        window.open(url, '_blank');
-
-        /* mensaje de exito */
-        this.exito(resp);
-      },
-      (err) => {
-        console.warn(err.error.msg);
-        
-
-        /* Mensaje de error */
-        this.error(err);
-      }
-    );
-  }
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
+  /*Funcion para generar el reporte PDF*/
   generatePDF(){
     if(this.hasBox() == false){
       return
@@ -261,7 +249,7 @@ export class HomeComponent implements OnInit {
 
     this.generando = 1 // Mostrar el gif de "Generando.."
     this.loadingType = 1 // Se está genrando un PDF
-    
+
     this.cajaService.getPDF(codigo)
     .then(response => response.blob())
     .then(pdf => {
@@ -318,7 +306,7 @@ export class HomeComponent implements OnInit {
     }
 
     const code = this.cajaForm.value.codigo || ''
-  
+
     if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{1,5}$/.test(code)) {
       //Abrir el Dialog con la inof
       const dialogRef = this.dialog.open(QuedanComponent, {
@@ -343,7 +331,7 @@ export class HomeComponent implements OnInit {
 
   insertarDebajo(index: number){
     const code = this.cajaForm.value.codigo || ''
-  
+
     if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{1,5}$/.test(code)) {
       //Abrir el Dialog con la inof
       const dialogRef = this.dialog.open(InsertarComponent, {
@@ -381,17 +369,17 @@ export class HomeComponent implements OnInit {
         if(i != index){
           newArray.push(this.contenidos[i])
         }
-      }   
+      }
 
       this.generando = 1 // Mostrar el gif de "Generando.."
       this.loadingType = 3 // Se está genrando un PDF
-      
+
       this.cajaService.deleteOneContent(codigo, newArray)
       .subscribe((res:any) => {
-        
+
         this.hideDeleteGif(res.msg)
         // Swal.fire(res.msg, 'Completado')
-        
+
         this.cargarCaja()
       }, (err)=> {
           console.warn(err)
@@ -422,7 +410,7 @@ export class HomeComponent implements OnInit {
 
     if (isConfirmed) {
       this.generando = 1
-      this.loadingType = 3 
+      this.loadingType = 3
 
       this.cajaService.deleteAllContent(codigo)
       .subscribe((res:any) => {
