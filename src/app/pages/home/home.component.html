@@ -135,19 +135,19 @@
 
           <!– Input para el Tipo de documento default–>
           <div class="col-sm-1 offset-sm-1">
-            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipodefault" name="tipodefault" placeholder="Tipo" 
+            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipodefault" name="tipodefault" placeholder="Tipo"
             (input)="inputChange('tipo')" />
           </div>
 
           <!– Input para la Clave default –>
           <div class="col-sm-1">
-            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="clavedefault" name="clavedefault" placeholder="Clave" 
+            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="clavedefault" name="clavedefault" placeholder="Clave"
             (input)="inputChange('clave')" maxlength="2" />
           </div>
 
           <!– Input para la fecha default–>
           <div class="col-sm-2 custom-ancho-input custom-offset">
-            <input type="date" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa" 
+            <input type="date" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa"
             (input)="inputChange('fecha')"/>
           </div>
 
@@ -203,8 +203,8 @@
 
           <!– Input para el N° Comprobante –>
           <div class="col-sm-1 custom-offset">
-            <input type="text" formControlName="correlativo" class="form-control form-control-sm" id="comprobante" name="comprobante" placeholder="N° Comp"
-            (keyup.enter)="ingresarComprobantes()"/>
+            <input type="text" formControlName="correlativo" class="form-control form-control-sm" id="correlativo" name="correlativo" placeholder="N° Comp"
+            (keyup.enter)="ingresarComprobantes()" >
           </div>
 
           <!– Botón Borrar Todos –>

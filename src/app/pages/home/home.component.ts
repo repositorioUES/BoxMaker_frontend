@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CajaService } from 'src/app/services/caja.service';
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   /* Form para los campos de la caja */
   public cajaForm = this.fb.group({
     descripcion: [''],
-    codigo: [''],
+    codigo: ['23-AAC-1'],
     caducidad: [''],
     grupo: [''],
     estante: [''],
@@ -44,6 +44,7 @@ export class HomeComponent implements OnInit {
   public generando: number = 0//   1 = Se está generando algun documento y por tanto, mostrar el loader;   0 = nada
   public loadingType: number = 0 // PDF = 1 ; Excel = 2
   public unsaved: boolean = false // hay cambios sin guardar?
+  @ViewChild('blankInput') blankInput!: ElementRef;
 
   /* Form para los campos del contenido (COMPROBANTES) de la caja */
   public contenidoForm = this.fb.group({
@@ -140,7 +141,7 @@ export class HomeComponent implements OnInit {
       }
     });
 
-    
+
   }
 
   /* Funcion que permite CREAR una caja y CARGAR sus datos en el formulario */
@@ -151,7 +152,7 @@ export class HomeComponent implements OnInit {
 
         /* mensaje de exito */
         this.exito(resp);
-        
+
 
         this.cajaForm.setValue({
           descripcion: resp.caja.descripcion,
@@ -186,7 +187,7 @@ export class HomeComponent implements OnInit {
   cargarCaja(from: string) {
     const formData = this.cajaForm.value;
     const codigo = formData.codigo;
-    
+
     if (codigo) {
       if(from != 'borrado'){
         this.generando = 1
@@ -213,8 +214,8 @@ export class HomeComponent implements OnInit {
 
             this.generando = 0
             this.loadingType = 0
-            
-            this.cargarContenidos()            
+
+            this.cargarContenidos()
 
             /* mensaje de exito */
             this.exito(resp);
@@ -247,10 +248,10 @@ export class HomeComponent implements OnInit {
 
     this.generando = 1
     this.loadingType = 4
-    
+
     this.cajaService.cargarContenido(codigo).subscribe(
       (resp: any) => {
-        
+
         this.contenidos = resp.contenido // Obtener los contenidos del json
         this.longitud =  this.contenidos.length -1
         this.cantidad =  resp.cantidad
@@ -291,13 +292,26 @@ export class HomeComponent implements OnInit {
     this.cajaService.ingresarComprobantes(this.contenidoForm.value).subscribe(
       (resp: any) => {
 
-        this.cargarContenidos() // recargasmo la tabla
-        document.getElementById('tipo')?.focus(); // Hacer focus al primer imput para volver a ingresar
+        this.cargarContenidos() // recargamos la tabla
+        // document.getElementById('tipo')?.focus(); // Hacer focus al primer input para volver a ingresar
+
+        if (!this.contenidoForm.get('tipodefault')?.value) { // Limpia el formulario y deja el focus en tipo
+          this.contenidoForm.get('tipo')?.reset();
+          this.contenidoForm.get('clave')?.reset();
+          this.contenidoForm.get('fecha')?.reset();
+          this.contenidoForm.get('correlativo')?.reset();
+          document.getElementById('tipo')?.focus();
+        } else {                                                   // Default esta lleno y solamente limpia el correlativo y deja focus el correlativo
+          this.contenidoForm.get('correlativo')?.reset();
+          document.getElementById('correlativo')?.focus();
+        }
 
         this.unsaved = true
 
         /* mensaje de exito */
         this.exito(resp);
+
+
       },
       (err) => {
         console.warn(err.error.msg);
@@ -518,7 +532,7 @@ export class HomeComponent implements OnInit {
 
     this.cajaService.savetoDatabase(codigo)
     .subscribe((res:any) => {
-      
+
       this.toastr.success('Contenido de la caja ' + codigo +' guardado en la Base de Datos', '', {
         timeOut: 5000,
         progressBar: true,
@@ -570,13 +584,13 @@ export class HomeComponent implements OnInit {
     }
 
     if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(data.fecha) == false){
-      errMsg.push('La Fecha No tiene formato válido') 
+      errMsg.push('La Fecha No tiene formato válido')
     }
 
     if(/^[0-9]{1,5}$/.test(data.correlativo) == false){
-      errMsg.push('El N° Comprobante No tiene formato válido') 
+      errMsg.push('El N° Comprobante No tiene formato válido')
     }
-    
+
     if (errMsg.length != 0) {
       errMsg.forEach(err => {
         this.toastr.error(err, '', {
@@ -637,7 +651,7 @@ export class HomeComponent implements OnInit {
       autoTipo = 'INGRESO'
       autoClave = ''
     }
-    
+
     this.contenidoForm.setValue({
       caja: this.contenidoForm.value.caja || '',
       tipo: autoTipo,
