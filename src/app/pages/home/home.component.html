@@ -118,111 +118,158 @@
 
 <!–---------------------------------------------------------- Ingreso de comprobantes --------------------------------------------------------------–>
 <mat-card class="custom-width custom-border">
+
   <div class="container mt-6 border custom-border-bottom custom-color separator">
-    <form autocomplete="off" [formGroup]="contenidoForm">
-        <div class="mb-1 row">
-
-          <!-- INICIO DE INPUTS QUE SON DEFAULT -->
-
-<!--          <!– Botón para bloquear inputs –>
-          <div class="col-sm-1">
-            <button [class]="boton_fijado ? 'btn btn-sm btn-danger' : 'btn btn-sm btn-primary'" (click)="fijar()">
-              <i class="fa fa-thumb-tack" aria-hidden="true"></i>
+    <table>
+      <tr>
+        <!-- BOTON DE FIJAR/SOLTAR----------------------------------------------------------------------------------------------------------------- -->
+        <td align="center">
+          <div *ngIf="!fixed">
+            <button type="button" class="btn btn-sm btn-success" style="width: 80px;" matTooltip="Usar campos con valores fijos" (click)="toggleFields()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pin-angle" viewBox="0 0 16 16">
+                <path d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146zm.122 2.112v-.002.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a4.507 4.507 0 0 0-.288-.076 4.922 4.922 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a4.924 4.924 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034.114 0 .23-.011.343-.04L9.927 2.028c-.029.113-.04.23-.04.343a1.779 1.779 0 0 0 .062.46z"/>
+              </svg>
               Fijar
             </button>
           </div>
-          -->
-
-          <!– Input para el Tipo de documento default–>
-          <div class="col-sm-1 offset-sm-1">
-            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipodefault" name="tipodefault" placeholder="Tipo" 
-            (input)="inputChange('tipo')" />
-          </div>
-
-          <!– Input para la Clave default –>
-          <div class="col-sm-1">
-            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="clavedefault" name="clavedefault" placeholder="Clave" 
-            (input)="inputChange('clave')" maxlength="2" />
-          </div>
-
-          <!– Input para la fecha default–>
-          <div class="col-sm-2 custom-ancho-input custom-offset">
-            <input type="date" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa" 
-            (input)="inputChange('fecha')"/>
-          </div>
-
-          <!– Botón buscar por quedan –>
-          <div class="col-sm-2 offset-sm-3">
-            <button type="button" class="btn btn-sm btn-primary" (click)="cargarQuedan()">
-              <i class="fa fa-plus-square" aria-hidden="true"></i>
-              Quedan
+          <div *ngIf="fixed">
+            <button type="button" class="btn btn-sm btn-danger" style="width: 80px;" matTooltip="Usar campos de inserción normales" (click)="toggleFields()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pin-fill" viewBox="0 0 16 16">
+                <path d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224 1.5-.5 1.5s-.5-1.224-.5-1.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A5.921 5.921 0 0 1 5 6.708V2.277a2.77 2.77 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354z"/>
+              </svg>
+              Soltar
             </button>
           </div>
+        </td>
+        <!-- INPUTS DE COMPRBANTE FIJOS----------------------------------------------------------------------------------------------------------------- -->
+        <td *ngIf="fixed"> 
+             <!-- FILA SUPERIOR -->
+            <tr>
+              <td>
+                  <div class="input--">
+                    <input type="text" autocomplete="off" class="form-control form-control-sm" id="tipoFijo" name="tipoFijo" (keyup)="$event.keyCode != 13 ? autoCompletar($event.keyCode) : null"
+                      placeholder="Tipo"  [(ngModel)]="comprob.tipoFixed" (keyup.enter)=" nextInput('claveFija')" />
+                  </div>
+              </td>
+              <td class="input--clave">
+                <div class="input-- input--clave">
+                  <input type="text" autocomplete="off" maxlength="2" class="form-control form-control-sm" id="claveFija" name="claveFija"
+                    placeholder="Clave"  [(ngModel)]="comprob.claveFixed" (keyup.enter)=" nextInput('fechaFija')" (keyup)="$event.keyCode != 13 ? upperCaseComp(comprob.claveFixed,'claveFija') : null"/>
+                </div>
+              </td>
+              <td>
 
-          <!– Botón Reporte PDF –>
-          <div class="col-sm-2">
-            <button type="button" class="btn btn-sm btn-danger" (click)="generatePDF()">
-              <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
-              Reporte PDF
-            </button>
-          </div>
-        </div>
+              </td>
+              <td class="input--">
+                <div class="input--">
+                  <input type="text" autocomplete="off" maxlength="7" class="form-control form-control-sm" id="fechaFija" name="fechaFija"
+                    placeholder="MM/yyyy"  [(ngModel)]="comprob.fechaResto" (keyup.enter)=" nextInput( 'dia')"
+                    (keypress)="$event.keyCode != 13 ? numbersOnly($event.keyCode) : null" />
+                </div>
+              </td>
+            </tr>
+            <!-- FILA INFERIOR -->
+            <tr>
+              <td>
+                  <div class="input--">
+                    <input type="text" autocomplete="off" class="form-control form-control-sm" style="background-color: rgb(187, 187, 187);" id="tipo" name="tipo" 
+                      placeholder="Tipo" disabled [(ngModel)]="comprob.tipo" />
+                  </div>
+              </td>
+              <td class="input--clave">
+                <div class="input-- input--clave">
+                  <input  type="text" autocomplete="off" maxlength="2" style="background-color: rgb(187, 187, 187);" class="form-control form-control-sm" id="clave" name="clave"
+                    placeholder="Clave" disabled [(ngModel)]="comprob.clave" />
+                </div>
+              </td>
+              <td class="input--clave">
+                <div class="input-- input--clave">
+                  <input ype="text" maxlength="2" class="form-control form-control-sm" id="dia" name="dia"
+                    placeholder="Día" autocomplete="off" [(ngModel)]="comprob.fechaDia" (keyup.enter)=" nextInput( 'correlativo')"
+                    (keypress)="$event.keyCode != 13 ? numbersOnly($event.keyCode) : null"/>
+                </div>
+              </td>
+              <td class="input--">
+                <div class="input--">
+                  <input type="text" autocomplete="off" maxlength="7" style="background-color: rgb(187, 187, 187);" class="form-control form-control-sm" id="fechaResto" name="fechaResto"
+                    placeholder="MM/yyyy" disabled [(ngModel)]="comprob.fechaResto" />
+                </div>
+              </td>
+              <td>
+                <div class="input--">
+                  <input  type="text" autocomplete="off" maxlength="4" class="form-control form-control-sm" id="correlativo" name="correlativo"
+                    placeholder="N° Interno"  [(ngModel)]="comprob.correlativo" (keyup.enter)="ingresarComprobantes()"
+                    (keypress)="$event.keyCode != 13 ? numbersOnly($event.keyCode) : null"/>
+                </div>
+              </td>
+            </tr>
+        </td>
 
+        <td *ngIf="!fixed"> 
+            <!-- FILA UNICA  SIN VALORES FIJOS -->
+            <tr>
+              <td>
+                  <div class="input--">
+                    <input type="text" autocomplete="off" class="form-control form-control-sm" id="tipo" name="tipo" (keyup)="$event.keyCode != 13 ? autoCompletar($event.keyCode) : null" 
+                      placeholder="Tipo"  [(ngModel)]="comprob.tipo" (keyup.enter)=" nextInput( 'clave')"/>
+                  </div>
+              </td>
+              <td class="input--clave">
+                <div class="input-- input--clave">
+                  <input  type="text" autocomplete="off" maxlength="2" class="form-control form-control-sm" id="clave" name="clave"
+                    placeholder="Clave"  [(ngModel)]="comprob.clave" (keyup.enter)=" nextInput( 'fecha')" (keyup)="$event.keyCode != 13 ? upperCaseComp(comprob.clave,'clave') : null"/>
+                </div>
+              </td>
+              <td class="input--fecha">
+                <div class="input-- input--fecha">
+                  <input  type="date" autocomplete="off" class="form-control form-control-sm" id="fecha" name="fecha"
+                    placeholder="Fecha"  [(ngModel)]="comprob.fecha" (keyup.enter)=" nextInput( 'correlativo')"/>
+                </div>
+              </td>
+              <td>
+                <div class="input--">
+                  <input type="text" autocomplete="off" maxlength="4" class="form-control form-control-sm" id="correlativo" name="correlativo"
+                    placeholder="N° Interno"  [(ngModel)]="comprob.correlativo" (keyup.enter)=" nextInput( 'tipo')"
+                    (keypress)="$event.keyCode != 13 ? numbersOnly($event.keyCode) : null" (keyup.enter)="ingresarComprobantes()"/>
+                </div>
+              </td>
+            </tr>
+        </td>
+        
+        <!-- Botones de QUEDAN y BORRAR TODO -->
+        <td align="center">
+            <div style="margin-top: 4px;">
+              <button type="button" class="btn btn-sm btn-primary" (click)="cargarQuedan()" style="width: 115px;">
+                <i class="fa fa-plus-square" aria-hidden="true"></i>
+                Quedan
+              </button>
+            </div>
 
-        <!-- INICIO DE INPUTS -->
+            <div style="margin-top: 4px; margin-bottom: 4px;">
+              <button type="button" class="btn btn-sm btn-danger" (click)="vaciarCaja()">
+                <i class="fa fa-times" aria-hidden="true"></i> Borrar Todos
+              </button>
+            </div>
+        </td>
+        
+        <!-- Botones de PDF y RXCEL -->
+        <td align="center">
+            <div style="margin-top: 4px; margin-right: 30px;">
+              <button type="button" class="btn btn-sm btn-danger" (click)="generatePDF()" style="width: 120px;">
+                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                Reporte PDF
+              </button>
+            </div>
 
-        <div class="mb-1 row">
-          <!– Input para el codigo de la caja –>
-          <div class="col-sm-1">
-            <input formControlName="caja" type="text"  class="form-control form-control-sm" id="caja" name="caja"
-              placeholder="caja" hidden [(ngModel)]="cajaForm.value.codigo" (keyup.enter)=" nextInput( 'tipo')"/>
-          </div>
-
-          <!– Input para el Tipo de documento –>
-         <div class="col-sm-1">
-            <input formControlName="tipo" type="text" [readonly]="contenidoForm.get('tipodefault')?.value" class="form-control form-control-sm" id="tipo" name="tipo"
-              placeholder="Tipo" (keyup.enter)="nextInput( 'clave')" (keyup)="$event.keyCode != 13 ? autoCompletar($event.keyCode) : null"/>
-          </div>
-
-          <!– Input para la Clave –>
-          <div class="col-sm-1">
-            <input type="text" formControlName="clave" maxlength="2" [readonly]="contenidoForm.get('clavedefault')?.value" class="form-control form-control-sm" id="clave" name="clave"
-              placeholder="Clave"  (keyup.enter)="nextInput( 'fecha')" (keyup)="upperCase()"/>
-          </div>
-
-<!--          <!– Input para el dia –>
-          <div class="col-sm-1">
-            <input type="text" class="form-control form-control-sm" id="dia" name="dia" placeholder="DD" />
-          </div>-->
-
-          <!– Input para la Fecha  –>
-          <div class="col-sm-2 custom-ancho-input">
-            <input type="date" formControlName="fecha" [readonly]="contenidoForm.get('fechadefault')?.value" class="form-control form-control-sm" id="fecha" name="fecha"
-              placeholder="dd/mm/aa" (keyup.enter)="nextInput( 'comprobante')"/>
-          </div>
-
-          <!– Input para el N° Comprobante –>
-          <div class="col-sm-1 custom-offset">
-            <input type="text" formControlName="correlativo" class="form-control form-control-sm" id="comprobante" name="comprobante" placeholder="N° Comp"
-            (keyup.enter)="ingresarComprobantes()"/>
-          </div>
-
-          <!– Botón Borrar Todos –>
-          <div class="col-sm-2 offset-sm-2">
-            <button type="button" class="btn btn-sm btn-danger" (click)="vaciarCaja()">
-              <i class="fa fa-times" aria-hidden="true"></i> Borrar Todos
-            </button>
-          </div>
-
-          <!– Botón Reporte Excel –>
-          <div class="col-sm-2">
-            <button type="button" class="btn btn-sm btn-success" (click)="generateXLSX()">
-              <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-              Reporte Excel
-            </button>
-          </div>
-        </div>
-    </form>
+            <div style="margin-top: 4px; margin-right: 30px; margin-bottom: 4px;">
+              <button type="button" class="btn btn-sm btn-success" (click)="generateXLSX()">
+                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                Reporte Excel
+              </button>
+            </div>
+        </td>
+      </tr>
+    </table>
   </div>
 </mat-card>
 

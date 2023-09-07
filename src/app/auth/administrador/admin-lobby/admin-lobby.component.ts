@@ -85,7 +85,7 @@ export class AdminLobbyComponent implements OnInit{
       dialogRef.afterClosed().subscribe(() => {
         // console.log('The dialog was closed');
         this.getProfile()
-      });
+      })
   }
 
   toUsers(){

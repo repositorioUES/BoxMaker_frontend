@@ -11,6 +11,17 @@ import Swal from 'sweetalert2';
 import { AstTransformer } from '@angular/compiler';
 import { query } from '@angular/animations';
 
+export interface compData {
+  codigo: string,
+  tipo: string,
+  clave: string,
+  fecha: string,
+  tipoFixed: string,
+  claveFixed: string,
+  fechaDia: string,
+  fechaResto: string,
+  correlativo: string,
+}
 
 @Component({
   selector: 'app-home',
@@ -44,6 +55,19 @@ export class HomeComponent implements OnInit {
   public generando: number = 0//   1 = Se está generando algun documento y por tanto, mostrar el loader;   0 = nada
   public loadingType: number = 0 // PDF = 1 ; Excel = 2
   public unsaved: boolean = false // hay cambios sin guardar?
+  public fixed: boolean = false// definir si usar los valores fijos o no
+
+  public comprob: compData = {
+    codigo: '',
+    tipo: '',
+    clave: '',
+    fecha: '',
+    tipoFixed: '',
+    claveFixed: '',
+    fechaDia: '',
+    fechaResto: '',
+    correlativo: '',
+  }
 
   /* Form para los campos del contenido (COMPROBANTES) de la caja */
   public contenidoForm = this.fb.group({
@@ -170,7 +194,7 @@ export class HomeComponent implements OnInit {
             return
           }
           this.unsaved = false
-          this.cargarCaja('')
+          this.cargarCaja('guardar')//desde que funcion ejecutamos el cargarCaja
         }
       },
       (err) => {
@@ -213,8 +237,10 @@ export class HomeComponent implements OnInit {
 
             this.generando = 0
             this.loadingType = 0
-            
-            this.cargarContenidos()            
+
+            // cargar los contenidos solo si se busca la caja manualmente o si no es un refresco depues de borrar
+            if(from != 'borrado' && from != 'guardar')
+              this.cargarContenidos()            
 
             /* mensaje de exito */
             this.exito(resp);
@@ -278,23 +304,48 @@ export class HomeComponent implements OnInit {
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
   ingresarComprobantes() {
-    //Podemos ejecutar solo si tenemos una caja cargada
+    // Podemos ejecutar solo si tenemos una caja cargada
     if(this.hasBox() == false){
       return
     }
 
-    //Podemos ejecutar solo si tenemos todos los datos necesarios
-    if(this.hasAllData(this.contenidoForm.value) == false){
+    let fechaFinal = this.comprob.fecha
+    if (this.fixed) {
+      const tempResto = this.comprob.fechaResto.split("/") //Formatear la fecha con guiones pues tiene "/"
+      fechaFinal = tempResto[1] + "-" + tempResto[0] + "-" + this.comprob.fechaDia
+    }
+ 
+    // Preparar el objeto que se mandará
+    const toSend = {
+      caja: this.cajaForm.value.codigo,
+      tipo: (this.fixed ? this.comprob.tipoFixed : this.comprob.tipo),
+      clave: (this.fixed ? this.comprob.claveFixed : this.comprob.clave),
+      fecha: fechaFinal,
+      correlativo: this.comprob.correlativo,
+    }
+
+    // Podemos ejecutar solo si tenemos todos los datos necesarios
+    if(this.hasAllData(toSend) == false){
       return
     }
 
-    this.cajaService.ingresarComprobantes(this.contenidoForm.value).subscribe(
-      (resp: any) => {
-
+    this.cajaService.ingresarComprobantes(toSend)
+    .subscribe((resp: any) => {
         this.cargarContenidos() // recargasmo la tabla
-        document.getElementById('tipo')?.focus(); // Hacer focus al primer imput para volver a ingresar
 
-        this.unsaved = true
+        if (this.fixed) { // en "Fijado" no spasamos al dia
+          document.getElementById('dia')?.focus();
+          this.comprob.fechaDia = '' // vaciar los inputs que se vean a reutilizar
+          this.comprob.correlativo = ''
+        } else {  // En "Normal" nos pasamos al tipo
+          document.getElementById('tipo')?.focus(); // Hacer focus al primer imput para volver a ingresar
+          this.comprob.tipo = ''     
+          this.comprob.clave = ''       //  vaciar los inputs que se vean a reutilizar
+          this.comprob.fecha = ''       // que en el llenado manual son todos
+          this.comprob.correlativo = '' 
+        }
+
+        this.unsaved = true // Hay cambios sin guadar en la BD
 
         /* mensaje de exito */
         this.exito(resp);
@@ -577,6 +628,19 @@ export class HomeComponent implements OnInit {
       errMsg.push('El N° Comprobante No tiene formato válido') 
     }
     
+    if (this.fixed) {
+      //verificar la fecha contruida a partir de los 2 campos separados
+      var fechaf = data.fecha.split("-");
+      var day = fechaf[2];
+      var month = fechaf[1];
+      var year = fechaf[0];
+      var date = new Date(year, month, 0);
+
+      if(( day - 0) > (date.getDate() -0)){
+          errMsg.push('La Fecha ' + data.fecha + ' No tiene formato válido') 
+      }
+    }
+
     if (errMsg.length != 0) {
       errMsg.forEach(err => {
         this.toastr.error(err, '', {
@@ -606,26 +670,96 @@ export class HomeComponent implements OnInit {
       numero: this.cajaForm.value.numero || '',
       usuario: this.cajaForm.value.usuario || ''
     })
+  }
 
-    this.contenidoForm.setValue({
-      caja: this.contenidoForm.value.caja?.toUpperCase() || '',
-      tipo: this.contenidoForm.value.tipo?.toUpperCase() || '',
-      clave: this.contenidoForm.value.clave?.toUpperCase() || '',
-      fecha: this.contenidoForm.value.fecha || '',
-      correlativo: this.contenidoForm.value.correlativo || '',
-      tipodefault: this.contenidoForm.value.tipodefault || '',
-      clavedefault: this.contenidoForm.value.clavedefault || '',
-      fechadefault: this.contenidoForm.value.fechadefault || ''
-    })
+  upperCaseComp(text: string, input: string){
+    if (input == 'clave' || input == 'claveFija') {
+      this.comprob.clave = text.toUpperCase()
+      this.comprob.claveFixed = text.toUpperCase()
+    }
+  }
+
+  numbersOnly(key: number){
+    if(key==8) // borrador.
+      return true;
+    else if(key >= 48 && key <= 57) // ASCCI de los numeros
+      return true;
+    else  // el resto de teclas
+      return false;
+  }
+
+  formatPartialDate(date: string){
+ 
+    if(parseInt(date.substring(0, 2)) < 1 || parseInt(date.substring(0, 2)) > 12){
+      this.toastr.error('El Mes debe ser mínimo 01 y máximo 12', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      document.querySelector('#fechaFija')?.classList.add('class', 'input--err')
+      return false
+    }
+
+    if(this.comprob.fechaResto.includes("/")){
+      if(/^[0-9]{2}[/][0-9]{4}$/.test(date)){
+        document.querySelector('#fechaFija')?.classList.remove('class', 'input--err')
+        return true
+      }
+    }
+
+    if(this.comprob.fechaResto.length != 6){
+      this.toastr.error('El Mes y Año no tienen el formato correcto: Ej. "12/2023"', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      document.querySelector('#fechaFija')?.classList.add('class', 'input--err')
+      return false
+    }
+
+    document.querySelector('#fechaFija')?.classList.remove('input--err')
+    const fecha = date.substring(0, 2) + '/' + date.substring(2, date.length)
+    this.comprob.fechaResto = fecha
+    return
+  }
+
+  formatDay(day: string){
+    if(/^[0-9]{2}$/.test(day) == false){
+      this.toastr.error('El Día no tiene el formato correcto: Ej. "01"', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      document.querySelector('#dia')?.classList.add('class', 'input--err')
+      return
+    }
+    
+    if(parseInt(day) < 1 || parseInt(day) > 31){
+      this.toastr.error('El Día debe ser mínimo 1 y máximo 31', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      document.querySelector('#dia')?.classList.add('class', 'input--err')
+      return
+    }
+
+    document.querySelector('#dia')?.classList.remove('class', 'input--err')
   }
 
   autoCompletar(key: any){
     let autoTipo = ''
-    let autoClave = this.contenidoForm.value.clave?.toUpperCase() || ''
+    let autoClave = ''
+    console.log(key);
+    
 
     if (key == 69) {
       autoTipo = 'EGRESO'
-      autoClave = ''
+
     }
 
     if (key == 68) {
@@ -635,19 +769,13 @@ export class HomeComponent implements OnInit {
 
     if (key == 73) {
       autoTipo = 'INGRESO'
-      autoClave = ''
+
     }
     
-    this.contenidoForm.setValue({
-      caja: this.contenidoForm.value.caja || '',
-      tipo: autoTipo,
-      clave: autoClave,
-      fecha: this.contenidoForm.value.fecha || '',
-      correlativo: this.contenidoForm.value.correlativo || '',
-      tipodefault: this.contenidoForm.value.tipodefault || '',
-      clavedefault: this.contenidoForm.value.clavedefault || '',
-      fechadefault: this.contenidoForm.value.fechadefault || ''
-    })
+    this.comprob.tipo = autoTipo
+    this.comprob.tipoFixed = autoTipo
+    this.comprob.clave = autoClave
+    this.comprob.claveFixed = autoClave
   }
 
   hideDeleteGif(msg: string){
@@ -666,7 +794,27 @@ export class HomeComponent implements OnInit {
   }
 
   nextInput(next: any) {
+      if(this.fixed){
+        if (next == 'dia') {
+          if(this.formatPartialDate(this.comprob.fechaResto)){
+            document.getElementById(next)?.focus();
+            return
+          }
+        }
+
+        if (next == 'correlativo') {
+          if(this.formatPartialDate(this.comprob.fechaResto)){
+            this.formatDay(this.comprob.fechaDia)
+            return
+          }
+        }
+      }
+
       document.getElementById(next)?.focus();
+  }
+
+  toggleFields(){
+    this.fixed = !this.fixed
   }
 
 }

@@ -75,6 +75,29 @@
     align-items: center;
   }
 
+  .input--{
+    margin-top: 1px;
+    margin-bottom: 3px;
+    margin-right: 10px;
+    width: 80px;
+  }
+
+  .input--clave{
+    width: 53px;
+  }
+
+  .input--fecha{
+    width: 120px;
+  }
+
+  .input--err{
+    background-color: rgb(255, 148, 148);
+  }
+
+  .input--success{
+    background-color: rgb(255, 255, 255);
+  }
+
   /* Opciones para el loader ======================================================================*/
   .loader{
     position: fixed;
