@@ -23,15 +23,17 @@ export class CajasComponent {
   
   public generando: number = 0//Se está cargando alguna opcion y mostrar el loader
   public docType: number = 0 // PDF = 1 ; Excel = 2
+
+  // Se suscribe para detecter cada vez que la variable $refreshTable cambie
+  public refresh = this.cajaSrv.$refreshTable.subscribe(data => {
+    if(data == true)
+      this.cargarCajas()
+  });
   
   ngOnInit(): void {
     this.cargarCajas()
     this.hideLoader()
 
-    // Se suscribe para detecter cada vez que la variable $refreshTable cambie
-    this.cajaSrv.$refreshTable.subscribe(data => {
-      this.cargarCajas()
-    });
   }
 
   applyFilter(event: Event) {
@@ -44,7 +46,7 @@ export class CajasComponent {
     .subscribe((resp:any) => {
       this.cajas = resp.result
       this.dataSource = new MatTableDataSource(this.cajas);
-      
+
       this.toast.success(resp.msg, '', {
         timeOut: 5000,
         progressBar: true,

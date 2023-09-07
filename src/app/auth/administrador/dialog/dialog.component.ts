@@ -25,6 +25,7 @@ export interface DialogData {
   _id: string;
   password: string;
   confirmPassword: string;
+  tipo : number;
 }
 
 @Component({
@@ -57,8 +58,22 @@ export class DialogComponent {
       segundoNombre: recivedData.segundoNombre,
       primerApellido: recivedData.primerApellido,
       segundoApellido: recivedData.segundoApellido,
+      password: recivedData.password,
+      confirmPassword: recivedData.confirmPassword,
+      admin: localStorage.getItem('usuario')?.replace(/"+/g, ''),
+      tipo: recivedData.tipo,
+      
     })
 
+    if (this.checked && !data.password && !data.confirmPassword) {
+      this.toast.error('Debe ingresar su contraseña para convertir a un Administrador', '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+      return
+    }
     this.adminSrv.updateUser(recivedData._id, data)
     .subscribe((resp:any) => {
       this.toast.success(resp.msg, '', {

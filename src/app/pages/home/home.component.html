@@ -6,7 +6,7 @@
       <table >
           <tr style="vertical-align: middle;">
               <td>
-                  <div style="height: 20px;" class="mb-1 row">
+                  <div style="height: 50px;" class="mb-1 row">
                       <div *ngIf="loadingType == 1">
                           <img src="../../../assets/images/loading-red.gif" style="height: 200px; width: 400px; border-radius: 5%;" class="shadow" >
                       </div>
@@ -16,15 +16,23 @@
                       <div *ngIf="loadingType == 3">
                           <img src="../../../assets/images/deleting.gif" style="height: 200px; width: 400px; border-radius: 5%;" class="shadow" >
                       </div>
+                      <div *ngIf="loadingType == 4">
+                          <img src="../../../assets/images/document-loader.gif" style="height: 300px; width: 400px; border-radius: 5%; background-color: white;" class="shadow" >
+                      </div>
+                      <div *ngIf="loadingType == 5">
+                          <img src="../../../assets/images/fileloading.gif" style="height: 300px; width: 400px; border-radius: 5%; background-color: white;" class="shadow" >
+                      </div>
                   </div>
               </td>
           </tr>
           <tr >
               <td>
                   <div style="height: 20px;" class="mb-1 row">
-                      <h1 *ngIf="loadingType == 1" class="loader--image--fade big-text " style="color: red;">Generando...</h1>
-                      <h1 *ngIf="loadingType == 2" class="loader--image--fade big-text " style="color: green;">Generando...</h1>
-                      <h1 *ngIf="loadingType == 2" class="loader--image--fade big-text " style="color: rgb(255, 17, 0);">Borrando...</h1>
+                      <h1 *ngIf="loadingType == 1" class="loader--image--fade big-text " style="color: red; margin-top: 100px;">Generando...</h1>
+                      <h1 *ngIf="loadingType == 2" class="loader--image--fade big-text " style="color: green; margin-top: 100px;">Generando...</h1>
+                      <!-- <h1 *ngIf="loadingType == 3" class="loader--image--fade big-text " style="color: rgb(255, 17, 0);">Borrando...</h1> -->
+                      <h1 *ngIf="loadingType == 4" class="loader--image--fade big-text " style="color: rgb(0, 0, 0); margin-top: 200px;">Cargando Caja...</h1>
+                      <h1 *ngIf="loadingType == 5" class="loader--image--fade big-text " style="color: rgb(0, 0, 0); margin-top: 200px;">Guardando...</h1>
                   </div>
               </td>
           </tr>
@@ -78,7 +86,7 @@
 
         <!– Botón para buscar caja –>
         <div class="col-sm-1">
-          <button class="btn btn-sm btn-primary" (click)="cargarCaja()">
+          <button class="btn btn-sm btn-primary" (click)="cargarCaja('')">
             <i class="fa fa-search" aria-hidden="true"></i>
             Buscar
           </button>
@@ -132,16 +140,16 @@
 
           <!– Input para la Clave default –>
           <div class="col-sm-1">
-            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="clavedefault" name="clavedefault" placeholder="Clave" />
+            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="clavedefault" name="clavedefault" placeholder="Clave" (input)="inputChange()"/>
           </div>
 
           <!– Input para la fecha default–>
-          <div class="col-sm-1">
-            <input type="text" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa" />
+          <div class="col-sm-2 custom-ancho-input">
+            <input type="date" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa" (input)="inputChange()"/>
           </div>
 
           <!– Botón buscar por quedan –>
-          <div class="col-sm-2 offset-sm-4">
+          <div class="col-sm-2 offset-sm-3">
             <button type="button" class="btn btn-sm btn-primary" (click)="cargarQuedan()">
               <i class="fa fa-plus-square" aria-hidden="true"></i>
               Quedan
@@ -169,14 +177,14 @@
 
           <!– Input para el Tipo de documento –>
          <div class="col-sm-1">
-            <input formControlName="tipo" type="text" class="form-control form-control-sm" id="tipo" name="tipo"
-              placeholder="Tipo" (keyup.enter)="nextInput( 'clave')"/>
+            <input formControlName="tipo" type="text" [readonly]="contenidoForm.get('tipodefault')?.value" class="form-control form-control-sm" id="tipo" name="tipo"
+              placeholder="Tipo" (keyup.enter)="nextInput( 'clave')" />
           </div>
 
           <!– Input para la Clave –>
           <div class="col-sm-1">
-            <input type="text" formControlName="clave" class="form-control form-control-sm" id="clave" name="clave"
-              placeholder="Clave" (keyup.enter)="nextInput( 'fecha')"/>
+            <input type="text" formControlName="clave" [readonly]="contenidoForm.get('clavedefault')?.value" class="form-control form-control-sm" id="clave" name="clave"
+              placeholder="Clave"  (keyup.enter)="nextInput( 'fecha')"/>
           </div>
 
 <!--          <!– Input para el dia –>
@@ -185,8 +193,8 @@
           </div>-->
 
           <!– Input para la Fecha  –>
-          <div class="col-sm-1">
-            <input type="date" formControlName="fecha" class="form-control form-control-sm" id="fecha" name="fecha"
+          <div class="col-sm-2 custom-ancho-input">
+            <input type="date" formControlName="fecha" [readonly]="contenidoForm.get('fechadefault')?.value" class="form-control form-control-sm" id="fecha" name="fecha"
               placeholder="dd/mm/aa" (keyup.enter)="nextInput( 'comprobante')"/>
           </div>
 
@@ -197,7 +205,7 @@
           </div>
 
           <!– Botón Borrar Todos –>
-          <div class="col-sm-2 offset-sm-3">
+          <div class="col-sm-2 offset-sm-2">
             <button type="button" class="btn btn-sm btn-danger" (click)="vaciarCaja()">
               <i class="fa fa-times" aria-hidden="true"></i> Borrar Todos
             </button>
@@ -279,7 +287,7 @@
     </section>
     <br />
     <div class="text-end">
-      <button type="submit" class="btn btn-primary">Guardar</button>
+      <button type="submit" class="btn btn-primary" (click)="guardarContenidos()" >Guardar</button>
     </div>
     <br />
   </div>

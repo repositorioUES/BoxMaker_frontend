@@ -25,7 +25,7 @@ export class AdministradorComponent implements OnInit {
   usuarios: Usuario[] = [] // Todos los usuarios
   dataSource = new MatTableDataSource(this.usuarios);
   
-  displayedColumns: string[] = ['Nombre', 'Nombre de Usuario', 'Fec. Creación', 'Estado','Bloqueo', 'Contraseña', 'Editar', 'Eliminar'];
+  displayedColumns: string[] = ['Admin', 'Nombre', 'Nombre de Usuario', 'Fec. Creación', 'Estado','Bloqueo', 'Contraseña', 'Editar', 'Eliminar'];
   
   ngOnInit(): void {
     this.cargarUsuarios()
@@ -153,7 +153,8 @@ export class AdministradorComponent implements OnInit {
           segundoApellido: usuario.segundoApellido,
           email: usuario.email,
           passCaducidad: usuario.passCaducidad + " (Faltan " + usuario.dias + " días)",
-          _id: id
+          _id: id,
+          tipo: usuario.tipo
         },
       });
   

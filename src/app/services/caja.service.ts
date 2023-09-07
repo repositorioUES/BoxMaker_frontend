@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import {Router} from "@angular/router";
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Caja } from '../models/caja.model';
+import { Comprobante } from '../models/comprobante.model';
 
 const base_url = environment.base_url;
 
@@ -71,15 +72,19 @@ export class CajaService {
     });
   }
 
-  deleteOneContent (caja: string, comprobantes: any) : Observable<void>{
+  deleteOneContent (caja: string, index: number) : Observable<void>{
     const headers = this.globalHeaders
-    const comp = JSON.stringify(comprobantes)
-    return this.http.post<void>(`${ base_url }/contenido/removeOne`, {caja, comp}, {headers})
+    return this.http.post<void>(`${ base_url }/contenido/removeOne`, {caja, index}, {headers})
   }
 
   deleteAllContent (codigo: string) : Observable<void>{
     const headers = this.globalHeaders
     return this.http.delete<void>(`${ base_url }/contenido/deleteAll/${ codigo }`, {headers})
+  }
+
+  cargarContenido (codigo: string) : Observable<Comprobante[]>{
+    const headers = this.globalHeaders
+    return this.http.get<Comprobante[]>(`${ base_url }/caja/contenido/${ codigo }`, {headers})
   }
 
   savetoDatabase (codigo: string) : Observable<void>{

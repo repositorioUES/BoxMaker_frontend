@@ -27,8 +27,11 @@
         <p>Caducidad de Contraseña: {{data.passCaducidad}}</p>
     </div>
     <div class="center-container " style="vertical-align: middle;">
-      <mat-checkbox [checked]="checked" color="warn" (change)="onChange()" >
-        <h3><strong>¿Convertir a {{data.userName }} en Administrador?</strong></h3>
+      <mat-checkbox [checked]="checked" name="chk" color="warn" (change)="onChange()" >
+        <label for="chk" style="justify-content: center; align-items: center;">
+          <h3 style="margin: 0%; padding: 0%;" *ngIf="data.tipo == 1"><strong>¿Convertir a {{data.userName }} en Administrador?</strong></h3>
+          <h3 style="margin: 0%; padding: 0%;" *ngIf="data.tipo == 0"><strong>¿Que {{data.userName }} ya no sea Administrador?</strong></h3>
+        </label>
       </mat-checkbox>
     </div>
     <div *ngIf="checked == true">

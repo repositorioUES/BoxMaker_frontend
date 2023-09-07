@@ -13,5 +13,6 @@ export class Usuario {
        public _id: string, 
        public activo: string, 
        public bloqueado: string, 
+       public tipo: number, 
     ) {}
 }

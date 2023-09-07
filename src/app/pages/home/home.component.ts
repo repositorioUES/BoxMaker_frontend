@@ -62,6 +62,13 @@ export class HomeComponent implements OnInit {
     private dialog: MatDialog
   ) {}
 
+  // Se suscribe para detectar cada vez que la variable $refreshTable cambie
+  private refresh = this.cajaService.$refreshTable.subscribe(data => {
+    if (data == true) {
+      this.cargarContenidos()
+    }
+});
+
 /*  /!* Funcion para fijar los campos  *!/
   fijar() {
     this.boton_fijado = !this.boton_fijado;
@@ -79,6 +86,8 @@ export class HomeComponent implements OnInit {
   inputChange() {
     // Copia el valor de tipodefault a tipo cuando tipodefault cambia
     this.contenidoForm.get('tipo')?.setValue(this.contenidoForm.get('tipodefault')?.value ?? '');
+    this.contenidoForm.get('clave')?.setValue(this.contenidoForm.get('clavedefault')?.value ?? '');
+    this.contenidoForm.get('fecha')?.setValue(this.contenidoForm.get('fechadefault')?.value ?? '');
   }
 
   exito(resp: any) {
@@ -112,35 +121,23 @@ export class HomeComponent implements OnInit {
 
     this.contenidoForm.get('tipodefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('tipo')?.disable();
-      } else {
-        this.contenidoForm.get('tipo')?.enable();
+        this.contenidoForm.get('tipo')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
       }
     });
 
     this.contenidoForm.get('clavedefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('clave')?.disable();
-      } else {
-        this.contenidoForm.get('clave')?.enable();
+        this.contenidoForm.get('clave')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
       }
     });
 
     this.contenidoForm.get('fechadefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('fecha')?.disable();
-      } else {
-        this.contenidoForm.get('fecha')?.enable();
+        this.contenidoForm.get('fecha')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
       }
     });
 
-    // Se suscribe para detectar cada vez que la variable $refreshTable cambie
-    this.cajaService.$refreshTable.subscribe(data => {
-      this.cargarCaja()
-    });
-
-
-
+    
   }
 
   /* Funcion que permite CREAR una caja y CARGAR sus datos en el formulario */
@@ -168,8 +165,6 @@ export class HomeComponent implements OnInit {
           if(this.hasBox() == false){
             return
           }
-          // Guardar el contenido de temporal en la BD
-          this.guardarContenidos(resp.caja.codigo)
         }
       },
       (err) => {
@@ -182,11 +177,16 @@ export class HomeComponent implements OnInit {
   }
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
-  cargarCaja() {
+  cargarCaja(from: string) {
     const formData = this.cajaForm.value;
     const codigo = formData.codigo;
-
+    
     if (codigo) {
+      if(from != 'borrado'){
+        this.generando = 1
+        this.loadingType = 4
+      }
+
       this.cajaService
         .cargarCaja(formData)
 
@@ -205,8 +205,10 @@ export class HomeComponent implements OnInit {
               usuario: resp.caja.usuario ||'',
             });
 
-            this.contenidos = resp.contenido // Obtener los contenidos del json
-            this.longitud =  this.contenidos.length -1
+            this.generando = 0
+            this.loadingType = 0
+            
+            this.cargarContenidos()            
 
             /* mensaje de exito */
             this.exito(resp);
@@ -214,13 +216,53 @@ export class HomeComponent implements OnInit {
           (err) => {
             console.warn(err.error.msg);
 
+            this.generando = 0
+            this.loadingType = 0
+
             /* Mensaje de error */
             this.errorCaja();
           }
         );
     } else {
       // Cualquier validacion con codigo
+      this.generando = 0
+      this.loadingType = 0
     }
+  }
+
+  cargarContenidos(){
+    //Podemos ejecutar solo si tenemos una caja cargada
+    if(this.hasBox() == false){
+      return
+    }
+
+    const codigo : string = this.cajaForm.value.codigo || ''
+    console.log(codigo);
+
+    this.generando = 1
+    this.loadingType = 4
+    
+    this.cajaService.cargarContenido(codigo).subscribe(
+      (resp: any) => {
+        
+        this.contenidos = resp.contenido // Obtener los contenidos del json
+        this.longitud =  this.contenidos.length -1
+
+        this.generando = 0
+        this.loadingType = 0
+        /* mensaje de exito */
+        this.exito(resp);
+      },
+      (err) => {
+        console.warn(err.error.msg);
+
+        this.generando = 0
+        this.loadingType = 0
+
+        /* Mensaje de error */
+        this.error(err);
+      }
+    );
   }
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
@@ -240,15 +282,13 @@ export class HomeComponent implements OnInit {
         console.log(this.contenidoForm.value);
         console.log(resp);
 
-        this.cargarCaja()
+        this.cargarCaja('')
         document.getElementById('tipo')?.focus(); // Hacer focus al primer imput para volver a ingresar
         
         /* mensaje de exito */
         this.exito(resp);
       },
       (err) => {
-        console.log(this.contenidoForm.value);
-        console.log('Valor de "tipo" a enviar:', this.contenidoForm.get('tipo')?.value);
         console.warn(err.error.msg);
 
         /* Mensaje de error */
@@ -380,7 +420,6 @@ export class HomeComponent implements OnInit {
   }
 
   async quitarUno(index: number){
-    let newArray: Comprobante[] = []
     const codigo = this.cajaForm.value.codigo || ''
 
     const { isConfirmed } = await Swal.fire({
@@ -389,22 +428,17 @@ export class HomeComponent implements OnInit {
     })
 
     if (isConfirmed) {
-      for (let i  = 0; i < this.contenidos.length; i++) {
-        if(i != index){
-          newArray.push(this.contenidos[i])
-        }
-      }
 
-      this.generando = 1 // Mostrar el gif de "Generando.."
-      this.loadingType = 3 // Se está genrando un PDF
+      this.generando = 1 // Mostrar el gif
+      this.loadingType = 3 // el agif a mostrar será el de "Borrando..."
 
-      this.cajaService.deleteOneContent(codigo, newArray)
+      this.cajaService.deleteOneContent(codigo, index)
       .subscribe((res:any) => {
 
         this.hideDeleteGif(res.msg)
         // Swal.fire(res.msg, 'Completado')
 
-        this.cargarCaja()
+        this.cargarCaja('')
       }, (err)=> {
           console.warn(err)
           this.toastr.error('No se ha podido quitar el comprobante ' + err.msg, '', {
@@ -443,7 +477,7 @@ export class HomeComponent implements OnInit {
         this.hideDeleteGif(res.msg)
         // Swal.fire('La caja ' + codigo + ' ahora está Vacia', 'Completado')
 
-        this.cargarCaja()
+        this.cargarCaja('borrado')
       }, (err)=> {
           console.warn(err)
           this.toastr.error('No se ha podido vaciar la caja', '', {
@@ -458,15 +492,29 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  guardarContenidos(codigo: string){
+  guardarContenidos(){
+    //Podemos ejecutar solo si tenemos una caja cargada
+    if(this.hasBox() == false){
+      return
+    }
+
+    const codigo = this.cajaForm.value.codigo || ''
+
+    this.generando = 1
+    this.loadingType = 5
+
     this.cajaService.savetoDatabase(codigo)
     .subscribe((res:any) => {
+      console.log('yas tuvo');
+      
       this.toastr.success('Contenido de la caja ' + codigo +' guardado en la Base de Datos', '', {
         timeOut: 5000,
         progressBar: true,
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
+      this.generando = 0
+      this.loadingType = 0
     }, (err)=> {
         console.warn(err)
         this.toastr.error('No se ha podido guardar el contenido de la caja', '', {
@@ -475,6 +523,8 @@ export class HomeComponent implements OnInit {
           progressAnimation: 'decreasing',
           positionClass: 'toast-top-right',
         });
+        this.generando = 0
+        this.loadingType = 0
     })
   }
 

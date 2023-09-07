@@ -28,6 +28,7 @@ export class AdminLobbyComponent implements OnInit{
     _id: 'fake', 
     activo: 'fake', 
     bloqueado: 'fake', 
+    tipo: 2, 
   })
   
   iconNumber: number = 0
