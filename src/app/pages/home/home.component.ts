@@ -38,10 +38,12 @@ export class HomeComponent implements OnInit {
 
   /* Inicializar el boton */
   public contenidos: Comprobante[] = [] //Contenido de la caja que está en el txt, NO en la base
-  public longitud: number = 0 //cuántos contenidos se recuperaron
+  public longitud: number = 0 //cuántos contenidos se recuperaron del JSON
+  public cantidad: number = 0 //cuántos contenidos se recuperaron de la BD
 
   public generando: number = 0//   1 = Se está generando algun documento y por tanto, mostrar el loader;   0 = nada
   public loadingType: number = 0 // PDF = 1 ; Excel = 2
+  public unsaved: boolean = false // hay cambios sin guardar?
 
   /* Form para los campos del contenido (COMPROBANTES) de la caja */
   public contenidoForm = this.fb.group({
@@ -65,6 +67,7 @@ export class HomeComponent implements OnInit {
   // Se suscribe para detectar cada vez que la variable $refreshTable cambie
   private refresh = this.cajaService.$refreshTable.subscribe(data => {
     if (data == true) {
+      this.unsaved = true
       this.cargarContenidos()
     }
 });
@@ -83,11 +86,11 @@ export class HomeComponent implements OnInit {
     }
   }*/
 
-  inputChange() {
+  inputChange(inputId: string) {
     // Copia el valor de tipodefault a tipo cuando tipodefault cambia
-    this.contenidoForm.get('tipo')?.setValue(this.contenidoForm.get('tipodefault')?.value ?? '');
-    this.contenidoForm.get('clave')?.setValue(this.contenidoForm.get('clavedefault')?.value ?? '');
-    this.contenidoForm.get('fecha')?.setValue(this.contenidoForm.get('fechadefault')?.value ?? '');
+    this.contenidoForm.get(inputId)?.setValue(this.contenidoForm.get(inputId + 'default')?.value ?? '');
+    // this.contenidoForm.get('clave')?.setValue(this.contenidoForm.get('clavedefault')?.value ?? '');
+    // this.contenidoForm.get('fecha')?.setValue(this.contenidoForm.get('fechadefault')?.value ?? '');
   }
 
   exito(resp: any) {
@@ -148,6 +151,7 @@ export class HomeComponent implements OnInit {
 
         /* mensaje de exito */
         this.exito(resp);
+        
 
         this.cajaForm.setValue({
           descripcion: resp.caja.descripcion,
@@ -165,6 +169,8 @@ export class HomeComponent implements OnInit {
           if(this.hasBox() == false){
             return
           }
+          this.unsaved = false
+          this.cargarCaja('')
         }
       },
       (err) => {
@@ -192,7 +198,7 @@ export class HomeComponent implements OnInit {
 
         .subscribe(
           (resp: any) => {
-            console.log(this.cajaForm.value.codigo);
+            // console.log(this.cajaForm.value.codigo);
 
             this.cajaForm.setValue({
               descripcion: resp.caja.descripcion,
@@ -237,7 +243,7 @@ export class HomeComponent implements OnInit {
     }
 
     const codigo : string = this.cajaForm.value.codigo || ''
-    console.log(codigo);
+    // console.log(codigo);
 
     this.generando = 1
     this.loadingType = 4
@@ -247,6 +253,11 @@ export class HomeComponent implements OnInit {
         
         this.contenidos = resp.contenido // Obtener los contenidos del json
         this.longitud =  this.contenidos.length -1
+        this.cantidad =  resp.cantidad
+
+        // Si los del JSON != a los de la BD entonces hay cambios sin guardar
+        if (this.cantidad != this.contenidos.length)
+          this.unsaved = true
 
         this.generando = 0
         this.loadingType = 0
@@ -279,12 +290,12 @@ export class HomeComponent implements OnInit {
 
     this.cajaService.ingresarComprobantes(this.contenidoForm.value).subscribe(
       (resp: any) => {
-        console.log(this.contenidoForm.value);
-        console.log(resp);
 
-        this.cargarCaja('')
+        this.cargarContenidos() // recargasmo la tabla
         document.getElementById('tipo')?.focus(); // Hacer focus al primer imput para volver a ingresar
-                this.cargarCaja('')
+
+        this.unsaved = true
+
         /* mensaje de exito */
         this.exito(resp);
       },
@@ -437,8 +448,9 @@ export class HomeComponent implements OnInit {
 
         this.hideDeleteGif(res.msg)
         // Swal.fire(res.msg, 'Completado')
+        this.unsaved = true
 
-        this.cargarCaja('')
+        this.cargarContenidos()
       }, (err)=> {
           console.warn(err)
           this.toastr.error('No se ha podido quitar el comprobante ' + err.msg, '', {
@@ -476,8 +488,9 @@ export class HomeComponent implements OnInit {
 
         this.hideDeleteGif(res.msg)
         // Swal.fire('La caja ' + codigo + ' ahora está Vacia', 'Completado')
+        this.unsaved = true
 
-        this.cargarCaja('borrado')
+        this.cargarContenidos()
       }, (err)=> {
           console.warn(err)
           this.toastr.error('No se ha podido vaciar la caja', '', {
@@ -505,7 +518,6 @@ export class HomeComponent implements OnInit {
 
     this.cajaService.savetoDatabase(codigo)
     .subscribe((res:any) => {
-      console.log('yas tuvo');
       
       this.toastr.success('Contenido de la caja ' + codigo +' guardado en la Base de Datos', '', {
         timeOut: 5000,
@@ -513,6 +525,7 @@ export class HomeComponent implements OnInit {
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
+      this.unsaved = false
       this.generando = 0
       this.loadingType = 0
     }, (err)=> {
@@ -581,10 +594,10 @@ export class HomeComponent implements OnInit {
 
 
   upperCase(){
-    let val = this.cajaForm.value.codigo || ''
+    let code = this.cajaForm.value.codigo || ''
 
     this.cajaForm.setValue({
-      codigo: val.toUpperCase(),
+      codigo: code.toUpperCase(),
       descripcion: this.cajaForm.value.descripcion || '',
       caducidad: this.cajaForm.value.caducidad || '',
       grupo: this.cajaForm.value.grupo || '',
@@ -592,6 +605,48 @@ export class HomeComponent implements OnInit {
       nivel: this.cajaForm.value.nivel || '',
       numero: this.cajaForm.value.numero || '',
       usuario: this.cajaForm.value.usuario || ''
+    })
+
+    this.contenidoForm.setValue({
+      caja: this.contenidoForm.value.caja?.toUpperCase() || '',
+      tipo: this.contenidoForm.value.tipo?.toUpperCase() || '',
+      clave: this.contenidoForm.value.clave?.toUpperCase() || '',
+      fecha: this.contenidoForm.value.fecha || '',
+      correlativo: this.contenidoForm.value.correlativo || '',
+      tipodefault: this.contenidoForm.value.tipodefault || '',
+      clavedefault: this.contenidoForm.value.clavedefault || '',
+      fechadefault: this.contenidoForm.value.fechadefault || ''
+    })
+  }
+
+  autoCompletar(key: any){
+    let autoTipo = ''
+    let autoClave = this.contenidoForm.value.clave?.toUpperCase() || ''
+
+    if (key == 69) {
+      autoTipo = 'EGRESO'
+      autoClave = ''
+    }
+
+    if (key == 68) {
+      autoTipo = 'DIARIO'
+      autoClave = 'XX'
+    }
+
+    if (key == 73) {
+      autoTipo = 'INGRESO'
+      autoClave = ''
+    }
+    
+    this.contenidoForm.setValue({
+      caja: this.contenidoForm.value.caja || '',
+      tipo: autoTipo,
+      clave: autoClave,
+      fecha: this.contenidoForm.value.fecha || '',
+      correlativo: this.contenidoForm.value.correlativo || '',
+      tipodefault: this.contenidoForm.value.tipodefault || '',
+      clavedefault: this.contenidoForm.value.clavedefault || '',
+      fechadefault: this.contenidoForm.value.fechadefault || ''
     })
   }
 

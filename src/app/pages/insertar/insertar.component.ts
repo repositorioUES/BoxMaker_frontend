@@ -50,7 +50,7 @@ export class InsertarComponent {
     if(!['DIARIO', 'EGRESO','INGRESO'].includes(data.tipo)){
       errMsg.push('El Tipo de Documento No es válido')
     }
-    if(/^[A-Z]{1}[0-9,A-Z]{1}$/.test(data.clave) == false){
+    if(/^[a-zA-Z]{1}[0-9,a-zA-Z]{1}$/.test(data.clave) == false){
       errMsg.push('La Clave No tiene un formato válido')
     }
 

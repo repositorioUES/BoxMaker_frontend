@@ -65,6 +65,16 @@
     filter: drop-shadow(5px 5px 10px black);
   }
 
+  .warn--shadow{
+    filter: drop-shadow(5px 5px 10px rgb(255, 123, 0));
+  }
+
+  .center-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   /* Opciones para el loader ======================================================================*/
   .loader{
     position: fixed;
@@ -110,6 +120,10 @@
     animation: rotateImage 1.8s infinite;
   }
 
+  .warning--fade{
+    animation: fadeWarn 1s infinite alternate;
+  }
+
   @keyframes scaleImage {
     from { height: 5px; width: 5px;}
     to { height: 175px; width: 175px;}
@@ -123,5 +137,10 @@
   @keyframes rotateImage {
     from { transform: rotate(0turn);}
     to { transform: rotate(1turn);}
+  }
+
+  @keyframes fadeWarn {
+    from { opacity: 1;}
+    to { opacity: 0.4;}
   }
 

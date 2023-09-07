@@ -135,17 +135,20 @@
 
           <!– Input para el Tipo de documento default–>
           <div class="col-sm-1 offset-sm-1">
-            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipodefault" name="tipodefault" placeholder="Tipo" (input)="inputChange()"/>
+            <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipodefault" name="tipodefault" placeholder="Tipo" 
+            (input)="inputChange('tipo')" />
           </div>
 
           <!– Input para la Clave default –>
           <div class="col-sm-1">
-            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="clavedefault" name="clavedefault" placeholder="Clave" (input)="inputChange()"/>
+            <input type="text" formControlName="clavedefault" class="form-control form-control-sm" id="clavedefault" name="clavedefault" placeholder="Clave" 
+            (input)="inputChange('clave')" maxlength="2" />
           </div>
 
           <!– Input para la fecha default–>
           <div class="col-sm-2 custom-ancho-input custom-offset">
-            <input type="date" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa" (input)="inputChange()"/>
+            <input type="date" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa" 
+            (input)="inputChange('fecha')"/>
           </div>
 
           <!– Botón buscar por quedan –>
@@ -178,13 +181,13 @@
           <!– Input para el Tipo de documento –>
          <div class="col-sm-1">
             <input formControlName="tipo" type="text" [readonly]="contenidoForm.get('tipodefault')?.value" class="form-control form-control-sm" id="tipo" name="tipo"
-              placeholder="Tipo" (keyup.enter)="nextInput( 'clave')" />
+              placeholder="Tipo" (keyup.enter)="nextInput( 'clave')" (keyup)="$event.keyCode != 13 ? autoCompletar($event.keyCode) : null"/>
           </div>
 
           <!– Input para la Clave –>
           <div class="col-sm-1">
-            <input type="text" formControlName="clave" [readonly]="contenidoForm.get('clavedefault')?.value" class="form-control form-control-sm" id="clave" name="clave"
-              placeholder="Clave"  (keyup.enter)="nextInput( 'fecha')"/>
+            <input type="text" formControlName="clave" maxlength="2" [readonly]="contenidoForm.get('clavedefault')?.value" class="form-control form-control-sm" id="clave" name="clave"
+              placeholder="Clave"  (keyup.enter)="nextInput( 'fecha')" (keyup)="upperCase()"/>
           </div>
 
 <!--          <!– Input para el dia –>
@@ -286,9 +289,26 @@
       </table>
     </section>
     <br />
-    <div class="text-end">
+    <table>
+      <tr>
+        <td  align="right">
+          <div class="alert alert-warning center-header warning--fade warn--shadow" role="alert"  *ngIf="unsaved"
+          style="height: 40px; width: 600px; margin-left: 50px; margin-right: 50px; margin-bottom: 0px;justify-content: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-exclamation-diamond" viewBox="0 0 16 16">
+                <path d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.482 1.482 0 0 1 0-2.098L6.95.435zm1.4.7a.495.495 0 0 0-.7 0L1.134 7.65a.495.495 0 0 0 0 .7l6.516 6.516a.495.495 0 0 0 .7 0l6.516-6.516a.495.495 0 0 0 0-.7L8.35 1.134z"/>
+                <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+            </svg>
+            .      Hay cambios sin guardar en la tabla de Comprobantes
+          </div>
+        </td>
+        <td   align="right">
+          <button type="submit" class="btn btn-primary" (click)="guardarContenidos()" >Guardar</button>
+        </td>
+      </tr>
+    </table>
+    <!-- <div class="text-end">
       <button type="submit" class="btn btn-primary" (click)="guardarContenidos()" >Guardar</button>
-    </div>
+    </div> -->
     <br />
   </div>
 </mat-card>
