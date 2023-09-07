@@ -136,7 +136,7 @@
           <!– Input para el Tipo de documento default–>
           <div class="col-sm-1 offset-sm-1">
             <input type="text" formControlName="tipodefault" class="form-control form-control-sm" id="tipodefault" name="tipodefault" placeholder="Tipo"
-            (input)="inputChange('tipo')" />
+            (input)="inputChange('tipo')"/>
           </div>
 
           <!– Input para la Clave default –>
@@ -190,10 +190,6 @@
               placeholder="Clave"  (keyup.enter)="nextInput( 'fecha')" (keyup)="upperCase()"/>
           </div>
 
-<!--          <!– Input para el dia –>
-          <div class="col-sm-1">
-            <input type="text" class="form-control form-control-sm" id="dia" name="dia" placeholder="DD" />
-          </div>-->
 
           <!– Input para la Fecha  –>
           <div class="col-sm-2 custom-ancho-input">

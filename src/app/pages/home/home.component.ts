@@ -92,6 +92,13 @@ export class HomeComponent implements OnInit {
     this.contenidoForm.get(inputId)?.setValue(this.contenidoForm.get(inputId + 'default')?.value ?? '');
     // this.contenidoForm.get('clave')?.setValue(this.contenidoForm.get('clavedefault')?.value ?? '');
     // this.contenidoForm.get('fecha')?.setValue(this.contenidoForm.get('fechadefault')?.value ?? '');
+
+    // Convertir el input a MAYÚSCULA
+    const inputValue = this.contenidoForm.get(inputId)?.value;
+    if (inputValue) {
+      this.contenidoForm.get(inputId)?.setValue(inputValue.toUpperCase());
+    }
+
   }
 
   exito(resp: any) {
