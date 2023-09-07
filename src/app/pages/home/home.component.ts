@@ -121,19 +121,19 @@ export class HomeComponent implements OnInit {
 
     this.contenidoForm.get('tipodefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('tipo')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
+        this.contenidoForm.get('tipo')?.setValue('');
       }
     });
 
     this.contenidoForm.get('clavedefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('clave')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
+        this.contenidoForm.get('clave')?.setValue('');
       }
     });
 
     this.contenidoForm.get('fechadefault')?.valueChanges.subscribe(value => {
       if (value) {
-        this.contenidoForm.get('fecha')?.setValue(''); // Si deseas borrar el valor cuando se desactiva
+        this.contenidoForm.get('fecha')?.setValue('');
       }
     });
 
@@ -284,7 +284,7 @@ export class HomeComponent implements OnInit {
 
         this.cargarCaja('')
         document.getElementById('tipo')?.focus(); // Hacer focus al primer imput para volver a ingresar
-        
+                this.cargarCaja('')
         /* mensaje de exito */
         this.exito(resp);
       },
@@ -307,7 +307,7 @@ export class HomeComponent implements OnInit {
     const codigo : string = this.cajaForm.value.codigo || ''
 
     this.generando = 1 // Mostrar el gif de "Generando.."
-    this.loadingType = 1 // Se está genrando un PDF
+    this.loadingType = 1 // Se está generando un PDF
 
     this.cajaService.getPDF(codigo)
     .then(response => response.blob())
@@ -429,8 +429,8 @@ export class HomeComponent implements OnInit {
 
     if (isConfirmed) {
 
-      this.generando = 1 // Mostrar el gif
-      this.loadingType = 3 // el agif a mostrar será el de "Borrando..."
+      this.generando = 1 // Mostrar el gif de "Generando.."
+      this.loadingType = 3 // Se está generando un PDF
 
       this.cajaService.deleteOneContent(codigo, index)
       .subscribe((res:any) => {

@@ -144,7 +144,7 @@
           </div>
 
           <!– Input para la fecha default–>
-          <div class="col-sm-2 custom-ancho-input">
+          <div class="col-sm-2 custom-ancho-input custom-offset">
             <input type="date" formControlName="fechadefault" class="form-control form-control-sm" id="fechadefault" name="fechadefault" placeholder="dd/mm/aa" (input)="inputChange()"/>
           </div>
 
@@ -199,7 +199,7 @@
           </div>
 
           <!– Input para el N° Comprobante –>
-          <div class="col-sm-1">
+          <div class="col-sm-1 custom-offset">
             <input type="text" formControlName="correlativo" class="form-control form-control-sm" id="comprobante" name="comprobante" placeholder="N° Comp"
             (keyup.enter)="ingresarComprobantes()"/>
           </div>
