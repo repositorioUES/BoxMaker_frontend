@@ -235,10 +235,11 @@
               </td>
             </tr>
         </td>
-
-        <td  align="left" >
+        
+        <!-- Contador de la cantidad de comprobantes en el JSON de la caja -->
+        <!-- <td  align="left" >
             <h3 ><strong>Comprobantes: {{ longitud }}</strong></h3>
-        </td>
+        </td> -->
         
         <!-- Botones de QUEDAN y BORRAR TODO -->
         <td align="center">
@@ -338,7 +339,8 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
       </table>
-      <a name="tableBottom" id="tableBottom"></a>
+      <!-- Ancla para hacer el scroll hasta abajo -->
+      <a name="tableBottom" id="tableBottom"></a>  
     </section>
     
     <br />

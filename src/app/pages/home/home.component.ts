@@ -654,9 +654,14 @@ export class HomeComponent implements OnInit {
 
     if(this.comprob.fechaResto.includes("/")){
       if(/^[0-9]{2}[/][0-9]{4}$/.test(date) == false){
-        errMsg.push('El formato de la fecha debe ser: dd/mm/yyyy')
+        errMsg.push('El formato del Mes y Año de la fecha no es correcto: Ej. "12/2023"')
+      }
+    } else {
+      if(/^[0-9]{6}$/.test(date) == false){
+        errMsg.push('El formato del Mes y Año de la fecha debe ser seis Digitos: Ej. 022023 (02 - mes) (2023 - año)')
       }
     }
+
 
     if (errMsg.length != 0) {
       errMsg.forEach(err => {
@@ -685,7 +690,7 @@ export class HomeComponent implements OnInit {
     let errMsg: any[] = []
 
     if(/^[0-9]{2}$/.test(day) == false){
-      errMsg.push('El número de Día debe con en 2 dígitos: Ej. "01"')
+      errMsg.push('El Número de Día de la fecha debe ser con 2 dígitos: Ej. "01"')
     }
     
     if(parseInt(day) < 1 || parseInt(day) > 31){
