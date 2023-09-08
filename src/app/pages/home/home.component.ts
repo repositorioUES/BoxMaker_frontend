@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CajaService } from 'src/app/services/caja.service';
 import { ToastrService } from 'ngx-toastr';
@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
   /* Form para los campos de la caja */
   public cajaForm = this.fb.group({
     descripcion: [''],
-    codigo: [''],
+    codigo: ['23-AAC-1'],
     caducidad: [''],
     grupo: [''],
     estante: [''],
@@ -123,7 +123,7 @@ export class HomeComponent implements OnInit {
 
         /* mensaje de exito */
         this.exito(resp);
-        
+
 
         this.cajaForm.setValue({
           descripcion: resp.caja.descripcion,
@@ -158,7 +158,7 @@ export class HomeComponent implements OnInit {
   cargarCaja(from: string) {
     const formData = this.cajaForm.value;
     const codigo = formData.codigo;
-    
+
     if (codigo) {
       if(from != 'borrado'){
         this.generando = 1
@@ -221,7 +221,7 @@ export class HomeComponent implements OnInit {
 
     this.generando = 1
     this.loadingType = 4
-    
+
     this.cajaService.cargarContenido(codigo).subscribe(
       (resp: any) => {
         
@@ -303,6 +303,8 @@ export class HomeComponent implements OnInit {
 
         /* mensaje de exito */
         this.exito(resp);
+
+
       },
       (err) => {
         console.warn(err.error.msg);
@@ -523,7 +525,7 @@ export class HomeComponent implements OnInit {
 
     this.cajaService.savetoDatabase(codigo)
     .subscribe((res:any) => {
-      
+
       this.toastr.success('Contenido de la caja ' + codigo +' guardado en la Base de Datos', '', {
         timeOut: 5000,
         progressBar: true,
@@ -575,11 +577,11 @@ export class HomeComponent implements OnInit {
     }
 
     if(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(data.fecha) == false){
-      errMsg.push('La Fecha No tiene formato válido') 
+      errMsg.push('La Fecha No tiene formato válido')
     }
 
     if(/^[0-9]{1,5}$/.test(data.correlativo) == false){
-      errMsg.push('El N° Comprobante No tiene formato válido') 
+      errMsg.push('El N° Comprobante No tiene formato válido')
     }
     
     if (this.fixed) {
