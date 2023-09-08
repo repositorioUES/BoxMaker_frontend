@@ -1,15 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CajaService } from 'src/app/services/caja.service';
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { ToastrService } from 'ngx-toastr';
 import { QuedanComponent } from 'src/app/pages/quedan/quedan.component';
 import { InsertarComponent } from 'src/app/pages/insertar/insertar.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Comprobante } from 'src/app/models/comprobante.model';
 import Swal from 'sweetalert2';
-import { AstTransformer } from '@angular/compiler';
-import { query } from '@angular/animations';
+import { Router } from '@angular/router';
 
 export interface compData {
   codigo: string,
@@ -69,23 +67,12 @@ export class HomeComponent implements OnInit {
     correlativo: '',
   }
 
-  /* Form para los campos del contenido (COMPROBANTES) de la caja */
-  public contenidoForm = this.fb.group({
-    caja: [''],
-    tipo: [''],
-    clave: [''],
-    fecha: [''],
-    correlativo: [''],
-    tipodefault: [''],
-    clavedefault: [''],
-    fechadefault: [''],
-  });
-
   constructor(
     private fb: FormBuilder,
     private cajaService: CajaService,
     private toastr: ToastrService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {}
 
   // Se suscribe para detectar cada vez que la variable $refreshTable cambie
@@ -95,27 +82,6 @@ export class HomeComponent implements OnInit {
       this.cargarContenidos()
     }
 });
-
-/*  /!* Funcion para fijar los campos  *!/
-  fijar() {
-    this.boton_fijado = !this.boton_fijado;
-    if (this.boton_fijado) {
-      this.contenidoForm.get('tipo')?.disable();
-      this.contenidoForm.get('clave')?.disable();
-      this.contenidoForm.get('fecha')?.disable();
-    } else {
-      this.contenidoForm.get('tipo')?.enable();
-      this.contenidoForm.get('clave')?.enable();
-      this.contenidoForm.get('fecha')?.enable();
-    }
-  }*/
-
-  inputChange(inputId: string) {
-    // Copia el valor de tipodefault a tipo cuando tipodefault cambia
-    this.contenidoForm.get(inputId)?.setValue(this.contenidoForm.get(inputId + 'default')?.value ?? '');
-    // this.contenidoForm.get('clave')?.setValue(this.contenidoForm.get('clavedefault')?.value ?? '');
-    // this.contenidoForm.get('fecha')?.setValue(this.contenidoForm.get('fechadefault')?.value ?? '');
-  }
 
   exito(resp: any) {
     this.toastr.success(resp.msg, '', {
@@ -145,25 +111,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.contenidoForm.get('tipodefault')?.valueChanges.subscribe(value => {
-      if (value) {
-        this.contenidoForm.get('tipo')?.setValue('');
-      }
-    });
-
-    this.contenidoForm.get('clavedefault')?.valueChanges.subscribe(value => {
-      if (value) {
-        this.contenidoForm.get('clave')?.setValue('');
-      }
-    });
-
-    this.contenidoForm.get('fechadefault')?.valueChanges.subscribe(value => {
-      if (value) {
-        this.contenidoForm.get('fecha')?.setValue('');
-      }
-    });
-
+    
     
   }
 
@@ -277,16 +225,22 @@ export class HomeComponent implements OnInit {
     this.cajaService.cargarContenido(codigo).subscribe(
       (resp: any) => {
         
+        this.generando = 0
+        this.loadingType = 0
+
         this.contenidos = resp.contenido // Obtener los contenidos del json
-        this.longitud =  this.contenidos.length -1
+        this.longitud =  this.contenidos.length
         this.cantidad =  resp.cantidad
 
         // Si los del JSON != a los de la BD entonces hay cambios sin guardar
         if (this.cantidad != this.contenidos.length)
           this.unsaved = true
 
-        this.generando = 0
-        this.loadingType = 0
+        // Ir hasta abajo de la tabla de contenidos al cargarla
+        const tempLink = document.createElement('a');
+        tempLink.href = '#tableBottom'
+        tempLink.click();
+
         /* mensaje de exito */
         this.exito(resp);
       },
@@ -637,7 +591,8 @@ export class HomeComponent implements OnInit {
       var date = new Date(year, month, 0);
 
       if(( day - 0) > (date.getDate() -0)){
-          errMsg.push('La Fecha ' + data.fecha + ' No tiene formato válido') 
+          const f = data.fecha.split("-")
+          errMsg.push('La Fecha "' + f[2] + '/' + f[1] + '/' + f[0] + '" No es una fecha real') 
       }
     }
 
@@ -689,74 +644,73 @@ export class HomeComponent implements OnInit {
   }
 
   formatPartialDate(date: string){
- 
+    let errMsg: any[] = []
+
     if(parseInt(date.substring(0, 2)) < 1 || parseInt(date.substring(0, 2)) > 12){
-      this.toastr.error('El Mes debe ser mínimo 01 y máximo 12', '', {
-        timeOut: 5000,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-        positionClass: 'toast-top-right',
-      });
-      document.querySelector('#fechaFija')?.classList.add('class', 'input--err')
-      return false
+      errMsg.push('El Mes debe ser mínimo 01 y máximo 12')
     }
 
     if(this.comprob.fechaResto.includes("/")){
-      if(/^[0-9]{2}[/][0-9]{4}$/.test(date)){
-        document.querySelector('#fechaFija')?.classList.remove('class', 'input--err')
-        return true
+      if(/^[0-9]{2}[/][0-9]{4}$/.test(date) == false){
+        errMsg.push('El formato de la fecha debe ser: dd/mm/yyyy')
       }
     }
 
-    if(this.comprob.fechaResto.length != 6){
-      this.toastr.error('El Mes y Año no tienen el formato correcto: Ej. "12/2023"', '', {
-        timeOut: 5000,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-        positionClass: 'toast-top-right',
+    if (errMsg.length != 0) {
+      errMsg.forEach(err => {
+        this.toastr.error(err, '', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'decreasing',
+          positionClass: 'toast-top-right',
+        });
       });
       document.querySelector('#fechaFija')?.classList.add('class', 'input--err')
       return false
     }
 
     document.querySelector('#fechaFija')?.classList.remove('input--err')
-    const fecha = date.substring(0, 2) + '/' + date.substring(2, date.length)
-    this.comprob.fechaResto = fecha
-    return
+    
+    this.comprob.fechaResto = date
+    if (!date.includes("/")) {
+      this.comprob.fechaResto = date.substring(0, 2) + '/' + date.substring(2, date.length)
+    }
+
+    return true
   }
 
   formatDay(day: string){
+    let errMsg: any[] = []
+
     if(/^[0-9]{2}$/.test(day) == false){
-      this.toastr.error('El Día no tiene el formato correcto: Ej. "01"', '', {
-        timeOut: 5000,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-        positionClass: 'toast-top-right',
-      });
-      document.querySelector('#dia')?.classList.add('class', 'input--err')
-      return
+      errMsg.push('El número de Día debe con en 2 dígitos: Ej. "01"')
     }
     
     if(parseInt(day) < 1 || parseInt(day) > 31){
-      this.toastr.error('El Día debe ser mínimo 1 y máximo 31', '', {
-        timeOut: 5000,
-        progressBar: true,
-        progressAnimation: 'decreasing',
-        positionClass: 'toast-top-right',
+      errMsg.push('El Día debe ser mínimo 1 y máximo 31')
+    }
+
+    if (errMsg.length != 0) {
+      errMsg.forEach(err => {
+        this.toastr.error(err, '', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'decreasing',
+          positionClass: 'toast-top-right',
+        });
       });
       document.querySelector('#dia')?.classList.add('class', 'input--err')
-      return
+      return false
     }
 
     document.querySelector('#dia')?.classList.remove('class', 'input--err')
+    return true
   }
 
   autoCompletar(key: any){
     let autoTipo = ''
     let autoClave = ''
-    console.log(key);
     
-
     if (key == 69) {
       autoTipo = 'EGRESO'
 
@@ -796,17 +750,13 @@ export class HomeComponent implements OnInit {
   nextInput(next: any) {
       if(this.fixed){
         if (next == 'dia') {
-          if(this.formatPartialDate(this.comprob.fechaResto)){
-            document.getElementById(next)?.focus();
+          if(this.formatPartialDate(this.comprob.fechaResto) == false)
             return
-          }
         }
 
         if (next == 'correlativo') {
-          if(this.formatPartialDate(this.comprob.fechaResto)){
-            this.formatDay(this.comprob.fechaDia)
+          if(this.formatDay(this.comprob.fechaDia) == false)
             return
-          }
         }
       }
 

@@ -29,6 +29,11 @@
     text-align: center;
   }
 
+  .mat-mdc-row:hover .mat-mdc-cell {
+    /* border-color: currentColor; */
+    background-color: rgb(231, 231, 231);
+  }
+
   .text-color{
     color: white;
   }

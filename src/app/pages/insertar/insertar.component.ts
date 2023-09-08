@@ -73,6 +73,7 @@ export class InsertarComponent {
       });
       return
     }
+      console.log(data);
       
       this.cajaSrv.ingresarComprobantes(data)
       .subscribe((res:any) => {
