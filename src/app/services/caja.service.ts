@@ -15,6 +15,9 @@ export class CajaService {
 
   //Objeto para comuncarse entre componentes suscritos al servicio
   public $refreshTable = new BehaviorSubject<boolean>(false);
+  //Objeto para comuncarse entre componentes suscritos al servicio
+  public $inserted = new BehaviorSubject<number>(-1);
+  public $hasInserted = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private router : Router) { }
 

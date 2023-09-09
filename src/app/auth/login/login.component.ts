@@ -22,6 +22,8 @@ export class LoginComponent implements OnInit{
 
   ngOnInit(): void {
     this.init() // Disparar al terminar de cargar el componente
+
+    this.hideLoader()
   }
 
 
@@ -75,6 +77,12 @@ export class LoginComponent implements OnInit{
     }, (err)=> {
         console.warn(err) 
     })
+  }
+
+  hideLoader(){
+    setTimeout(()=>{
+      document.querySelector(".loader")?.classList.add("loader--hidden")
+    },1500)
   }
 
 }

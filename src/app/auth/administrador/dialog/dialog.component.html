@@ -43,7 +43,7 @@
       &nbsp;&nbsp;
       <mat-form-field>
         <mat-label>Confirmar Contraseña</mat-label>
-        <input matInput id="confirmModal" type="password" [(ngModel)]="data.confirmPassword">
+        <input matInput id="confirmModal" type="password" [(ngModel)]="data.confirmPassword" (keypress)="$event.keyCode == 13 ? upadateUser(data) : null">
       </mat-form-field>
     </div>
 </div>

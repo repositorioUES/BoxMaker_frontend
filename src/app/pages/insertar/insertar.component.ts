@@ -73,45 +73,48 @@ export class InsertarComponent {
       });
       return
     }
-      console.log(data);
       
-      this.cajaSrv.ingresarComprobantes(data)
-      .subscribe((res:any) => {
-        if(res.satus == 400){
-          this.toast.error(res.msg, '', {
-            timeOut: 5000,
-            progressBar: true,
-            progressAnimation: 'decreasing',
-            positionClass: 'toast-top-right',
-          });
-        } else {
-          this.toast.success(res.msg, '', {
-            timeOut: 5000,
-            progressBar: true,
-            progressAnimation: 'decreasing',
-            positionClass: 'toast-top-right',
-          });
-        }
-
-        this.cajaSrv.$refreshTable.next(true); //Emitir que se debe refrescar la tabla del home.component
-        this.onNoClick() // cerrar dialog depues de trasladar
-      }, (err)=> {
-        console.warn(err) 
-        console.log(typeof(err.error));
-        
-        let msg = ''
-        if(err.error)
-          msg = err.error.msg
-        else
-          msg = err.error[0].msg
-
-        this.toast.error(msg, '', {
+    this.cajaSrv.ingresarComprobantes(data)
+    .subscribe((res:any) => {
+      if(res.satus == 400){
+        this.toast.error(res.msg, '', {
           timeOut: 5000,
           progressBar: true,
           progressAnimation: 'decreasing',
           positionClass: 'toast-top-right',
         });
-      })
+      } else {
+        this.toast.success(res.msg, '', {
+          timeOut: 5000,
+          progressBar: true,
+          progressAnimation: 'decreasing',
+          positionClass: 'toast-top-right',
+        });
+      }
+
+      this.cajaSrv.$refreshTable.next(true); //Emitir que se debe refrescar la tabla del home.component
+
+      this.cajaSrv.$inserted.next(data.index); //Emitir que se debe resaltar la fila insertada en la tabla del home.component
+      this.cajaSrv.$hasInserted.next(true);
+
+      this.onNoClick() // cerrar dialog depues de trasladar
+    }, (err)=> {
+      console.warn(err) 
+      console.log(typeof(err.error));
+      
+      let msg = ''
+      if(err.error)
+        msg = err.error.msg
+      else
+        msg = err.error[0].msg
+
+      this.toast.error(msg, '', {
+        timeOut: 5000,
+        progressBar: true,
+        progressAnimation: 'decreasing',
+        positionClass: 'toast-top-right',
+      });
+    })
   }
 
 

@@ -44,6 +44,8 @@ export class UserLobbyComponent {
   ngOnInit(): void {
     this.getProfile()
     this.authSrv.$refreshNav.next(true); //Emitir que se debe refrescar la tabla del home.component
+
+    this.hideLoader()
   }
 
   getProfile(){
@@ -117,5 +119,13 @@ export class UserLobbyComponent {
 
   celIcon(){
     this.iconNumber = 0
+  }
+
+  hideLoader(){
+
+    setTimeout(()=>{
+      document.querySelector(".loader")?.classList.add("loader--hidden")
+    },1500)
+
   }
 }

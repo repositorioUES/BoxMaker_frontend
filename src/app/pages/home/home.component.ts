@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CajaService } from 'src/app/services/caja.service';
 import { ToastrService } from 'ngx-toastr';
@@ -7,7 +7,6 @@ import { InsertarComponent } from 'src/app/pages/insertar/insertar.component';
 import { MatDialog } from '@angular/material/dialog';
 import { Comprobante } from 'src/app/models/comprobante.model';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
 
 export interface compData {
   codigo: string,
@@ -36,7 +35,7 @@ export class HomeComponent implements OnInit {
   /* Form para los campos de la caja */
   public cajaForm = this.fb.group({
     descripcion: [''],
-    codigo: ['23-AAC-1'],
+    codigo: [''],
     caducidad: [''],
     grupo: [''],
     estante: [''],
@@ -46,9 +45,15 @@ export class HomeComponent implements OnInit {
   });
 
   /* Inicializar el boton */
-  public contenidos: Comprobante[] = [] //Contenido de la caja que está en el txt, NO en la base
+  public contenidos: Comprobante[] = [] //Contenido de la caja que está en el JSON, NO en la base
   public longitud: number = 0 //cuántos contenidos se recuperaron del JSON
   public cantidad: number = 0 //cuántos contenidos se recuperaron de la BD
+
+  public hasInserted: boolean = false // se hizo uso de insercion intermedia? 
+  public insertado: number = -1 //Indice del Lugar intermedio donde se insertó el comprobante 
+
+  public existe: boolean = false // ya esta el comp en el JSON? 
+  public donde: number = -1 // se ya existre el comp en la caja, donde esta? 
 
   public generando: number = 0//   1 = Se está generando algun documento y por tanto, mostrar el loader;   0 = nada
   public loadingType: number = 0 // PDF = 1 ; Excel = 2
@@ -72,7 +77,6 @@ export class HomeComponent implements OnInit {
     private cajaService: CajaService,
     private toastr: ToastrService,
     private dialog: MatDialog,
-    private router: Router
   ) {}
 
   // Se suscribe para detectar cada vez que la variable $refreshTable cambie
@@ -81,7 +85,15 @@ export class HomeComponent implements OnInit {
       this.unsaved = true
       this.cargarContenidos()
     }
-});
+  });
+
+  // Se suscribe para detectar cada vez que la variable $inserted cambie
+  private posicion = this.cajaService.$inserted.subscribe(valor => {
+    this.insertado = valor + 1
+  });
+  private hecho = this.cajaService.$hasInserted.subscribe(valor => {
+    this.hasInserted = valor
+  });
 
   exito(resp: any) {
     this.toastr.success(resp.msg, '', {
@@ -111,15 +123,14 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    
-    
+    document.getElementById('codigo')?.focus()
+    this.hideLoader()
   }
 
   /* Funcion que permite CREAR una caja y CARGAR sus datos en el formulario */
   crearCaja() {
     this.cajaService.crearCaja(this.cajaForm.value).subscribe(
       (resp: any) => {
-        console.log(resp);
 
         /* mensaje de exito */
         this.exito(resp);
@@ -165,44 +176,47 @@ export class HomeComponent implements OnInit {
         this.loadingType = 4
       }
 
-      this.cajaService
-        .cargarCaja(formData)
+      this.cajaService.cargarCaja(formData)
+      .subscribe((resp: any) => {
 
-        .subscribe(
-          (resp: any) => {
-            // console.log(this.cajaForm.value.codigo);
+        const tempFecha = resp.caja.caducidad.substring(0, 10).split("-") //Formatear la fecha con guiones pues tiene "/"
+        const fechaFinal = tempFecha[2] + "/" + tempFecha[1] + "/" + tempFecha[0]
 
-            this.cajaForm.setValue({
-              descripcion: resp.caja.descripcion,
-              codigo: resp.caja.codigo,
-              caducidad: resp.caja.caducidad,
-              grupo: resp.caja.grupo,
-              estante: resp.caja.estante,
-              nivel: resp.caja.nivel,
-              numero: resp.caja.numero,
-              usuario: resp.caja.usuario ||'',
-            });
+        this.cajaForm.setValue({
+          descripcion: resp.caja.descripcion,
+          codigo: resp.caja.codigo,
+          caducidad: fechaFinal,
+          grupo: resp.caja.grupo,
+          estante: resp.caja.estante,
+          nivel: resp.caja.nivel,
+          numero: resp.caja.numero,
+          usuario: resp.caja.usuario ||'',
+        });
 
-            this.generando = 0
-            this.loadingType = 0
+        this.generando = 0
+        this.loadingType = 0
 
-            // cargar los contenidos solo si se busca la caja manualmente o si no es un refresco depues de borrar
-            if(from != 'borrado' && from != 'guardar')
-              this.cargarContenidos()            
+        this.insertado = -1
+        this.hasInserted = false
+        this.donde = -1 //quitar el resaltado de la fila repetida
+        this.existe = false
 
-            /* mensaje de exito */
-            this.exito(resp);
-          },
-          (err) => {
-            console.warn(err.error.msg);
+        // cargar los contenidos solo si se busca la caja manualmente o si no es un refresco depues de borrar
+        if(from != 'borrado' && from != 'guardar')
+          this.cargarContenidos()            
 
-            this.generando = 0
-            this.loadingType = 0
+        /* mensaje de exito */
+        this.exito(resp);
+      },
+      (err) => {
+        console.warn(err.error.msg);
 
-            /* Mensaje de error */
-            this.errorCaja();
-          }
-        );
+        this.generando = 0
+        this.loadingType = 0
+
+        /* Mensaje de error */
+        this.errorCaja();
+      });
     } else {
       // Cualquier validacion con codigo
       this.generando = 0
@@ -217,8 +231,7 @@ export class HomeComponent implements OnInit {
     }
 
     const codigo : string = this.cajaForm.value.codigo || ''
-    // console.log(codigo);
-
+    
     this.generando = 1
     this.loadingType = 4
 
@@ -236,10 +249,19 @@ export class HomeComponent implements OnInit {
         if (this.cantidad != this.contenidos.length)
           this.unsaved = true
 
-        // Ir hasta abajo de la tabla de contenidos al cargarla
-        const tempLink = document.createElement('a');
-        tempLink.href = '#tableBottom'
-        tempLink.click();
+        // // Hacer Scroll hasta donde convenga -----------------------------------------------------
+        if (this.existe){
+          document.getElementById('existe')?.scrollIntoView({ block: "center", behavior: "smooth" })
+        }
+
+        if (this.hasInserted){
+          document.getElementById('intermedio')?.scrollIntoView({ block: "center", behavior: "smooth" })
+        }
+        
+        if(!this.existe && !this.hasInserted){
+          document.getElementById('final')?.scrollIntoView(true)
+        }
+        // Fin SCROLL -----------------------------------------------------------------------------
 
         /* mensaje de exito */
         this.exito(resp);
@@ -254,6 +276,7 @@ export class HomeComponent implements OnInit {
         this.error(err);
       }
     );
+   
   }
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
@@ -283,6 +306,11 @@ export class HomeComponent implements OnInit {
       return
     }
 
+    this.insertado = -1 //quitar el resaltado de la fila
+    this.hasInserted = false
+    this.donde = -1 //quitar el resaltado de la fila repetida
+    this.existe = false
+
     this.cajaService.ingresarComprobantes(toSend)
     .subscribe((resp: any) => {
         this.cargarContenidos() // recargasmo la tabla
@@ -304,9 +332,14 @@ export class HomeComponent implements OnInit {
         /* mensaje de exito */
         this.exito(resp);
 
-
       },
       (err) => {
+        if (err.error.donde) {
+          // this.hasInserted = false
+          this.donde = err.error.donde
+          this.existe = true
+          this.cargarContenidos()
+        }
         console.warn(err.error.msg);
 
         /* Mensaje de error */
@@ -384,6 +417,11 @@ export class HomeComponent implements OnInit {
 
     const code = this.cajaForm.value.codigo || ''
 
+    this.insertado = -1
+    this.hasInserted = false
+    this.donde = -1 //quitar el resaltado de la fila repetida
+    this.existe = false
+
     if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{1,5}$/.test(code)) {
       //Abrir el Dialog con la inof
       const dialogRef = this.dialog.open(QuedanComponent, {
@@ -413,6 +451,8 @@ export class HomeComponent implements OnInit {
     }
 
     const code = this.cajaForm.value.codigo || ''
+
+    this.donde = -1 //quitar el resaltado de la fila repetida
 
     if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{1,5}$/.test(code)) {
       //Abrir el Dialog con la inof
@@ -444,6 +484,11 @@ export class HomeComponent implements OnInit {
       title: '¿Quitar éste Comprobante  de la Caja '+ codigo +'?',
       showCancelButton: true
     })
+
+    this.insertado = -1
+    this.hasInserted = false
+    this.donde = -1 //quitar el resaltado de la fila repetida
+    this.existe = false
 
     if (isConfirmed) {
 
@@ -480,6 +525,11 @@ export class HomeComponent implements OnInit {
     }
 
     const codigo = this.cajaForm.value.codigo || ''
+
+    this.insertado = -1
+    this.hasInserted = false
+    this.donde = -1 //quitar el resaltado de la fila repetida
+    this.existe = false
 
     const { isConfirmed } = await Swal.fire({
       title: '¿Borrar todo el Contendo de la Caja '+ codigo +'?',
@@ -523,6 +573,11 @@ export class HomeComponent implements OnInit {
     this.generando = 1
     this.loadingType = 5
 
+    this.insertado = -1
+    this.hasInserted = false
+    this.donde = -1 //quitar el resaltado de la fila repetida
+    this.existe = false
+
     this.cajaService.savetoDatabase(codigo)
     .subscribe((res:any) => {
 
@@ -532,9 +587,13 @@ export class HomeComponent implements OnInit {
         progressAnimation: 'decreasing',
         positionClass: 'toast-top-right',
       });
+
+      this.cargarContenidos()
+
       this.unsaved = false
       this.generando = 0
       this.loadingType = 0
+
     }, (err)=> {
         console.warn(err)
         this.toastr.error('No se ha podido guardar el contenido de la caja', '', {
@@ -772,6 +831,33 @@ export class HomeComponent implements OnInit {
 
   toggleFields(){
     this.fixed = !this.fixed
+  }
+
+  clearAll(){  // Poner todo en blanco
+    this.contenidos = [] //Contenido de la caja que está en el txt, NO en la base
+    this.longitud = 0 //cuántos contenidos se recuperaron del JSON
+    this.cantidad = 0 //cuántos contenidos se recuperaron de la BD
+
+    this.generando = 0//   1 = Se está generando algun documento y por tanto, mostrar el loader;   0 = nada
+    this.loadingType = 0 // PDF = 1 ; Excel = 2
+    this.unsaved = false // hay cambios sin guardar?
+    this.fixed = false// definir si usar los valores fijos o no
+
+    this.comprob.codigo = ''
+    this.comprob.tipo = ''
+    this.comprob.clave = ''
+    this.comprob.fecha = ''
+    this.comprob.tipoFixed = ''
+    this.comprob.claveFixed = ''
+    this.comprob.fechaDia = ''
+    this.comprob.fechaResto = ''
+    this.comprob.correlativo = ''
+  }
+
+  hideLoader(){
+    setTimeout(()=>{
+      document.querySelector(".loader")?.classList.add("loader--hidden")
+    },1500)
   }
 
 }

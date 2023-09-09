@@ -116,6 +116,15 @@
     animation: rotateImage 1.8s infinite;
   }
 
+  .loader--text--fade{
+    animation: fadeText 2.5s infinite;
+  }
+
+  @keyframes fadeText {
+    from { opacity: 0;}
+    to { opacity: 1;}
+  }
+
   @keyframes scaleImage {
     from { height: 5px; width: 5px;}
     to { height: 175px; width: 175px;}
