@@ -49,11 +49,11 @@ export class HomeComponent implements OnInit {
   public longitud: number = 0 //cuántos contenidos se recuperaron del JSON
   public cantidad: number = 0 //cuántos contenidos se recuperaron de la BD
 
-  public hasInserted: boolean = false // se hizo uso de insercion intermedia? 
-  public insertado: number = -1 //Indice del Lugar intermedio donde se insertó el comprobante 
+  public hasInserted: boolean = false // se hizo uso de insercion intermedia?
+  public insertado: number = -1 //Indice del Lugar intermedio donde se insertó el comprobante
 
-  public existe: boolean = false // ya esta el comp en el JSON? 
-  public donde: number = -1 // se ya existre el comp en la caja, donde esta? 
+  public existe: boolean = false // ya esta el comp en el JSON?
+  public donde: number = -1 // se ya existre el comp en la caja, donde esta?
 
   public generando: number = 0//   1 = Se está generando algun documento y por tanto, mostrar el loader;   0 = nada
   public loadingType: number = 0 // PDF = 1 ; Excel = 2
@@ -203,7 +203,7 @@ export class HomeComponent implements OnInit {
 
         // cargar los contenidos solo si se busca la caja manualmente o si no es un refresco depues de borrar
         if(from != 'borrado' && from != 'guardar')
-          this.cargarContenidos()            
+          this.cargarContenidos()
 
         /* mensaje de exito */
         this.exito(resp);
@@ -231,13 +231,13 @@ export class HomeComponent implements OnInit {
     }
 
     const codigo : string = this.cajaForm.value.codigo || ''
-    
+
     this.generando = 1
     this.loadingType = 4
 
     this.cajaService.cargarContenido(codigo).subscribe(
       (resp: any) => {
-        
+
         this.generando = 0
         this.loadingType = 0
 
@@ -257,14 +257,14 @@ export class HomeComponent implements OnInit {
         if (this.hasInserted){
           document.getElementById('intermedio')?.scrollIntoView({ block: "center", behavior: "smooth" })
         }
-        
+
         if(!this.existe && !this.hasInserted){
           document.getElementById('final')?.scrollIntoView(true)
         }
         // Fin SCROLL -----------------------------------------------------------------------------
 
-        /* mensaje de exito */
-        this.exito(resp);
+        /* mensaje de exito para cargar contenidos*/
+        /*this.exito(resp);*/
       },
       (err) => {
         console.warn(err.error.msg);
@@ -276,7 +276,7 @@ export class HomeComponent implements OnInit {
         this.error(err);
       }
     );
-   
+
   }
 
   /* Funcion que permite BUSCAR una caja y CARGAR sus datos en el formulario */
@@ -291,7 +291,7 @@ export class HomeComponent implements OnInit {
       const tempResto = this.comprob.fechaResto.split("/") //Formatear la fecha con guiones pues tiene "/"
       fechaFinal = tempResto[1] + "-" + tempResto[0] + "-" + this.comprob.fechaDia
     }
- 
+
     // Preparar el objeto que se mandará
     const toSend = {
       caja: this.cajaForm.value.codigo,
@@ -313,21 +313,21 @@ export class HomeComponent implements OnInit {
 
     this.cajaService.ingresarComprobantes(toSend)
     .subscribe((resp: any) => {
-        this.cargarContenidos() // recargasmo la tabla
+        this.cargarContenidos() // recargamos la tabla
 
-        if (this.fixed) { // en "Fijado" no spasamos al dia
+        if (this.fixed) { // en "Fijado" nos pasamos al dia
           document.getElementById('dia')?.focus();
           this.comprob.fechaDia = '' // vaciar los inputs que se vean a reutilizar
           this.comprob.correlativo = ''
         } else {  // En "Normal" nos pasamos al tipo
-          document.getElementById('tipo')?.focus(); // Hacer focus al primer imput para volver a ingresar
-          this.comprob.tipo = ''     
+          document.getElementById('tipo')?.focus(); // Hacer focus al primer input para volver a ingresar
+          this.comprob.tipo = ''
           this.comprob.clave = ''       //  vaciar los inputs que se vean a reutilizar
           this.comprob.fecha = ''       // que en el llenado manual son todos
-          this.comprob.correlativo = '' 
+          this.comprob.correlativo = ''
         }
 
-        this.unsaved = true // Hay cambios sin guadar en la BD
+        this.unsaved = true // Hay cambios sin guardar en la BD
 
         /* mensaje de exito */
         this.exito(resp);
@@ -388,7 +388,7 @@ export class HomeComponent implements OnInit {
     const codigo : string = this.cajaForm.value.codigo || ''
 
     this.generando = 1 // Mostrar el gif de "Generando.."
-    this.loadingType = 2 // Se está genrando un PDF
+    this.loadingType = 2 // Se está generando un PDF
 
     this.cajaService.getXLSX(codigo)
     .then(response => response.blob())
@@ -423,7 +423,7 @@ export class HomeComponent implements OnInit {
     this.existe = false
 
     if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{1,5}$/.test(code)) {
-      //Abrir el Dialog con la inof
+      //Abrir el Dialog con la info
       const dialogRef = this.dialog.open(QuedanComponent, {
         data: {
           codigo: code
@@ -455,7 +455,7 @@ export class HomeComponent implements OnInit {
     this.donde = -1 //quitar el resaltado de la fila repetida
 
     if (/^[0-9]{2}-[A]{2}[C]{1}-[0-9]{1,5}$/.test(code)) {
-      //Abrir el Dialog con la inof
+      //Abrir el Dialog con la info
       const dialogRef = this.dialog.open(InsertarComponent, {
         data: {
           caja: code,
@@ -642,7 +642,7 @@ export class HomeComponent implements OnInit {
     if(/^[0-9]{1,5}$/.test(data.correlativo) == false){
       errMsg.push('El N° Comprobante No tiene formato válido')
     }
-    
+
     if (this.fixed) {
       //verificar la fecha contruida a partir de los 2 campos separados
       var fechaf = data.fecha.split("-");
@@ -653,7 +653,7 @@ export class HomeComponent implements OnInit {
 
       if(( day - 0) > (date.getDate() -0)){
           const f = data.fecha.split("-")
-          errMsg.push('La Fecha "' + f[2] + '/' + f[1] + '/' + f[0] + '" No es una fecha real') 
+          errMsg.push('La Fecha "' + f[2] + '/' + f[1] + '/' + f[0] + '" No es una fecha real')
       }
     }
 
@@ -736,7 +736,7 @@ export class HomeComponent implements OnInit {
     }
 
     document.querySelector('#fechaFija')?.classList.remove('input--err')
-    
+
     this.comprob.fechaResto = date
     if (!date.includes("/")) {
       this.comprob.fechaResto = date.substring(0, 2) + '/' + date.substring(2, date.length)
@@ -751,7 +751,7 @@ export class HomeComponent implements OnInit {
     if(/^[0-9]{2}$/.test(day) == false){
       errMsg.push('El Número de Día de la fecha debe ser con 2 dígitos: Ej. "01"')
     }
-    
+
     if(parseInt(day) < 1 || parseInt(day) > 31){
       errMsg.push('El Día debe ser mínimo 1 y máximo 31')
     }
@@ -776,7 +776,7 @@ export class HomeComponent implements OnInit {
   autoCompletar(key: any){
     let autoTipo = ''
     let autoClave = ''
-    
+
     if (key == 69) {
       autoTipo = 'EGRESO'
 
@@ -791,7 +791,7 @@ export class HomeComponent implements OnInit {
       autoTipo = 'INGRESO'
 
     }
-    
+
     this.comprob.tipo = autoTipo
     this.comprob.tipoFixed = autoTipo
     this.comprob.clave = autoClave

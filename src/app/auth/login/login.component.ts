@@ -14,8 +14,8 @@ import { ToastrService } from 'ngx-toastr';
 export class LoginComponent implements OnInit{
 
   public loginForm = this.fb.group({
-    userName: ["cgarcia", ],
-    password: ["archivo", ],
+    userName: ["", ],
+    password: ["", ],
   });
 
   constructor(private fb: FormBuilder, private router: Router, private authService: AuthService, private snack: MatSnackBar, private toastr: ToastrService) { }
@@ -31,12 +31,12 @@ export class LoginComponent implements OnInit{
     this.authService.login(this.loginForm.value)
       .subscribe(resp => {
         if (resp.ok === true) {
- 
+
           if(resp.tipo == 0)
             this.router.navigateByUrl('/auth/admin-lobby');
           else
             this.router.navigateByUrl('/auth/user-lobby');
-          
+
           this.router.events.subscribe(event => {
             if (event instanceof NavigationEnd && this.router.url === '/') {
               window.location.reload();
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit{
         positionClass: 'toast-top-right',
       });
     }, (err)=> {
-        console.warn(err) 
+        console.warn(err)
     })
   }
 

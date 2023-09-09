@@ -16,10 +16,10 @@ export class AuthService {
 
   /* Verificar el status de el Usuario definido como observable */
   public loginStatusSubjec = new Subject<boolean>();
-  
-  //Objeto para comuncarse entre componentes suscritos al servicio
+
+  //Objeto para comunicarse entre componentes suscritos al servicio
   public $logged = new BehaviorSubject<boolean>(false);
-   //Objeto para comuncarse entre componentes suscritos al servicio
+   //Objeto para comunicarse entre componentes suscritos al servicio
    public $refresh = new BehaviorSubject<boolean>(false);
 
   /* Verificar el estado del token para comprobar si esta Logueado o No */
@@ -42,7 +42,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  //Objeto para comuncarse entre componentes suscritos al servicio
+  //Objeto para comunicarse entre componentes suscritos al servicio
   public $refreshNav = new BehaviorSubject<boolean>(false);
 
   /* Funcion de Login */
@@ -54,6 +54,7 @@ export class AuthService {
           // console.log(resp);
 
           localStorage.setItem('token', resp.token);
+          localStorage.setItem('tipo', resp.tipo);
           localStorage.setItem('usuario', JSON.stringify(resp.username));
         })
       );
@@ -62,10 +63,10 @@ export class AuthService {
   /* Funcion Logout */
   logout() {
     localStorage.clear();
-    
-    this.router.navigateByUrl('/auth/login');
+
+    this.router.navigateByUrl('/login');
     this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd && this.router.url === '/auth/login') {
+      if (event instanceof NavigationEnd && this.router.url === '/login') {
         window.location.reload();
       }
     });

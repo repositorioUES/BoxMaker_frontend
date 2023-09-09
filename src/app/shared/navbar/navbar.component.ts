@@ -12,8 +12,9 @@ export class NavbarComponent implements OnInit {
 
   /* Colocar el nombre del usuario en el Navbar sin comillas */
   usuario = (localStorage.getItem('usuario') || '').replace(/"/g, '')
+  tipo = (localStorage.getItem('tipo') || '')
 
-  /* Colocar el la fecha actual en el Navbar  */
+  /* Colocar la fecha actual en el Navbar  */
   currentTime!: Date;
 
   /* Inicializar el estado del usuario */
@@ -31,7 +32,7 @@ export class NavbarComponent implements OnInit {
   ngOnInit(): void {
 
     this.currentTime = new Date();
-    
+
     /* Permite verificar el estado del usuario mediante su status */
     this.isLoggedIn = this.authService.isLoggedIn();
     this.authService.loginStatusSubjec.asObservable().subscribe(
@@ -40,7 +41,7 @@ export class NavbarComponent implements OnInit {
       }
     )
 
-    // Se suscribe para detecter cada vez que la variable $refreshTable cambie
+    // Se suscribe para detectar cada vez que la variable $refreshTable cambie
     this.authService.$refreshNav.subscribe(data => {
       this.isLoggedIn = this.authService.isLoggedIn();
       this.usuario = (localStorage.getItem('usuario') || '').replace(/"/g, '')

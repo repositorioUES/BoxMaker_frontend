@@ -6,6 +6,7 @@ import { AdministradorComponent } from './administrador/administrador.component'
 import { AdminLobbyComponent } from './administrador/admin-lobby/admin-lobby.component';
 import { CajasComponent } from './cajas/cajas.component';
 import { UserLobbyComponent } from './user-lobby/user-lobby.component';
+import {authGuard} from "../guards/auth.guard";
 
 
 const routes: Routes = [
@@ -15,23 +16,28 @@ const routes: Routes = [
   },
   {
     path: "register",
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [authGuard]
   },
   {
     path: "admin",
-    component: AdministradorComponent
+    component: AdministradorComponent,
+    canActivate: [authGuard]
   },
   {
     path: "admin-lobby",
-    component: AdminLobbyComponent
+    component: AdminLobbyComponent,
+    canActivate: [authGuard]
   },
   {
     path: "user-lobby",
-    component: UserLobbyComponent
+    component: UserLobbyComponent,
+    canActivate: [authGuard]
   },
   {
     path: "cajas",
-    component: CajasComponent
+    component: CajasComponent,
+    canActivate: [authGuard]
   },
   {
     path: "**",
